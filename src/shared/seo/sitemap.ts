@@ -4,7 +4,7 @@ import { updateLogEntries } from "@/modules/page-content/update-log";
 import { getSiteUrl } from "../site";
 import { topics } from "@/modules/channel";
 import { companies, companyHref } from "@/modules/vendor/model";
-import { themes, themeHref } from "@/modules/vendor/themes";
+import { themes, themeGroupHref, themeHref } from "@/modules/vendor/themes";
 
 export type SitemapUrl = {
   loc: string;
@@ -113,10 +113,13 @@ export function getCoreSitemapUrls(): SitemapUrl[] {
 export function getThemeSitemapUrls(): SitemapUrl[] {
   return [
     { loc: getSiteUrl("/themes/"), lastmod: STATIC_LASTMOD },
-    ...themes.map((theme) => ({
-      loc: getSiteUrl(themeHref(theme.id)),
-      lastmod: STATIC_LASTMOD,
-    })),
+    ...themes.flatMap((theme) => [
+      { loc: getSiteUrl(themeHref(theme.id)), lastmod: STATIC_LASTMOD },
+      ...theme.groups.map((group) => ({
+        loc: getSiteUrl(themeGroupHref(theme.id, group.id)),
+        lastmod: STATIC_LASTMOD,
+      })),
+    ]),
     // 主题页下面挂着厂商列表，这里把厂商详情页一起聚合进来
     ...companies.map((company) => ({
       loc: getSiteUrl(companyHref(company.id)),

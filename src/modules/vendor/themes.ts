@@ -41,7 +41,12 @@ export function getThemeSeo(theme: VendorTheme) {
 }
 
 export function themeHref(id: string) {
-  return `/themes/${id}/`;
+  return `/t/${id}/`;
+}
+
+/** 主题内的二级分类（分组）页：/t/<theme>/<group>/ */
+export function themeGroupHref(themeId: string, groupId: string) {
+  return `/t/${themeId}/${groupId}/`;
 }
 
 /** 主题内的公司 id：按分组顺序去重，未知 id 直接跳过 */

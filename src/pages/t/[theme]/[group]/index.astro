@@ -1,0 +1,86 @@
+---
+import Root from "@/layouts/Root.astro";
+import Shell from "@/layouts/Shell.astro";
+import ChannelPanel from "@/components/channel/ChannelPanel.astro";
+import CompanyCard from "@/components/vendor/CompanyCard.astro";
+import PageGuide from "@/components/channel/PageGuide.astro";
+import { buildThemeListing, getTheme, themeGroupHref, themeHref, themes } from "@/modules/vendor/themes";
+import { readFeedMeta } from "@/modules/content";
+import { formatMonthDay } from "@/shared/utils";
+import { widePageContainerClass } from "@/shared/ui/classes";
+
+export function getStaticPaths() {
+  return themes.flatMap((theme) =>
+    theme.groups.map((group) => ({
+      params: { theme: theme.id, group: group.id },
+      props: { themeId: theme.id, groupId: group.id },
+    })),
+  );
+}
+
+const { themeId, groupId } = Astro.props;
+const theme = getTheme(themeId);
+if (!theme) throw new Error(`主题不存在：${themeId}`);
+
+const meta = readFeedMeta();
+if (!meta) throw new Error("meta.json 未生成");
+
+const listing = buildThemeListing(theme, meta.companies);
+const section = listing.sections.find((entry) => entry.id === groupId);
+if (!section) throw new Error(`主题分组不存在：${themeId}/${groupId}`);
+
+const articleCount = section.summaries.reduce((total, summary) => total + summary.articleCount, 0);
+const latest = section.summaries.reduce<string | null>(
+  (value, summary) => (summary.lastUpdated && (!value || summary.lastUpdated > value) ? summary.lastUpdated : value),
+  null,
+);
+const names = section.summaries.map((summary) => summary.company.name);
+
+// 标题按公司名拼，超长就少放几个名字，保证整条 title 不超过 60 字（含 " | NewHot"）
+const pickTitle = (count: number) => {
+  const top = names.slice(0, count);
+  return `${section.label}：${top.join("、")}${names.length > top.length ? ` 等 ${names.length} 家公司` : ""}`;
+};
+let title = pickTitle(3);
+if (title.length > 50) title = pickTitle(2);
+if (title.length > 50) title = `${section.label}：${theme.name}下的 ${names.length} 家公司`;
+
+let description = `${theme.name}主题的${section.label}分类，收录${names.slice(0, 6).join("、")}${names.length > 6 ? ` 等 ${names.length}` : ""} 家公司，共 ${articleCount} 篇官方动态，记录产品能力、版本更新、价格与授权变化。`;
+if (description.length > 160) {
+  description = `${theme.name}主题的${section.label}分类，收录${names.slice(0, 4).join("、")} 等 ${names.length} 家公司，共 ${articleCount} 篇官方动态，记录产品能力、版本更新、价格与授权变化。`;
+}
+
+const tabs = [
+  { id: "all", label: "全部", href: themeHref(theme.id) },
+  ...listing.sections.map((entry) => ({
+    id: entry.id,
+    label: entry.label,
+    href: themeGroupHref(theme.id, entry.id),
+    active: entry.id === section.id,
+  })),
+];
+---
+<Root title={title} description={description} path={themeGroupHref(theme.id, section.id)}>
+  <Shell selectedChannel="主题" mainClassName={widePageContainerClass}>
+    <ChannelPanel
+      title={`${theme.name} · ${section.label}`}
+      eyebrow={theme.eyebrow}
+      description={description}
+      tabs={tabs}
+      stats={`${section.summaries.length} 家公司 · ${articleCount} 篇动态${latest ? ` · 更新至 ${formatMonthDay(latest)}` : ""}`}
+    />
+
+    <section class="mt-5" data-theme-section={section.id}>
+      <div class="grid gap-4 [grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr))]">
+        {section.summaries.map((summary) => (
+          <CompanyCard summary={summary} />
+        ))}
+      </div>
+    </section>
+
+    <PageGuide
+      heading="主题是怎么划分的？"
+      description="主题按方向聚合公司；主题下的公司与动态均来自厂商官方渠道，由编辑核对后归档，同一家公司可以出现在多个主题里。"
+    />
+  </Shell>
+</Root>
