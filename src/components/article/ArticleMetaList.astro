@@ -2,6 +2,7 @@
 import Icon from "@/components/ui/Icon.astro";
 import { getContentTypeLabel, resolveContentType } from "@/modules/content/content-types";
 import type { Post } from "@/modules/content/schema";
+import { getCompany } from "@/modules/vendor/model";
 import { getSubcategoryLabel, getTopicAccent, getTopicLabel, subcategoryHref, topicHref } from "@/modules/channel";
 import { formatDate } from "@/shared/utils";
 
@@ -20,9 +21,30 @@ const subcategoryLabel = post.subcategory ? getSubcategoryLabel(post.category, p
 const subcategoryPath = post.subcategory ? subcategoryHref(post.category, post.subcategory) : null;
 const contentType = post.type ?? resolveContentType(post.category, post.subcategory ?? "") ?? undefined;
 const publishedAt = post.time ? `${formatDate(post.date)} ${post.time}` : formatDate(post.date);
-const attribution = post.author ?? post.sources?.[0]?.publisher ?? null;
+const company = getCompany(post.company);
+// 有作者显示作者，没有就用公司名
+const authorName = post.author?.trim() || company?.name || null;
+const publisher = post.sources?.[0]?.publisher ?? null;
 
-const rows = [
+type MetaRow = {
+  key: string;
+  icon: string;
+  iconClass: string;
+  label: string;
+  href?: string | null;
+  value: string | null;
+  external?: boolean;
+};
+
+const rows: MetaRow[] = [
+  {
+    key: "author",
+    icon: "UserRound",
+    iconClass: "text-violet-500",
+    label: "作者",
+    href: null,
+    value: authorName,
+  },
   { key: "channel", icon: "Radio", iconClass: accent.text, label: "频道", href: topicHref(post.category), value: topicLabel },
   { key: "subcategory", icon: "FolderTree", iconClass: "text-amber-500", label: "分类", href: subcategoryPath, value: subcategoryLabel },
   { key: "type", icon: "Tag", iconClass: "text-rose-500", label: "类型", href: null, value: contentType ? getContentTypeLabel(contentType) : null },
@@ -32,7 +54,7 @@ const rows = [
     iconClass: "text-sky-500",
     label: "信息出处",
     href: post.source,
-    value: attribution,
+    value: publisher,
     external: true,
   },
   { key: "date", icon: "CalendarClock", iconClass: "text-indigo-500", label: "发布时间", href: null, value: publishedAt },

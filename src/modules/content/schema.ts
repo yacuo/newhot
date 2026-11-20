@@ -77,6 +77,9 @@ export type ArticleListItem = Pick<PostMeta, "title" | "description" | "date" | 
   productId?: string;
   /** 公司层级，构建期从 companies.json 写入，首页按大模型/工具/开源与运行时筛选 */
   companyTier?: "model" | "tool" | "infra";
+  /** 公司展示名与 logo，构建期写入，列表作者位直接使用，客户端不再查公司表 */
+  companyName?: string;
+  companyLogo?: string;
 };
 
 /** 频道 / 分类 / 公司的统计信息，供列表页显示计数与最新日期 */

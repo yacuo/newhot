@@ -8,6 +8,8 @@ export type TimelineItem = {
   product?: string;
   productId?: string;
   company?: string;
+  companyName?: string;
+  companyLogo?: string;
   category: string;
   categoryLabel?: string;
   subcategory?: string;
@@ -27,14 +29,6 @@ export const weekdayOf = (date: string) =>
     new Date(`${date}T00:00:00+08:00`),
   );
 
-const sameEntity = (a?: string, b?: string) => {
-  if (!a || !b) return false;
-  const normalize = (value: string) => value.toLowerCase().replace(/[\s._-]+/g, "");
-  const left = normalize(a);
-  const right = normalize(b);
-  return Boolean(left && right) && (left === right || left.includes(right) || right.includes(left));
-};
-
 export function rowMarkup(
   item: TimelineItem,
   showTopic: boolean,
@@ -48,13 +42,29 @@ export function rowMarkup(
     : showSubcategory
       ? subcategory
       : null;
-  const entityLabel = item.product ?? item.author ?? null;
-  const inlineAuthor = item.author && item.product && !sameEntity(item.product, item.author) ? item.author : null;
+  // 厂商 · 作者；没有作者就只显示厂商，作者已包含厂商名时不重复
+  const company = item.companyName?.trim() || null;
+  const author = item.author?.trim() || null;
+  const normalize = (value: string) => value.toLowerCase().replace(/[\s._-]+/g, "");
+  const authorLabel =
+    company && author
+      ? normalize(author).includes(normalize(company))
+        ? author
+        : `${company} · ${author}`
+      : author ?? company;
+  const authorBlock = authorLabel
+    ? `<span class="inline-flex items-center gap-1.5 pr-1 text-slate-600">${
+        item.companyLogo
+          ? `<img src="${escapeHtml(item.companyLogo)}" alt="" aria-hidden="true" loading="lazy" decoding="async" class="h-4 w-4 shrink-0 rounded-full bg-white object-contain" />`
+          : `<span class="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-slate-100 text-[9px] font-medium leading-none text-slate-500">${escapeHtml(authorLabel.slice(0, 1))}</span>`
+      }${escapeHtml(authorLabel)}</span>`
+    : "";
+  const entityLabel = item.product ?? null;
 
   const badges = [
+    authorBlock,
     primaryLabel ? `<span class="badge badge-accent">${escapeHtml(primaryLabel)}</span>` : "",
     entityLabel ? `<span class="badge badge-muted">${escapeHtml(entityLabel)}</span>` : "",
-    inlineAuthor ? `<span class="text-slate-500 xl:hidden">@${escapeHtml(inlineAuthor)}</span>` : "",
   ].join("");
 
   const track = item.author

@@ -26,6 +26,11 @@ const PRODUCT_IDLE = [
 const root = document.querySelector<HTMLElement>("[data-company-feed]");
 const dataNode = document.querySelector<HTMLScriptElement>("[data-company-data]");
 
+const build = document.querySelector('meta[name="newhot-build"]')?.getAttribute("content") ?? "";
+const versionSuffix = build && build !== "dev" ? `?v=${encodeURIComponent(build)}` : "";
+// 开发环境没有构建号，必须绕过缓存，否则改完数据还会读到旧的 JSON
+const listCache: RequestCache = build && build !== "dev" ? "force-cache" : "no-store";
+
 if (root && dataNode) {
   const payload = JSON.parse(dataNode.textContent ?? "{}") as Payload;
   const channels = root.querySelector<HTMLElement>("[data-company-channels]");
@@ -162,9 +167,7 @@ if (root && dataNode) {
     const page = Math.floor(items.length / 50) + 1;
 
     try {
-      const build = document.querySelector('meta[name="newhot-build"]')?.getAttribute("content") ?? "";
-      const suffix = build && build !== "dev" ? `?v=${encodeURIComponent(build)}` : "";
-      const response = await fetch(`/data/lists/${payload.scope}/${page}.json${suffix}`, { cache: "force-cache" });
+      const response = await fetch(`/data/lists/${payload.scope}/${page}.json${versionSuffix}`, { cache: listCache });
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
       const data = (await response.json()) as { items: TimelineItem[] };

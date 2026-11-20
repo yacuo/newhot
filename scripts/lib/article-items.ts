@@ -122,6 +122,8 @@ function normalizePost(meta: Record<string, unknown>, content: string, sourcePat
     product: productLabel,
     productId: product?.id,
     companyTier: company?.tier,
+    companyName: company?.name,
+    companyLogo: company?.logo,
     readingTime: estimateReadingTime(content),
     href: `/${meta.subcategory}/${meta.slug}/`,
   };

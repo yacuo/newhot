@@ -1,7 +1,6 @@
 ---
 import DayGroup from "./DayGroup.astro";
 import type { ArticleListItem } from "@/modules/content/schema";
-import { isSameEntity } from "@/shared/utils";
 
 type Props = {
   items: ArticleListItem[];
@@ -42,9 +41,17 @@ for (const item of items) {
             : showSubcategory
               ? subcategory
               : null;
-          const entityLabel = item.product ?? item.author ?? null;
-          const inlineAuthor =
-            item.author && item.product && !isSameEntity(item.product, item.author) ? item.author : null;
+          // 厂商 · 作者；没有作者就只显示厂商，作者已包含厂商名时不重复
+          const company = item.companyName?.trim() || null;
+          const author = item.author?.trim() || null;
+          const normalize = (value: string) => value.toLowerCase().replace(/[\s._-]+/g, "");
+          const authorLabel =
+            company && author
+              ? normalize(author).includes(normalize(company))
+                ? author
+                : `${company} · ${author}`
+              : author ?? company;
+          const entityLabel = item.product ?? null;
 
           return (
             <li data-article-item data-category={item.category} data-product={productKeyOf(item)} class="xl:grid xl:grid-cols-[148px_minmax(0,1fr)] xl:gap-x-8">
@@ -59,9 +66,27 @@ for (const item of items) {
 
               <a href={item.href} class="group block border-t border-slate-100 py-4">
                 <div class="flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs leading-5">
+                  {authorLabel ? (
+                    <span class="inline-flex items-center gap-1.5 pr-1 text-slate-600">
+                      {item.companyLogo ? (
+                        <img
+                          src={item.companyLogo}
+                          alt=""
+                          aria-hidden="true"
+                          loading="lazy"
+                          decoding="async"
+                          class="h-4 w-4 shrink-0 rounded-full bg-white object-contain"
+                        />
+                      ) : (
+                        <span class="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-slate-100 text-[9px] font-medium leading-none text-slate-500">
+                          {authorLabel.slice(0, 1)}
+                        </span>
+                      )}
+                      {authorLabel}
+                    </span>
+                  ) : null}
                   {primaryLabel ? <span class="badge badge-accent">{primaryLabel}</span> : null}
                   {entityLabel ? <span class="badge badge-muted">{entityLabel}</span> : null}
-                  {inlineAuthor ? <span class="text-slate-500 xl:hidden">@{inlineAuthor}</span> : null}
                 </div>
                 <h3 class="mt-1.5 truncate text-[15px] font-medium leading-6 text-slate-900 transition-colors group-hover:text-slate-600">
                   {item.title}
