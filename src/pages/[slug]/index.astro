@@ -79,7 +79,7 @@ const faqJsonLd = topic?.faqs.length
       <ChannelPanel
         title={topic.label}
         eyebrow={topic.labelEn}
-        description={topic.description}
+        description={topic.seo.description}
         stats={stat ? `${total} 篇文章 · 更新至 ${formatMonthDay(stat.latest)}` : undefined}
       />
 
