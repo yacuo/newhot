@@ -80,11 +80,17 @@ const faqJsonLd = topic?.faqs.length
         title={topic.label}
         eyebrow={topic.labelEn}
         description={topic.seo.description}
-        stats={stat ? `${total} 篇文章 · 更新至 ${formatMonthDay(stat.latest)}` : undefined}
       />
 
       <section class={`mt-5 ${pagePanelClass}`}>
-        <h2 class="text-base font-semibold text-slate-900">最新动态</h2>
+        <div class="flex items-baseline justify-between gap-4">
+          <h2 class="text-base font-semibold text-slate-900">最新动态</h2>
+          {stat ? (
+            <p class="shrink-0 font-mono text-[11px] tracking-[0.04em] text-slate-400">
+              {`${total} 篇文章 · 更新至 ${formatMonthDay(stat.latest)}`}
+            </p>
+          ) : null}
+        </div>
         <ChannelTabs
           tabs={[
             { id: "all", label: "全部", href: topicHref(topic.id), active: true },

@@ -30,7 +30,7 @@ const formatDate = (value: string) => {
 };
 ---
 <Root
-  title={`${entry.title} · ${entry.version}`}
+  title={entry.title}
   description={entry.summary}
   path={`/update-log/${entry.slug}/`}
   type="article"
@@ -48,8 +48,9 @@ const formatDate = (value: string) => {
         </a>
 
         <div class="mt-5 flex flex-wrap items-center gap-2">
-          <time datetime={entry.date} class="font-mono text-xs tracking-[0.04em] text-slate-400">{formatDate(entry.date)}</time>
-          <span class="badge badge-accent">{entry.version}</span>
+          <time datetime={`${entry.date}T${entry.time}`} class="font-mono text-xs tracking-[0.04em] text-slate-400">
+            {formatDate(entry.date)} {entry.time}
+          </time>
           {entry.tags.map((tag) => (
             <span class="badge badge-muted">{tag}</span>
           ))}
@@ -92,7 +93,7 @@ const formatDate = (value: string) => {
           <a href={`/update-log/${newer.slug}/`} class={`${pagePanelClass} group block`}>
             <span class="flex items-center gap-1.5 text-xs text-slate-400">
               <Icon name="ArrowLeft" size={14} strokeWidth={2} class="h-3.5 w-3.5" />
-              更新的一篇 · {newer.version}
+              更新的一篇
             </span>
             <p class="mt-2 truncate text-sm font-semibold text-slate-900 transition-colors group-hover:text-slate-600">{newer.title}</p>
           </a>
@@ -101,7 +102,7 @@ const formatDate = (value: string) => {
         {older ? (
           <a href={`/update-log/${older.slug}/`} class={`${pagePanelClass} group block md:text-right`}>
             <span class="flex items-center gap-1.5 text-xs text-slate-400 md:justify-end">
-              更早的一篇 · {older.version}
+              更早的一篇
               <Icon name="ArrowRight" size={14} strokeWidth={2} class="h-3.5 w-3.5" />
             </span>
             <p class="mt-2 truncate text-sm font-semibold text-slate-900 transition-colors group-hover:text-slate-600">{older.title}</p>

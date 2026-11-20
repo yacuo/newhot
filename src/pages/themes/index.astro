@@ -26,25 +26,22 @@ const blocks = themes.map((theme) => {
     if (logos.length === 7) break;
   }
 
+  const latest = listing.summaries.reduce<string | null>(
+    (value, summary) => (summary.lastUpdated && (!value || summary.lastUpdated > value) ? summary.lastUpdated : value),
+    null,
+  );
+
   return {
     id: theme.id,
     name: theme.name,
     description: theme.description,
     companyCount: listing.summaries.length,
     articleCount: listing.summaries.reduce((total, summary) => total + summary.articleCount, 0),
+    latest,
     logos,
     sections: listing.sections,
   };
 });
-
-const latest = blocks.reduce<string | null>((value, block) => {
-  for (const section of block.sections) {
-    for (const summary of section.summaries) {
-      if (summary.lastUpdated && (!value || summary.lastUpdated > value)) value = summary.lastUpdated;
-    }
-  }
-  return value;
-}, null);
 
 const description = themesPage.seo.description;
 
@@ -80,7 +77,6 @@ const jsonLd = {
       title="主题"
       eyebrow="THEMES"
       description={themesPage.seo.description}
-      stats={`${meta.total} 篇文章${latest ? ` · 更新至 ${formatMonthDay(latest)}` : ""}`}
     />
 
     <div class="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
@@ -108,8 +104,10 @@ const jsonLd = {
               />
             ))}
           </div>
-          <div class="mt-auto flex items-center justify-between pt-4 font-mono text-[11px] text-slate-400">
-            <span>{block.articleCount} 篇动态</span>
+          <div class="mt-auto flex flex-wrap items-center justify-between gap-x-3 gap-y-1 pt-4 font-mono text-[11px] text-slate-400">
+            <span>
+              {block.articleCount} 篇动态{block.latest ? ` · 更新至 ${formatMonthDay(block.latest)}` : ""}
+            </span>
             <span class="text-indigo-600 transition-colors group-hover:text-indigo-700">查看主题 →</span>
           </div>
         </a>

@@ -91,13 +91,12 @@ const collectionJsonLd = {
               {group.entries.map((entry) => (
                 <li class="xl:grid xl:grid-cols-[148px_minmax(0,1fr)] xl:gap-x-8">
                   <div class="relative hidden border-r border-slate-200 pr-5 pt-4 text-right xl:block">
-                    <p class="mt-[22px] font-mono text-sm leading-6 text-slate-900">{entry.version}</p>
+                    <p class="mt-[22px] font-mono text-sm leading-6 text-slate-900">{entry.time}</p>
                     <span class="absolute -right-[4.5px] top-[46px] h-2 w-2 rounded-full bg-slate-950 ring-2 ring-surface"></span>
                   </div>
 
                   <a href={`/update-log/${entry.slug}/`} class="group block border-t border-slate-100 py-4">
                     <div class="flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs leading-5">
-                      <span class="badge badge-accent">{entry.version}</span>
                       {entry.tags.map((tag) => (
                         <span class="badge badge-muted">{tag}</span>
                       ))}
@@ -148,15 +147,14 @@ const collectionJsonLd = {
         heading="这个更新日志记录什么？"
         description={updateLogPage.page.description}
         points={[
-          "每条日志由编辑核对官方发布后整理，版本号与日期以厂商原文为准。",
-          "一版一篇日志，标注版本号与发布日期，并按时间倒序排列。",
+          "每条日志由编辑核对官方发布后整理，日期与变更内容以站内实际情况为准。",
+          "一次发布一篇日志，标注发布日期与具体时间，并按时间倒序排列。",
           "变更分成新增、优化、修复三类，没有内容的分类直接省略。",
           "每条日志都能单独打开，也能在列表里按日期分组浏览。",
         ]}
         sources={[
           { name: "GitHub", href: siteConfig.repository },
         ]}
-        quote={{ text: "版本号由主版本、次版本与修订号三段组成。", label: "语义化版本 2.0.0", href: "https://semver.org/lang/zh-CN/" }}
       />
     </div>
   </Shell>

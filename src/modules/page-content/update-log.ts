@@ -62,10 +62,13 @@ function loadEntries() {
 
 export type UpdateLogEntry = UpdateLogEntryMeta & { slug: string };
 
-/** 时间倒序：最新的一篇排最前；同一天按 slug 稳定排序 */
-export const updateLogEntries: UpdateLogEntry[] = loadEntries().sort((a, b) =>
-  a.date === b.date ? a.slug.localeCompare(b.slug) : a.date < b.date ? 1 : -1,
-);
+/** 时间倒序：最新的一篇排最前；同一时刻按 slug 稳定排序 */
+export const updateLogEntries: UpdateLogEntry[] = loadEntries().sort((a, b) => {
+  const left = `${a.date} ${a.time}`;
+  const right = `${b.date} ${b.time}`;
+
+  return left === right ? a.slug.localeCompare(b.slug) : left < right ? 1 : -1;
+});
 
 export function getUpdateLogEntry(slug: string) {
   return updateLogEntries.find((entry) => entry.slug === slug) ?? null;

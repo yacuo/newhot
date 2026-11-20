@@ -368,11 +368,17 @@ if (topic && sub) {
         title={category.sub.label}
         eyebrow={category.topic.labelEn}
         description={category.seoDescription}
-        stats={category.stat ? `${category.total} 篇文章 · 更新至 ${formatMonthDay(category.stat.latest)}` : undefined}
       />
 
       <section class={`mt-5 ${pagePanelClass}`}>
-        <h2 class="text-base font-semibold text-slate-900">最新动态</h2>
+        <div class="flex items-baseline justify-between gap-4">
+          <h2 class="text-base font-semibold text-slate-900">最新动态</h2>
+          {category.stat ? (
+            <p class="shrink-0 font-mono text-[11px] tracking-[0.04em] text-slate-400">
+              {`${category.total} 篇文章 · 更新至 ${formatMonthDay(category.stat.latest)}`}
+            </p>
+          ) : null}
+        </div>
         <ChannelTabs
           tabs={[
             { id: "all", label: "全部", href: topicHref(category.topic.id) },

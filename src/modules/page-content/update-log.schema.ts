@@ -19,8 +19,8 @@ export const updateLogEntrySchema = z
       .string()
       .regex(/^\d{4}-\d{2}-\d{2}$/, "date 必须是 YYYY-MM-DD")
       .refine((value) => !Number.isNaN(Date.parse(value)), "date 不是有效日期"),
-    /** 语义化版本，必须带 v，例如 v1.6.0 */
-    version: z.string().regex(/^v\d+\.\d+\.\d+$/, "version 必须是 vX.Y.Z，例如 v1.6.0"),
+    /** 发布时间，24 小时制 HH:mm */
+    time: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, "time 必须是 HH:mm，例如 09:30"),
     title: z.string().trim().min(4, "title 至少 4 个字").max(80, "title 不超过 80 个字"),
     summary: z.string().trim().min(20, "summary 至少 20 个字").max(200, "summary 不超过 200 个字"),
     tags: z.array(z.string().trim().min(1).max(20)).min(1, "tags 至少 1 个").max(5, "tags 最多 5 个").default([]),

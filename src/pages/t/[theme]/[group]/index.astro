@@ -7,7 +7,7 @@ import PageGuide from "@/components/channel/PageGuide.astro";
 import { buildThemeListing, getTheme, themeGroupHref, themeHref, themes } from "@/modules/vendor/themes";
 import { readFeedMeta } from "@/modules/content";
 import { formatMonthDay } from "@/shared/utils";
-import { widePageContainerClass } from "@/shared/ui/classes";
+import { widePageContainerClass, pagePanelClass } from "@/shared/ui/classes";
 
 export function getStaticPaths() {
   return themes.flatMap((theme) =>
@@ -67,13 +67,19 @@ const tabs = [
       eyebrow={theme.eyebrow}
       description={description}
       tabs={tabs}
-      stats={`${section.summaries.length} 家公司 · ${articleCount} 篇动态${latest ? ` · 更新至 ${formatMonthDay(latest)}` : ""}`}
     />
 
-    <section class="mt-5" data-theme-section={section.id}>
-      <div class="grid gap-4 [grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr))]">
+    <section class={`mt-5 ${pagePanelClass}`}>
+      <div class="flex items-baseline justify-between gap-4">
+        <h2 class="text-base font-semibold text-slate-900">公司列表</h2>
+        <p class="shrink-0 font-mono text-[11px] tracking-[0.04em] text-slate-400">
+          {`${section.summaries.length} 家公司 · ${articleCount} 篇动态${latest ? ` · 更新至 ${formatMonthDay(latest)}` : ""}`}
+        </p>
+      </div>
+
+      <div class="mt-5 grid gap-4 [grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr))]" data-theme-section={section.id}>
         {section.summaries.map((summary) => (
-          <CompanyCard summary={summary} />
+          <CompanyCard summary={summary} tone="muted" />
         ))}
       </div>
     </section>
