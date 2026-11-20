@@ -33,6 +33,8 @@ export const postMetaSchema = z.object({
     .string()
     .regex(/^\d{2}:\d{2}$/, "time 必须是 HH:MM")
     .optional(),
+  /** 站内发布时间：我们收录并发布这篇稿子的日期；缺失时按 fetchedAt 的日期兜底 */
+  publishedAt: z.string().date("publishedAt 必须是 YYYY-MM-DD").optional(),
   updated: z.string().date("updated 必须是 YYYY-MM-DD").optional(),
   author: z.string().min(1, "author 不能为空").optional(),
   /** 公司归属：对应 data/vendors/companies.json 的 id，由采集流程按来源映射写入 */

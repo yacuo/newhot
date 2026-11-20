@@ -2,7 +2,7 @@
 import Root from "@/layouts/Root.astro";
 import Shell from "@/layouts/Shell.astro";
 import ChannelPanel from "@/components/channel/ChannelPanel.astro";
-import CompanyCard from "@/components/vendor/CompanyCard.astro";
+import CompanyRankRow from "@/components/vendor/CompanyRankRow.astro";
 import PageGuide from "@/components/channel/PageGuide.astro";
 import { buildThemeListing, getTheme, themeGroupHref, themeHref, themes } from "@/modules/vendor/themes";
 import { readFeedMeta } from "@/modules/content";
@@ -77,11 +77,15 @@ const tabs = [
         </p>
       </div>
 
-      <div class="mt-5 grid gap-4 [grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr))]" data-theme-section={section.id}>
-        {section.summaries.map((summary) => (
-          <CompanyCard summary={summary} tone="muted" />
+      <ul class="mt-5 divide-y divide-slate-100" data-theme-section={section.id}>
+        {section.summaries.map((summary, index) => (
+          <CompanyRankRow
+            summary={summary}
+            rank={index + 1}
+            maxCount={Math.max(...section.summaries.map((item) => item.articleCount), 1)}
+          />
         ))}
-      </div>
+      </ul>
     </section>
 
     <PageGuide

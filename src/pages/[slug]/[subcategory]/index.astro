@@ -69,6 +69,8 @@ if (post) {
   const subcategoryPath = post.subcategory ? subcategoryHref(post.category, post.subcategory) : null;
   const articleUrl = getSiteUrl(post.href);
   const ogImageUrl = getSiteUrl(siteConfig.ogImage);
+  /** 站内发布时间：原文日期只用于发展史与列表排序，不作为文章发布时间输出 */
+  const sitePublishedAt = post.publishedAt ?? post.fetchedAt?.slice(0, 10) ?? post.date;
 
   article = {
     current: post,
@@ -84,8 +86,8 @@ if (post) {
       "@type": post.subcategory === "pricing" ? "Article" : "NewsArticle",
       headline: post.title,
       description: post.description,
-      datePublished: post.date,
-      dateModified: post.updated ?? post.date,
+      datePublished: sitePublishedAt,
+      dateModified: post.updated ?? sitePublishedAt,
       author: { "@type": "Organization", name: post.author || siteConfig.author },
       publisher: {
         "@type": "Organization",

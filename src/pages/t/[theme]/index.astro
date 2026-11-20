@@ -2,7 +2,7 @@
 import Root from "@/layouts/Root.astro";
 import Shell from "@/layouts/Shell.astro";
 import ChannelPanel from "@/components/channel/ChannelPanel.astro";
-import CompanyCard from "@/components/vendor/CompanyCard.astro";
+import CompanyRankRow from "@/components/vendor/CompanyRankRow.astro";
 import PageGuide from "@/components/channel/PageGuide.astro";
 import { buildThemeListing, getTheme, getThemeSeo, themeGroupHref, themeHref, themes } from "@/modules/vendor/themes";
 import { readFeedMeta } from "@/modules/content";
@@ -61,11 +61,15 @@ const tabs = [
               <h3 class="text-[13px] font-semibold tracking-[-0.01em] text-slate-700">{section.label}</h3>
               <span class="font-mono text-[11px] tabular-nums text-slate-400">{section.summaries.length}</span>
             </div>
-            <div class="grid gap-4 [grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr))]">
-              {section.summaries.map((summary) => (
-                <CompanyCard summary={summary} tone="muted" />
+            <ul class="divide-y divide-slate-100">
+              {section.summaries.map((summary, index) => (
+                <CompanyRankRow
+                  summary={summary}
+                  rank={index + 1}
+                  maxCount={Math.max(...section.summaries.map((item) => item.articleCount), 1)}
+                />
               ))}
-            </div>
+            </ul>
           </section>
         ))}
       </div>

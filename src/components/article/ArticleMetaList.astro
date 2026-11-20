@@ -20,7 +20,8 @@ const accent = getTopicAccent(post.category);
 const subcategoryLabel = post.subcategory ? getSubcategoryLabel(post.category, post.subcategory) : null;
 const subcategoryPath = post.subcategory ? subcategoryHref(post.category, post.subcategory) : null;
 const contentType = post.type ?? resolveContentType(post.category, post.subcategory ?? "") ?? undefined;
-const publishedAt = post.time ? `${formatDate(post.date)} ${post.time}` : formatDate(post.date);
+/** 发布时间：我们收录并发布这篇稿子的日期，原文日期不对外展示 */
+const sitePublishedAt = post.publishedAt ?? post.fetchedAt?.slice(0, 10) ?? post.date;
 const company = getCompany(post.company);
 // 有作者显示作者，没有就用公司名
 const authorName = post.author?.trim() || company?.name || null;
@@ -33,6 +34,7 @@ type MetaRow = {
   label: string;
   href?: string | null;
   value: string | null;
+  datetime?: string;
   external?: boolean;
 };
 
@@ -52,12 +54,20 @@ const rows: MetaRow[] = [
     key: "source",
     icon: "Building2",
     iconClass: "text-sky-500",
-    label: "信息出处",
+    label: "参考来源",
     href: post.source,
     value: publisher,
     external: true,
   },
-  { key: "date", icon: "CalendarClock", iconClass: "text-indigo-500", label: "发布时间", href: null, value: publishedAt },
+  {
+    key: "published",
+    icon: "CalendarClock",
+    iconClass: "text-indigo-500",
+    label: "发布时间",
+    href: null,
+    value: formatDate(sitePublishedAt),
+    datetime: sitePublishedAt,
+  },
   { key: "reading", icon: "Clock", iconClass: "text-teal-500", label: "阅读时长", href: null, value: `约 ${post.readingTime} 分钟` },
 ].filter((row) => row.value !== null);
 ---
@@ -83,8 +93,8 @@ const rows: MetaRow[] = [
           {row.label}
         </span>
         <span class="mt-0.5 block pl-6 text-[13px] leading-5 text-slate-800">
-          {row.key === "date" ? (
-            <time datetime={`${post.date}${post.time ? `T${post.time}` : ""}`}>{row.value}</time>
+          {row.datetime ? (
+            <time datetime={row.datetime}>{row.value}</time>
           ) : row.href ? (
             <a
               href={row.href}

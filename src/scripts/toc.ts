@@ -22,7 +22,6 @@ if (links.length) {
     for (const item of items) {
       const isActive = item === active;
       item.link.setAttribute("aria-current", isActive ? "true" : "false");
-      item.link.style.borderLeftColor = isActive ? "var(--primary)" : "";
       item.link.style.color = isActive ? "var(--primary)" : "";
     }
   };
