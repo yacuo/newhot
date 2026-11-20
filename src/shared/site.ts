@@ -13,6 +13,11 @@ export function getBaseUrl() {
 }
 
 export function getSiteUrl(path = "") {
+  // 已经是完整地址（例如指向资源站的 logo）就原样返回
+  if (/^https?:\/\//i.test(path)) {
+    return path;
+  }
+
   const baseUrl = getBaseUrl().replace(/\/$/, "");
   const normalizedPath = path.startsWith("/") ? path : `/${path}`;
 
