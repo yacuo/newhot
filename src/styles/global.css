@@ -635,11 +635,15 @@ body {
 }
 
 .prose table {
-  display: table;
-  width: 100%;
+  /* 表格只做横向滚动，单元格一律不换行：width:max-content 撑开真实宽度，外层再滚动 */
+  display: block;
+  width: max-content;
   max-width: 100%;
   margin: 22px 0;
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  white-space: nowrap;
   border: 1px solid #e8e8e8;
   border-collapse: collapse;
   border-spacing: 0;
@@ -683,6 +687,7 @@ body {
   text-align: left;
   line-height: 1.6;
   vertical-align: middle;
+  white-space: nowrap;
 }
 
 .prose table th:last-child,
@@ -699,7 +704,8 @@ body {
 
 .prose table td {
   color: #252933;
-  word-break: break-word;
+  word-break: normal;
+  overflow-wrap: normal;
 }
 
 .prose table tbody tr:last-child {

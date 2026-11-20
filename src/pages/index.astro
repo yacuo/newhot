@@ -76,7 +76,7 @@ const faqJsonLd = {
       name: "NewHot 是什么？",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "NewHot 是按发布时间整理 AI 官方更新动态的资讯站，覆盖大模型、AI 编程、AI 办公、AI 创作与故障排查，并为每家公司建立独立档案。",
+        text: "NewHot 按发布时间整理 AI 厂商官方更新，覆盖大模型、AI 编程、AI 办公、AI 创作、智能体与平台、开源与运行时、云平台与算力，以及故障排查频道，只收录官方公告与文档。",
       },
     },
     {
@@ -98,7 +98,7 @@ const faqJsonLd = {
   ],
 };
 
-const description = "NewHot 是什么？NewHot 是按发布时间整理 AI 官方更新动态的资讯站，覆盖大模型、AI 编程、AI 办公、AI 创作与故障排查，只收录厂商官方公告与文档，每条标注版本与生效时间。";
+const description = "AI 厂商官方更新汇总：大模型发布与 API 价格、AI 编程工具更新、AI 办公软件版本、AI 绘画与视频工具价格、智能体框架与 MCP、本地部署与推理运行时、云平台模型计费，以及 AI 工具报错排查，覆盖 GPT、Claude Code、DeepSeek、GLM 等厂商的版本发布、Bug 修复与套餐调整。";
 ---
 <Root title={homePage.seo.title} description={homePage.seo.description} path={homePage.seo.path}>
   <script type="application/ld+json" set:html={JSON.stringify(collectionJsonLd)} />
@@ -114,7 +114,7 @@ const description = "NewHot 是什么？NewHot 是按发布时间整理 AI 官�
     <section class={`mt-5 ${pagePanelClass}`}>
       <h2 class="text-base font-semibold text-slate-900">NewHot 是什么？</h2>
       <p class="mt-3 text-sm leading-7 text-slate-600">
-        NewHot 是一个按发布时间整理 AI 官方更新动态的资讯站：把大模型、AI 编程、AI 办公、AI 创作、智能体与云平台的官方发布整理成动态，经人工审核后发布，并为每家公司建立独立档案。
+        NewHot 按发布时间整理 AI 厂商官方更新：覆盖大模型、AI 编程、AI 办公、AI 创作、智能体与平台、开源与运行时、云平台与算力，以及故障排查频道，记录版本发布、价格调整、Bug 修复与服务状态，只收录官方公告与文档，按主题归档公司、产品与每次变化。
       </p>
 
       <ul class="mt-4 grid gap-3 md:grid-cols-3">
