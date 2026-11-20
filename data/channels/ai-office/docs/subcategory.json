@@ -1,0 +1,9 @@
+{
+  "label": "文档与知识",
+  "description": "文档、知识库、写作、翻译、演示与企业搜索工具，如 Notion、Coda、Grammarly、DeepL、Glean。关注内容生产、知识沉淀与检索能力的变化。",
+  "seo": {
+    "title": "示例分类：文档与知识",
+    "description": "文档与知识的示例分类描述，仅用于演示分类页 SEO 配置，请替换为自己的关键词与介绍。"
+  },
+  "order": 20
+}

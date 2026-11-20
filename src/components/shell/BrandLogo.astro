@@ -1,0 +1,12 @@
+---
+type Props = { href?: string };
+const { href = "/" } = Astro.props;
+---
+<a
+  href={href}
+  data-nav-link
+  class="brand-wordmark group inline-flex shrink-0 items-center gap-[3px] text-[26px] font-extrabold leading-none tracking-[-0.02em]"
+>
+  <span>New</span>
+  <span>Hot</span>
+</a>

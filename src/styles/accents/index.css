@@ -1,0 +1,24 @@
+/*
+ * 主题色注册表。
+ *
+ * 新增一个主题色 = 做两件事：
+ *   1. 在本目录新建 <id>.css，写 html[data-accent="<id>"] { ...色阶 + label + swatch }
+ *   2. 在下面 @import 一行，并在 --accent-list 里追加 <id>
+ *
+ * --accent-list 是切换器的数据源：顶栏那个「主题色」下拉从这里读有哪些主题，
+ * 再逐个读每个主题自己声明的 --accent-label / --accent-swatch。
+ * 第一个 id 必须是不带 data-accent 的默认主题（electric）。
+ *
+ * 注意：本文件被 globals.css 顶部 @import，位置在所有规则之前，
+ * 因此各主题的 html[data-accent] (0,1,1) 会排在暗色重映射 html[data-theme="dark"]
+ * (0,1,1) 之前，暗色重映射依然生效。
+ */
+@import "./electric.css";
+@import "./rose.css";
+@import "./orange.css";
+@import "./teal.css";
+@import "./ink.css";
+
+:root {
+  --accent-list: "electric,rose,orange,teal,ink";
+}

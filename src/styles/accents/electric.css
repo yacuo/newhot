@@ -1,0 +1,31 @@
+/*
+ * 电蓝（默认主题）：不设 data-accent 时生效。
+ *
+ * 主题色机制：整站品牌色由 Tailwind 的 indigo 色阶驱动（violet 是镜像色阶）。
+ * 一个主题 = 本目录下的一个 CSS 文件，只覆盖变量，不写任何组件样式。
+ * 新增主题：复制本文件 → 改色阶与 label/swatch → 在 index.css 加一行 @import
+ * 和 --accent-list 里加一个 id，就完事了。
+ */
+:root {
+  --accent-label: "电蓝";
+  --accent-swatch: #3b5bff;
+  /* 实心主题色块上的前景色：亮色主题可改深色，其余用白色 */
+  --accent-on: #ffffff;
+
+  --color-indigo-50: #eff2ff;
+  --color-indigo-100: #dfe5ff;
+  --color-indigo-200: #c2ceff;
+  --color-indigo-300: #a3b2ff;
+  --color-indigo-400: #7b8fff;
+  --color-indigo-500: #5670ff;
+  --color-indigo-600: #3b5bff;
+  --color-indigo-700: #2440e0;
+  --color-indigo-800: #1b32b0;
+
+  /* violet 只是 indigo 的镜像，供渐变与少数历史组件使用，必须同步 */
+  --color-violet-50: #eff2ff;
+  --color-violet-100: #dfe5ff;
+  --color-violet-200: #c2ceff;
+  --color-violet-500: #5670ff;
+  --color-violet-700: #2440e0;
+}

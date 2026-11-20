@@ -1,0 +1,482 @@
+{
+  "version": 2,
+  "companies": [
+    {
+      "id": "openai",
+      "name": "OpenAI",
+      "tier": "model",
+      "homepage": "https://openai.com",
+      "aliases": [
+        "OpenAI",
+        "OpenAI Sora",
+        "Codex"
+      ],
+      "vendorIds": [
+        "openai",
+        "openai-api",
+        "openai-agents",
+        "codex"
+      ],
+      "products": [
+        {
+          "id": "gpt",
+          "name": "GPT",
+          "aliases": [
+            "GPT-6.1",
+            "GPT-6 Cyber",
+            "GPT-6",
+            "ChatGPT"
+          ]
+        },
+        {
+          "id": "codex",
+          "name": "Codex",
+          "aliases": [
+            "Codex",
+            "Codex CLI"
+          ]
+        },
+        {
+          "id": "sora",
+          "name": "Sora",
+          "aliases": [
+            "Sora"
+          ]
+        },
+        {
+          "id": "agents-sdk",
+          "name": "Agents SDK",
+          "aliases": [
+            "OpenAI Agents SDK"
+          ]
+        }
+      ],
+      "region": "global",
+      "primaryModel": "ChatGPT",
+      "logo": "/logos/openai.svg"
+    },
+    {
+      "id": "anthropic",
+      "name": "Anthropic",
+      "tier": "model",
+      "homepage": "https://www.anthropic.com",
+      "aliases": [
+        "Anthropic",
+        "Anthropic Claude",
+        "Claude API",
+        "Claude Code"
+      ],
+      "vendorIds": [
+        "anthropic",
+        "anthropic-api",
+        "claude-code",
+        "anthropic-writer"
+      ],
+      "products": [
+        {
+          "id": "claude",
+          "name": "Claude",
+          "aliases": [
+            "Claude Fable 5.2",
+            "Claude Mythos 5.2",
+            "Claude",
+            "Claude Duet"
+          ]
+        },
+        {
+          "id": "claude-code",
+          "name": "Claude Code",
+          "aliases": [
+            "Claude Code",
+            "Claude Code CLI"
+          ]
+        }
+      ],
+      "region": "global",
+      "primaryModel": "Claude",
+      "logo": "/logos/anthropic.svg"
+    },
+    {
+      "id": "google",
+      "name": "Google",
+      "tier": "model",
+      "homepage": "https://ai.google.dev",
+      "aliases": [
+        "Google",
+        "Google Gemini 图像",
+        "Google Veo",
+        "Google Workspace",
+        "Gemini CLI",
+        "Android Studio"
+      ],
+      "vendorIds": [
+        "google",
+        "gemini-api",
+        "gemini-cli",
+        "android-studio",
+        "google-workspace"
+      ],
+      "products": [
+        {
+          "id": "gemini",
+          "name": "Gemini",
+          "aliases": [
+            "Gemini 4 Carbon",
+            "Gemini",
+            "Gemini Nano"
+          ]
+        },
+        {
+          "id": "veo",
+          "name": "Veo",
+          "aliases": [
+            "Veo"
+          ]
+        },
+        {
+          "id": "nano-banana",
+          "name": "Nano Banana",
+          "aliases": [
+            "Nano Banana 2.1",
+            "Nano Banana"
+          ]
+        },
+        {
+          "id": "gemini-cli",
+          "name": "Gemini CLI",
+          "aliases": [
+            "Gemini CLI"
+          ]
+        }
+      ],
+      "region": "global",
+      "primaryModel": "Gemini",
+      "logo": "/logos/google.svg"
+    },
+    {
+      "id": "microsoft",
+      "name": "Microsoft",
+      "tier": "model",
+      "homepage": "https://www.microsoft.com",
+      "aliases": [
+        "Microsoft",
+        "GitHub",
+        "GitHub Copilot",
+        "Microsoft 365 Copilot"
+      ],
+      "vendorIds": [
+        "microsoft",
+        "copilot",
+        "microsoft-copilot",
+        "microsoft-visual-studio",
+        "vscode",
+        "dotnet",
+        "typescript"
+      ],
+      "products": [
+        {
+          "id": "copilot",
+          "name": "Copilot",
+          "aliases": [
+            "GitHub Copilot",
+            "Microsoft 365 Copilot",
+            "Copilot"
+          ]
+        },
+        {
+          "id": "visual-studio",
+          "name": "Visual Studio",
+          "aliases": [
+            "Visual Studio",
+            "Visual Studio Code",
+            "VS Code"
+          ]
+        },
+        {
+          "id": "dotnet",
+          "name": ".NET",
+          "aliases": [
+            ".NET"
+          ]
+        },
+        {
+          "id": "typescript",
+          "name": "TypeScript",
+          "aliases": [
+            "TypeScript"
+          ]
+        }
+      ],
+      "region": "global",
+      "primaryModel": "Copilot",
+      "logo": "/logos/microsoft.svg"
+    },
+    {
+      "id": "mistral",
+      "name": "Mistral AI",
+      "tier": "model",
+      "homepage": "https://mistral.ai",
+      "aliases": [
+        "Mistral AI",
+        "Mistral"
+      ],
+      "vendorIds": [
+        "mistral"
+      ],
+      "products": [
+        {
+          "id": "voxtral",
+          "name": "Voxtral",
+          "aliases": [
+            "Voxtral 3",
+            "Voxtral"
+          ]
+        },
+        {
+          "id": "mistral",
+          "name": "Mistral",
+          "aliases": [
+            "Mistral Large",
+            "Mistral"
+          ]
+        }
+      ],
+      "region": "global",
+      "primaryModel": "Mistral",
+      "logo": "/logos/mistral.svg"
+    },
+    {
+      "id": "bfl",
+      "name": "Black Forest Labs",
+      "tier": "model",
+      "homepage": "https://blackforestlabs.ai",
+      "aliases": [
+        "Black Forest Labs"
+      ],
+      "vendorIds": [
+        "bfl"
+      ],
+      "products": [
+        {
+          "id": "flux",
+          "name": "FLUX",
+          "aliases": [
+            "FLUX 3 Image Klein",
+            "FLUX"
+          ]
+        }
+      ],
+      "region": "global",
+      "primaryModel": "FLUX",
+      "logo": "/logos/bfl.svg"
+    },
+    {
+      "id": "elevenlabs",
+      "name": "ElevenLabs",
+      "tier": "model",
+      "homepage": "https://elevenlabs.io",
+      "aliases": [
+        "ElevenLabs"
+      ],
+      "vendorIds": [
+        "elevenlabs"
+      ],
+      "products": [
+        {
+          "id": "sfx",
+          "name": "SFX",
+          "aliases": [
+            "SFX v3",
+            "SFX"
+          ]
+        }
+      ],
+      "region": "global",
+      "primaryModel": "ElevenLabs",
+      "logo": "/logos/elevenlabs.svg"
+    },
+    {
+      "id": "runway",
+      "name": "Runway",
+      "tier": "model",
+      "homepage": "https://runwayml.com",
+      "aliases": [
+        "Runway"
+      ],
+      "vendorIds": [
+        "runway"
+      ],
+      "products": [
+        {
+          "id": "runway",
+          "name": "Runway",
+          "aliases": [
+            "Runway Ads",
+            "Runway"
+          ]
+        }
+      ],
+      "region": "global",
+      "primaryModel": "Runway",
+      "logo": "/logos/runway.svg"
+    },
+    {
+      "id": "cursor",
+      "name": "Cursor",
+      "tier": "tool",
+      "homepage": "https://cursor.com",
+      "aliases": [
+        "Cursor"
+      ],
+      "vendorIds": [
+        "cursor"
+      ],
+      "products": [],
+      "region": "global",
+      "primaryModel": null,
+      "logo": "/logos/cursor.svg"
+    },
+    {
+      "id": "mcp",
+      "name": "Model Context Protocol",
+      "tier": "tool",
+      "homepage": "https://modelcontextprotocol.io",
+      "aliases": [
+        "Model Context Protocol"
+      ],
+      "vendorIds": [
+        "mcp"
+      ],
+      "products": [],
+      "region": "global",
+      "primaryModel": null,
+      "logo": "/logos/mcp.svg"
+    },
+    {
+      "id": "notion",
+      "name": "Notion",
+      "tier": "tool",
+      "homepage": "https://www.notion.so",
+      "aliases": [
+        "Notion"
+      ],
+      "vendorIds": [
+        "notion"
+      ],
+      "products": [],
+      "region": "global",
+      "primaryModel": null,
+      "logo": "/logos/notion.svg"
+    },
+    {
+      "id": "zoom",
+      "name": "Zoom",
+      "tier": "tool",
+      "homepage": "https://zoom.us",
+      "aliases": [
+        "Zoom"
+      ],
+      "vendorIds": [
+        "zoom"
+      ],
+      "products": [],
+      "region": "global",
+      "primaryModel": null,
+      "logo": "/logos/zoom.svg"
+    },
+    {
+      "id": "airtable",
+      "name": "Airtable",
+      "tier": "tool",
+      "homepage": "https://www.airtable.com",
+      "aliases": [
+        "Airtable"
+      ],
+      "vendorIds": [
+        "airtable"
+      ],
+      "products": [],
+      "region": "global",
+      "primaryModel": null,
+      "logo": "/logos/airtable.svg"
+    },
+    {
+      "id": "feishu",
+      "name": "飞书",
+      "tier": "tool",
+      "homepage": "https://www.feishu.cn",
+      "aliases": [
+        "飞书"
+      ],
+      "vendorIds": [
+        "feishu"
+      ],
+      "products": [],
+      "parentId": "bytedance",
+      "region": "cn",
+      "primaryModel": null
+    },
+    {
+      "id": "jasper",
+      "name": "Jasper",
+      "tier": "tool",
+      "homepage": "https://www.jasper.ai",
+      "aliases": [
+        "Jasper"
+      ],
+      "vendorIds": [
+        "jasper"
+      ],
+      "products": [],
+      "region": "global",
+      "primaryModel": null
+    },
+    {
+      "id": "ollama",
+      "name": "Ollama",
+      "tier": "infra",
+      "homepage": "https://ollama.com",
+      "aliases": [
+        "Ollama"
+      ],
+      "vendorIds": [
+        "ollama"
+      ],
+      "products": [],
+      "region": "global",
+      "primaryModel": null,
+      "logo": "/logos/ollama.svg"
+    },
+    {
+      "id": "nodejs",
+      "name": "Node.js 生态",
+      "tier": "infra",
+      "homepage": "https://nodejs.org",
+      "aliases": [
+        "Node.js",
+        "npm",
+        "Yarn",
+        "pnpm",
+        "Bun",
+        "Deno",
+        "Vite",
+        "webpack",
+        "esbuild"
+      ],
+      "vendorIds": [
+        "nodejs",
+        "npm",
+        "yarn",
+        "pnpm",
+        "bun",
+        "deno",
+        "vite",
+        "webpack",
+        "esbuild"
+      ],
+      "products": [],
+      "region": "global",
+      "primaryModel": null
+    }
+  ]
+}

@@ -1,0 +1,83 @@
+---
+import Icon from "@/components/ui/Icon.astro";
+import { getContentTypeLabel, resolveContentType } from "@/modules/content/content-types";
+import type { Post } from "@/modules/content/schema";
+import { getSubcategoryLabel, getTopicAccent, getTopicLabel, subcategoryHref, topicHref } from "@/modules/channel";
+import { formatDate } from "@/shared/utils";
+
+type Props = {
+  post: Post;
+  backHref: string;
+  backLabel: string;
+  showBackLink?: boolean;
+};
+
+const { post, backHref, backLabel, showBackLink = true } = Astro.props;
+
+const topicLabel = getTopicLabel(post.category);
+const accent = getTopicAccent(post.category);
+const subcategoryLabel = post.subcategory ? getSubcategoryLabel(post.category, post.subcategory) : null;
+const subcategoryPath = post.subcategory ? subcategoryHref(post.category, post.subcategory) : null;
+const contentType = post.type ?? resolveContentType(post.category, post.subcategory ?? "") ?? undefined;
+const publishedAt = post.time ? `${formatDate(post.date)} ${post.time}` : formatDate(post.date);
+const attribution = post.author ?? post.sources?.[0]?.publisher ?? null;
+
+const rows = [
+  { key: "channel", icon: "Radio", iconClass: accent.text, label: "频道", href: topicHref(post.category), value: topicLabel },
+  { key: "subcategory", icon: "FolderTree", iconClass: "text-amber-500", label: "分类", href: subcategoryPath, value: subcategoryLabel },
+  { key: "type", icon: "Tag", iconClass: "text-rose-500", label: "类型", href: null, value: contentType ? getContentTypeLabel(contentType) : null },
+  {
+    key: "source",
+    icon: "Building2",
+    iconClass: "text-sky-500",
+    label: "信息出处",
+    href: post.source,
+    value: attribution,
+    external: true,
+  },
+  { key: "date", icon: "CalendarClock", iconClass: "text-indigo-500", label: "发布时间", href: null, value: publishedAt },
+  { key: "reading", icon: "Clock", iconClass: "text-teal-500", label: "阅读时长", href: null, value: `约 ${post.readingTime} 分钟` },
+].filter((row) => row.value !== null);
+---
+<nav aria-label="文章信息">
+  {showBackLink ? (
+    <>
+      <a
+        href={backHref}
+        class="group -ml-1 -mt-1 inline-flex items-center gap-1.5 px-1 py-0.5 text-[13px] font-medium leading-5 text-slate-600 transition-colors hover:text-indigo-600"
+      >
+        <Icon name="ArrowLeft" size={14} strokeWidth={2} class="transition-transform group-hover:-translate-x-0.5" />
+        {backLabel}
+      </a>
+      <div class="mb-3 mt-2 border-t border-slate-200/70"></div>
+    </>
+  ) : null}
+
+  <ul class="space-y-3">
+    {rows.map((row) => (
+      <li class="min-w-0">
+        <span class="flex items-center gap-2.5 text-[11px] leading-4 text-slate-400">
+          <Icon name={row.icon as never} size={14} strokeWidth={1.9} class={`shrink-0 ${row.iconClass ?? "text-slate-400"}`} />
+          {row.label}
+        </span>
+        <span class="mt-0.5 block pl-6 text-[13px] leading-5 text-slate-800">
+          {row.key === "date" ? (
+            <time datetime={`${post.date}${post.time ? `T${post.time}` : ""}`}>{row.value}</time>
+          ) : row.href ? (
+            <a
+              href={row.href}
+              target={row.external ? "_blank" : undefined}
+              rel={row.external ? "noreferrer" : undefined}
+              class="inline-flex items-center gap-0.5 transition-colors hover:text-indigo-600"
+            >
+              {row.value}
+              {row.external ? <Icon name="ArrowUpRight" size={12} strokeWidth={2.2} class="text-slate-400" /> : null}
+            </a>
+          ) : (
+            row.value
+          )}
+        </span>
+      </li>
+    ))}
+  </ul>
+</nav>

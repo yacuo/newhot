@@ -1,0 +1,75 @@
+---
+import { getChannelSources, type SourceLink } from "@/config/sources";
+import { pagePanelClass } from "@/shared/ui/classes";
+
+type Props = {
+  heading: string;
+  description: string;
+  topicId?: string;
+  points?: string[];
+  sources?: SourceLink[];
+  quote?: { text: string; label: string; href: string } | null;
+  panel?: boolean;
+  sourcesHeading?: string;
+  sourcesDescription?: string;
+  largeHeading?: boolean;
+};
+
+const {
+  heading,
+  description,
+  topicId,
+  points,
+  sources,
+  quote = { text: "确保通用人工智能造福全人类。", label: "OpenAI 官方使命", href: "https://openai.com/about/" },
+  panel = true,
+  sourcesHeading = "这些内容从哪里来？",
+  sourcesDescription = "每条内容都标注原始来源；涉及能力、版本与价格的信息，以厂商官方原文为准。",
+  largeHeading = false,
+} = Astro.props;
+
+const defaultPoints = [
+  "只采用厂商官方公告、版本说明与官方文档，每条内容都附原文链接与发布日期。",
+  "标题、摘要与解读由编辑团队原创撰写，不翻译、不搬运、不转述二手内容。",
+  "发布前由编辑逐条核对版本、价格与时间，确认准确后才上线。",
+  "内容有更正会同步修改，并在更新日志里留下记录，方便逐条回溯。",
+];
+
+const items = points ?? defaultPoints;
+const links = sources ?? getChannelSources(topicId);
+const headingClass = largeHeading
+  ? "text-xl font-semibold tracking-tight text-slate-950 md:text-2xl"
+  : "text-base font-semibold text-slate-900";
+---
+<section class={panel ? `mt-5 ${pagePanelClass}` : "mt-8 border-t border-slate-200 pt-6"}>
+  <h2 class={headingClass}>{heading}</h2>
+  <p class="mt-3 text-sm leading-7 text-slate-600">{description}</p>
+
+  <ul class="mt-4 space-y-2 text-sm leading-7 text-slate-600">
+    {items.map((point) => (
+      <li class="flex gap-2">
+        <span aria-hidden="true" class="mt-[11px] h-1.5 w-1.5 flex-none rounded-full bg-indigo-400"></span>
+        <span>{point}</span>
+      </li>
+    ))}
+  </ul>
+
+  <h2 class={`mt-8 ${headingClass}`}>{sourcesHeading}</h2>
+  <p class="mt-3 text-sm leading-7 text-slate-600">{sourcesDescription}</p>
+
+  <ul class="mt-4 flex flex-wrap gap-x-6 gap-y-2">
+    {links.map((source) => (
+      <li>
+        <a href={source.href} target="_blank" rel="noreferrer" class="text-sm font-medium text-indigo-600 hover:underline">
+          {source.name}
+        </a>
+      </li>
+    ))}
+  </ul>
+
+  {quote ? (
+    <blockquote class="mt-4 border-l-2 border-indigo-300 pl-4 text-sm leading-7 text-slate-600">
+      「{quote.text}」<cite class="ml-2 not-italic text-slate-400">——{" "}<a href={quote.href} target="_blank" rel="noreferrer" class="text-indigo-600 hover:underline">{quote.label}</a></cite>
+    </blockquote>
+  ) : null}
+</section>

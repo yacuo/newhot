@@ -1,0 +1,66 @@
+import { getSiteUrl, siteConfig } from "../site";
+
+type ListItem = {
+  title: string;
+  href: string;
+  description?: string;
+  date?: string;
+  author?: string;
+};
+
+/** 列表页通用的 JSON-LD：CollectionPage + ItemList；带日期的条目按 Article 输出 */
+export function buildCollectionJsonLd(options: {
+  name: string;
+  description: string;
+  path: string;
+  items: ListItem[];
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: options.name,
+    description: options.description,
+    url: getSiteUrl(options.path),
+    isPartOf: {
+      "@type": "WebSite",
+      name: siteConfig.name,
+      url: getSiteUrl("/"),
+    },
+    mainEntity: {
+      "@type": "ItemList",
+      itemListElement: options.items.slice(0, 50).map((item, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        ...(item.date
+          ? {
+              item: {
+                "@type": "Article",
+                headline: item.title,
+                url: getSiteUrl(item.href),
+                description: item.description,
+                datePublished: item.date,
+                author: {
+                  "@type": "Organization",
+                  name: item.author ?? `${siteConfig.name} 编辑部`,
+                },
+              },
+            }
+          : { name: item.title, url: getSiteUrl(item.href) }),
+      })),
+    },
+  };
+}
+
+/** 面包屑 JSON-LD，按传入顺序从首页到当前页 */
+export function buildBreadcrumbJsonLd(items: Array<{ name: string; href: string }>) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: items.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.name,
+      item: getSiteUrl(item.href),
+    })),
+  };
+}

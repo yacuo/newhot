@@ -1,0 +1,28 @@
+---
+import Root from "@/layouts/Root.astro";
+import Shell from "@/layouts/Shell.astro";
+import PageHeader from "@/components/ui/PageHeader.astro";
+import LegalSections from "@/components/ui/LegalSections.astro";
+import { privacySections } from "@/modules/page-content/legal";
+import { pagePanelClass, widePageContainerClass } from "@/shared/ui/classes";
+
+const description =
+  "NewHot 隐私政策：说明访问日志、Cookie 与本地存储的处理方式，以及欧盟/英国/瑞士（GDPR）与美国各州（CCPA/CPRA）访客的权利。";
+---
+<Root title="隐私政策" description={description} path="/privacy/">
+  <Shell mainClassName={widePageContainerClass}>
+    <div class="space-y-5">
+      <PageHeader eyebrow="PRIVACY" title="隐私政策" description="最后更新：2026 年 11 月 15 日" />
+
+      <article class={pagePanelClass}>
+        <LegalSections sections={privacySections} />
+
+        <div class="mt-8 flex flex-wrap gap-4 border-t border-slate-200 pt-6 text-sm">
+          <a href="/cookies/" class="font-medium text-indigo-600 hover:underline">Cookie 政策</a>
+          <a href="/do-not-sell/" class="font-medium text-indigo-600 hover:underline">不出售或共享个人信息</a>
+          <a href="/terms/" class="font-medium text-indigo-600 hover:underline">服务条款</a>
+        </div>
+      </article>
+    </div>
+  </Shell>
+</Root>

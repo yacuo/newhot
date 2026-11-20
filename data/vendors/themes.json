@@ -1,0 +1,147 @@
+{
+  "version": 1,
+  "themes": [
+    {
+      "id": "llm",
+      "name": "大模型",
+      "eyebrow": "FOUNDATION MODELS",
+      "description": "通用大模型与多模态基础模型厂商，按语言、图像、语音、视频四条线看模型发布与产品更新。",
+      "groups": [
+        {
+          "id": "global",
+          "label": "海外模型厂商",
+          "companyIds": [
+            "openai",
+            "anthropic",
+            "google",
+            "microsoft",
+            "mistral",
+            "bfl",
+            "elevenlabs",
+            "runway"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ai-coding",
+      "name": "AI 编程",
+      "eyebrow": "AI CODING",
+      "description": "从编辑器到终端再到代码评审，覆盖 AI 编程工具、IDE 与代码智能体。",
+      "groups": [
+        {
+          "id": "agents",
+          "label": "AI 编程工具",
+          "companyIds": [
+            "openai",
+            "anthropic",
+            "google",
+            "microsoft",
+            "cursor"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ai-office",
+      "name": "AI 办公",
+      "eyebrow": "AI WORK",
+      "description": "办公套件、团队协作、知识检索与自动化流程里的 AI。",
+      "groups": [
+        {
+          "id": "suite",
+          "label": "办公套件与文档",
+          "companyIds": [
+            "notion",
+            "feishu",
+            "airtable"
+          ]
+        },
+        {
+          "id": "collab",
+          "label": "协作、会议与项目",
+          "companyIds": [
+            "zoom"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ai-creation",
+      "name": "AI 创作",
+      "eyebrow": "AI CREATION",
+      "description": "图像、视频、语音与文案的生成式创作工具和模型厂商。",
+      "groups": [
+        {
+          "id": "labs",
+          "label": "生成模型厂商",
+          "companyIds": [
+            "bfl",
+            "elevenlabs",
+            "runway"
+          ]
+        },
+        {
+          "id": "tools",
+          "label": "创作工具",
+          "companyIds": [
+            "jasper"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "agents",
+      "name": "智能体与平台",
+      "eyebrow": "AGENTS & PLATFORM",
+      "description": "把模型接进业务流程的智能体框架、协议与自托管平台。",
+      "groups": [
+        {
+          "id": "protocol",
+          "label": "协议与自托管界面",
+          "companyIds": [
+            "mcp"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "opensource",
+      "name": "开源与运行时",
+      "eyebrow": "OPEN SOURCE",
+      "description": "本地推理、模型服务与编程语言运行时，开源生态的基础设施。",
+      "groups": [
+        {
+          "id": "inference",
+          "label": "本地推理与模型服务",
+          "companyIds": [
+            "ollama"
+          ]
+        },
+        {
+          "id": "languages",
+          "label": "编程语言与包管理",
+          "companyIds": [
+            "nodejs"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cloud",
+      "name": "云平台与算力",
+      "eyebrow": "CLOUD & COMPUTE",
+      "description": "提供模型托管、推理与训练算力的大厂云平台。",
+      "groups": [
+        {
+          "id": "global",
+          "label": "海外云平台",
+          "companyIds": [
+            "google",
+            "microsoft"
+          ]
+        }
+      ]
+    }
+  ]
+}

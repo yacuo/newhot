@@ -1,0 +1,49 @@
+---
+import type { TableOfContentsItem } from "@/modules/content/schema";
+
+type Props = { headings: TableOfContentsItem[] };
+const { headings } = Astro.props;
+
+const indent = (level: number) => (level >= 4 ? "pl-4" : level === 3 ? "pl-2" : "pl-0");
+---
+{headings.length ? (
+  <>
+    <button
+      type="button"
+      data-mobile-toc-toggle
+      aria-label="打开文章目录"
+      aria-expanded="false"
+      class="fixed right-4 top-[calc(var(--site-header-height)+8px)] z-30 flex h-9 w-9 items-center justify-center rounded-full border border-slate-200/80 bg-surface/95 text-slate-600 shadow-[0_4px_14px_rgba(15,23,42,0.12)] backdrop-blur transition-colors hover:text-slate-950 xl:hidden"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" />
+      </svg>
+    </button>
+
+    <aside
+      data-mobile-toc
+      class="fixed right-0 top-[var(--site-header-height)] z-30 h-[calc(100vh-var(--site-header-height))] w-[min(17rem,84vw)] overflow-y-auto bg-surface p-4 shadow-[-8px_0_30px_rgba(15,23,42,0.12)] xl:hidden"
+    >
+      <nav aria-label="移动端文章目录">
+        <div class="mb-3 flex items-center justify-between">
+          <div class="flex items-baseline gap-1.5">
+            <span class="text-[15px] font-semibold text-slate-950">文章目录</span>
+            <span class="text-[11px] text-slate-400">{headings.length} 节</span>
+          </div>
+          <button type="button" data-mobile-toc-close aria-label="关闭文章目录" class="flex h-7 w-7 items-center justify-center rounded-full text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600">
+            <svg viewBox="0 0 24 24" aria-hidden="true" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
+        <ol class="space-y-0.5">
+          {headings.map((heading) => (
+            <li class={`min-w-0 ${indent(heading.level)}`}>
+              <a href={`#${heading.id}`} data-mobile-toc-link class="block truncate rounded-md px-2 py-1.5 text-[13px] leading-5 text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-950">
+                {heading.text}
+              </a>
+            </li>
+          ))}
+        </ol>
+      </nav>
+    </aside>
+  </>
+) : null}

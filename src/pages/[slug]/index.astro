@@ -1,0 +1,126 @@
+---
+import Root from "@/layouts/Root.astro";
+import Shell from "@/layouts/Shell.astro";
+import ChannelPanel from "@/components/channel/ChannelPanel.astro";
+import ChannelTabs from "@/components/channel/ChannelTabs.astro";
+import ArticleList from "@/components/channel/ArticleList.astro";
+import PageGuide from "@/components/channel/PageGuide.astro";
+import ArticleFaqSection from "@/components/article/ArticleFaqSection.astro";
+import CompanyPage from "@/components/vendor/CompanyPage.astro";
+import { topics, getTopicById, subcategoryHref, topicHref } from "@/modules/channel";
+import { companies, getCompany } from "@/modules/vendor/model";
+import { getCompanySeo } from "@/modules/vendor/seo";
+import { readFeedMeta, readListShard } from "@/modules/content";
+import { LIST_INITIAL_SIZE } from "@/modules/content/list-shards";
+import { buildBreadcrumbJsonLd, buildCollectionJsonLd } from "@/shared/seo/jsonld";
+import { formatMonthDay } from "@/shared/utils";
+import { pagePanelClass, widePageContainerClass } from "@/shared/ui/classes";
+
+export function getStaticPaths() {
+  return [
+    ...topics.map((topic) => ({ params: { slug: topic.id }, props: { kind: "channel", id: topic.id } })),
+    ...companies.map((company) => ({ params: { slug: company.id }, props: { kind: "company", id: company.id } })),
+  ];
+}
+
+const { kind, id } = Astro.props;
+const meta = readFeedMeta();
+
+const companyForPage = kind === "company" ? getCompany(id) : null;
+if (kind === "company" && !companyForPage) throw new Error(`公司不存在：${id}`);
+const companySeo = companyForPage ? getCompanySeo(companyForPage) : null;
+
+const topic = kind === "channel" ? getTopicById(id) : null;
+if (kind === "channel" && !topic) throw new Error(`频道不存在：${id}`);
+
+const stat = topic ? meta?.channels[topic.id] : undefined;
+const total = stat?.count ?? 0;
+const initialItems = topic ? readListShard(topic.id, 1)?.items.slice(0, LIST_INITIAL_SIZE) ?? [] : [];
+const coverage = topic ? topic.subcategories.map((subcategory) => subcategory.label).join("、") : "";
+const coverageGap = /^[A-Za-z0-9]/.test(coverage) ? " " : "";
+
+const collectionJsonLd = topic
+  ? buildCollectionJsonLd({
+      name: topic.seo.title,
+      description: topic.seo.description,
+      path: topicHref(topic.id),
+      items: initialItems,
+    })
+  : null;
+const breadcrumbJsonLd = topic
+  ? buildBreadcrumbJsonLd([
+      { name: "首页", href: "/" },
+      { name: topic.label, href: topicHref(topic.id) },
+    ])
+  : null;
+const faqJsonLd = topic?.faqs.length
+  ? {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: topic.faqs.map((faq) => ({
+        "@type": "Question",
+        name: faq.question,
+        acceptedAnswer: { "@type": "Answer", text: faq.answer },
+      })),
+    }
+  : null;
+---
+{companyForPage && companySeo ? (
+  <Root title={companySeo.title} description={companySeo.description} path={`/${companyForPage.id}/`}>
+    <CompanyPage id={companyForPage.id} />
+  </Root>
+) : topic ? (
+  <Root title={topic.seo.title} description={topic.seo.description} path={topicHref(topic.id)}>
+    <Shell selectedChannel={topic.label} mainClassName={widePageContainerClass}>
+      {collectionJsonLd ? <script type="application/ld+json" set:html={JSON.stringify(collectionJsonLd)} /> : null}
+      {breadcrumbJsonLd ? <script type="application/ld+json" set:html={JSON.stringify(breadcrumbJsonLd)} /> : null}
+      {faqJsonLd ? <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} /> : null}
+
+      <ChannelPanel
+        title={topic.label}
+        eyebrow={topic.labelEn}
+        description={topic.description}
+        stats={stat ? `${total} 篇文章 · 更新至 ${formatMonthDay(stat.latest)}` : undefined}
+      />
+
+      <section class={`mt-5 ${pagePanelClass}`}>
+        <h2 class="text-base font-semibold text-slate-900">最新动态</h2>
+        <ChannelTabs
+          tabs={[
+            { id: "all", label: "全部", href: topicHref(topic.id), active: true },
+            ...topic.subcategories.map((subcategory) => ({
+              id: subcategory.id,
+              label: subcategory.label,
+              href: subcategoryHref(topic.id, subcategory.id),
+            })),
+          ]}
+          class="mt-3"
+        />
+        <p class="mt-3 text-sm leading-6 text-slate-500">
+          {`${topic.label}频道跟踪厂商官方发布的动态，覆盖${coverageGap}${coverage}，共 ${total} 篇，按发布时间倒序排列；点开任意一条查看完整内容与原始来源。`}
+        </p>
+        <ArticleList class="mt-2" scope={topic.id} total={total} initialItems={initialItems} showTopic={false} showSubcategory />
+      </section>
+
+      <PageGuide
+        heading={`${topic.label}频道的写作标准是什么？`}
+        description={topic.standards?.description ?? "内容由 NewHot 编辑部原创整理，只采用厂商官方渠道发布的信息，经人工审核后发布；同一条动态只保留一份记录，并按公司归档。"}
+        points={topic.standards ? [topic.standards.scope, ...topic.standards.points] : undefined}
+        sourcesHeading={topic.standards?.sourcesHeading}
+        sourcesDescription={topic.standards?.sourcesDescription}
+        quote={topic.standards ? topic.standards.quote ?? null : undefined}
+        topicId={topic.id}
+      />
+
+      {topic.faqs.length ? (
+        <section class={`mt-5 ${pagePanelClass}`}>
+          <ArticleFaqSection faqs={topic.faqs} />
+        </section>
+      ) : null}
+    </Shell>
+  </Root>
+) : null}
+
+<script>
+  import "../../scripts/list";
+</script>

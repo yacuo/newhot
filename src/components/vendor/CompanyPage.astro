@@ -1,0 +1,190 @@
+---
+import Shell from "@/layouts/Shell.astro";
+import CompanyFeed from "./CompanyFeed.astro";
+import HistoryTimeline from "./HistoryTimeline.astro";
+import { readFeedMeta, readListShard } from "@/modules/content";
+import { LIST_INITIAL_SIZE } from "@/modules/content/list-shards";
+import { getCompanyHistory } from "@/modules/vendor/history";
+import {
+  companyHref,
+  companyTierLabels,
+  getChildCompanies,
+  getCompany,
+  getCompanyModel,
+  getParentCompany,
+} from "@/modules/vendor/model";
+import { getCompanyThemes, getPrimaryTheme, themeHref } from "@/modules/vendor/themes";
+import { getCompanySeo } from "@/modules/vendor/seo";
+import { getCompanyAccent, getCompanyInitials } from "@/modules/vendor/taxonomy";
+import { buildBreadcrumbJsonLd, buildCollectionJsonLd } from "@/shared/seo/jsonld";
+import { getSiteUrl } from "@/shared/site";
+import { flatPagePanelClass, pagePanelClass, widePageContainerClass } from "@/shared/ui/classes";
+
+type Props = { id: string };
+const { id } = Astro.props;
+
+const company = getCompany(id);
+if (!company) throw new Error(`公司不存在：${id}`);
+
+const stat = readFeedMeta()?.companies[company.id];
+const total = stat?.count ?? 0;
+const initialItems = readListShard(`_companies/${company.id}`, 1)?.items.slice(0, LIST_INITIAL_SIZE) ?? [];
+const history = getCompanyHistory(company.id);
+const accent = getCompanyAccent(company.tier);
+const model = getCompanyModel(company);
+const children = getChildCompanies(company.id);
+const parent = getParentCompany(company);
+const productCount = children.length + company.products.length;
+const relatedThemes = [
+  ...new Map(
+    [...getCompanyThemes(company.id), ...children.flatMap((child) => getCompanyThemes(child.id))].map((theme) => [
+      theme.id,
+      theme,
+    ]),
+  ).values(),
+];
+const primaryTheme = getPrimaryTheme(company.id);
+const releaseCount = stat?.releaseCount ?? 0;
+const channelCount = stat?.channels.length ?? 0;
+const latest = stat?.latest ?? null;
+const seo = getCompanySeo(company);
+
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: company.name,
+  alternateName: company.aliases.length ? company.aliases.slice(0, 5) : undefined,
+  url: company.homepage,
+  logo: company.logo ? getSiteUrl(company.logo) : undefined,
+};
+const collectionJsonLd = buildCollectionJsonLd({
+  name: seo.title,
+  description: seo.description,
+  path: companyHref(company.id),
+  items: initialItems,
+});
+const breadcrumbJsonLd = buildBreadcrumbJsonLd([
+  { name: "首页", href: "/" },
+  { name: "主题", href: "/themes/" },
+  ...(primaryTheme ? [{ name: primaryTheme.name, href: themeHref(primaryTheme.id) }] : []),
+  { name: company.name, href: companyHref(company.id) },
+]);
+---
+<Shell selectedChannel="主题" mainClassName={widePageContainerClass}>
+  <script type="application/ld+json" set:html={JSON.stringify(organizationJsonLd)} />
+  <script type="application/ld+json" set:html={JSON.stringify(collectionJsonLd)} />
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbJsonLd)} />
+
+  <div class="space-y-4">
+    <section class={pagePanelClass}>
+      <div class="flex items-start gap-4">
+        <span class="flex h-12 w-12 flex-none items-center justify-center rounded-xl bg-white shadow-[0_2px_10px_rgba(15,23,42,0.08)]">
+          {company.logo ? (
+            <img src={company.logo} alt="" aria-hidden="true" class="h-7 w-7 object-contain" />
+          ) : (
+            <span class={`text-base font-bold ${accent.text}`}>{getCompanyInitials(company.name)}</span>
+          )}
+        </span>
+        <div class="min-w-0 flex-1">
+          <p class="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400">
+            NewHot <span class="mx-1.5 text-slate-300">/</span><a href="/themes/" class="text-indigo-600 transition hover:text-indigo-700">主题</a>{primaryTheme ? (<><span class="mx-1.5 text-slate-300">/</span><a href={themeHref(primaryTheme.id)} class="text-indigo-600 transition hover:text-indigo-700">{primaryTheme.name}</a></>) : null}
+          </p>
+          <h1 class="mt-2 flex flex-wrap items-baseline gap-x-2 gap-y-1 text-[22px] font-extrabold leading-none tracking-[-0.02em] text-slate-950 md:text-[26px]">
+            <span>{company.name}</span>
+            {model ? (
+              <>
+                <span class="text-lg font-normal text-slate-300">/</span>
+                <span class="text-lg font-semibold text-slate-500">{model}</span>
+              </>
+            ) : null}
+            <span class="badge badge-accent">{companyTierLabels[company.tier]}</span>
+            {parent ? (
+              <a href={companyHref(parent.id)} class="text-xs font-medium text-indigo-600 transition hover:text-indigo-700">
+                {parent.name}旗下
+              </a>
+            ) : null}
+          </h1>
+          <p class="mt-2 font-mono text-[11px] tracking-[0.04em] text-slate-400">
+            {total > 0 ? (
+              <>
+                {total} 篇动态
+                <span class="mx-1.5 text-slate-300">·</span>
+                {releaseCount} 次模型发布
+                <span class="mx-1.5 text-slate-300">·</span>
+                {channelCount} 个频道
+                {latest ? (
+                  <>
+                    <span class="mx-1.5 text-slate-300">·</span>
+                    更新至 {latest}
+                  </>
+                ) : null}
+              </>
+            ) : (
+              <>
+                暂无站内动态
+                {history.length > 0 ? (
+                  <>
+                    <span class="mx-1.5 text-slate-300">·</span>
+                    {history.length} 个发展史节点
+                  </>
+                ) : null}
+              </>
+            )}
+          </p>
+        </div>
+        <a
+          href={company.homepage}
+          target="_blank"
+          rel="noreferrer"
+          class="hidden shrink-0 rounded-full bg-indigo-50 px-3 py-1.5 text-xs text-indigo-700 transition hover:bg-indigo-100 hover:text-indigo-800 sm:block"
+        >
+          官网 ↗
+        </a>
+      </div>
+
+      {productCount > 0 ? (
+        <div class="mt-5 border-t border-slate-100 pt-4">
+          <p class="flex items-baseline gap-2 text-sm font-semibold text-slate-900">
+            旗下产品与模型
+            <span class="font-mono text-[11px] font-normal text-slate-400">{productCount} 个</span>
+          </p>
+          <div class="mt-3 flex flex-wrap gap-2">
+            {children.map((child) => (
+              <span class="rounded-full bg-indigo-50 px-3 py-1 text-[13px] font-medium text-indigo-700">{child.name}</span>
+            ))}
+            {company.products.map((product) => (
+              <span class="rounded-full bg-indigo-50 px-3 py-1 text-[13px] font-medium text-indigo-700">{product.name}</span>
+            ))}
+          </div>
+        </div>
+      ) : null}
+
+      {relatedThemes.length > 0 ? (
+        <div class="mt-4 flex flex-wrap items-center gap-2">
+          <span class="font-mono text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-400">涉及主题</span>
+          {relatedThemes.map((theme) => (
+            <a href={themeHref(theme.id)} class="rounded-full bg-slate-100 px-2.5 py-0.5 text-[12px] text-slate-600 transition hover:bg-indigo-50 hover:text-indigo-700">
+              {theme.name}
+            </a>
+          ))}
+        </div>
+      ) : null}
+    </section>
+
+    {history.length > 0 ? (
+      <section class={flatPagePanelClass}>
+        <HistoryTimeline events={history} />
+      </section>
+    ) : null}
+
+    <section class={pagePanelClass}>
+      <div class="flex items-baseline justify-between gap-3">
+        <h2 class="text-base font-semibold text-slate-950">全部动态</h2>
+        <span class="font-mono text-[11px] tracking-[0.04em] text-slate-400">可按频道与产品切换</span>
+      </div>
+      <div class="mt-4">
+        <CompanyFeed company={company} scope={`_companies/${company.id}`} initialItems={initialItems} total={total} />
+      </div>
+    </section>
+  </div>
+</Shell>

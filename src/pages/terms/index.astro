@@ -1,0 +1,21 @@
+---
+import Root from "@/layouts/Root.astro";
+import Shell from "@/layouts/Shell.astro";
+import PageHeader from "@/components/ui/PageHeader.astro";
+import LegalSections from "@/components/ui/LegalSections.astro";
+import { termsSections } from "@/modules/page-content/legal";
+import { pagePanelClass, widePageContainerClass } from "@/shared/ui/classes";
+
+const description = "NewHot 服务条款：说明内容使用规则、投稿与转载、广告与第三方链接、免责声明与适用法律。";
+---
+<Root title="服务条款" description={description} path="/terms/">
+  <Shell mainClassName={widePageContainerClass}>
+    <div class="space-y-5">
+      <PageHeader eyebrow="TERMS" title="服务条款" description="最后更新：2026 年 11 月 15 日" />
+
+      <article class={pagePanelClass}>
+        <LegalSections sections={termsSections} />
+      </article>
+    </div>
+  </Shell>
+</Root>

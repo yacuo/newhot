@@ -1,0 +1,61 @@
+---
+import SiteHeader from "@/components/shell/SiteHeader.astro";
+import SiteFooter from "@/components/shell/SiteFooter.astro";
+import ChannelDrawerShell from "@/components/shell/ChannelDrawerShell.astro";
+import BackToTop from "@/components/shell/BackToTop.astro";
+import SearchDialog from "@/components/ui/SearchDialog.astro";
+import { channels } from "@/modules/channel/model";
+import { pageContainerClass } from "@/shared/ui/classes";
+
+type Props = {
+  selectedChannel?: string;
+  mobileShowChannels?: boolean;
+  headerInnerClassName?: string;
+  mainClassName?: string;
+};
+
+const {
+  selectedChannel,
+  mobileShowChannels = true,
+  headerInnerClassName,
+  mainClassName,
+} = Astro.props;
+
+const originNotePaths = new Set([
+  "/about/",
+  "/contact/",
+  "/contribute/",
+  "/privacy/",
+  "/cookies/",
+  "/do-not-sell/",
+  "/terms/",
+]);
+const showOriginNote = originNotePaths.has(Astro.url.pathname);
+---
+<SiteHeader showMobileMenu={mobileShowChannels} headerInnerClassName={headerInnerClassName} />
+<ChannelDrawerShell topics={channels} selectedChannel={selectedChannel} showMobileChannels={mobileShowChannels}>
+  <main class={`min-w-0 flex-1 ${mainClassName ?? pageContainerClass}`}>
+    <slot />
+    {showOriginNote && (
+      <p class="mt-8 text-[13px] leading-6 text-slate-500">
+        本站的站点模板与内容结构由
+        <a
+          href="https://newhot.org"
+          target="_blank"
+          rel="noopener"
+          class="text-indigo-600 underline underline-offset-2 transition-colors hover:text-indigo-700"
+        >
+          NewHot
+        </a>
+        维护，更多 AI 资讯、模型发布与教程可以访问主站。
+      </p>
+    )}
+  </main>
+  <SiteFooter />
+</ChannelDrawerShell>
+<BackToTop />
+<SearchDialog />
+
+<script>
+  import "../scripts/shell";
+</script>

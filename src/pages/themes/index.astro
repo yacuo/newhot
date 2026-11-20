@@ -1,0 +1,82 @@
+---
+import Root from "@/layouts/Root.astro";
+import Shell from "@/layouts/Shell.astro";
+import ChannelPanel from "@/components/channel/ChannelPanel.astro";
+import PageGuide from "@/components/channel/PageGuide.astro";
+import ThemeExplorer from "@/components/vendor/ThemeExplorer.astro";
+import { readFeedMeta } from "@/modules/content";
+import { themesPage } from "@/modules/page-content/themes";
+import { buildThemeListing, themeHref, themes } from "@/modules/vendor/themes";
+import { getSiteUrl, siteConfig } from "@/shared/site";
+import { formatMonthDay } from "@/shared/utils";
+import { widePageContainerClass } from "@/shared/ui/classes";
+
+const meta = readFeedMeta();
+if (!meta) throw new Error("meta.json 未生成");
+
+const blocks = themes.map((theme) => {
+  const listing = buildThemeListing(theme, meta.companies);
+  return {
+    id: theme.id,
+    name: theme.name,
+    description: theme.description,
+    companyCount: listing.summaries.length,
+    articleCount: listing.summaries.reduce((total, summary) => total + summary.articleCount, 0),
+    sections: listing.sections,
+  };
+});
+
+const latest = blocks.reduce<string | null>((value, block) => {
+  for (const section of block.sections) {
+    for (const summary of section.summaries) {
+      if (summary.lastUpdated && (!value || summary.lastUpdated > value)) value = summary.lastUpdated;
+    }
+  }
+  return value;
+}, null);
+
+const description = themesPage.seo.description;
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: themesPage.seo.title,
+  description,
+  url: getSiteUrl("/themes/"),
+  inLanguage: siteConfig.language,
+  mainEntity: {
+    "@type": "ItemList",
+    numberOfItems: blocks.length,
+    itemListElement: blocks.map((block, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: block.name,
+      description: block.description,
+      url: getSiteUrl(themeHref(block.id)),
+    })),
+  },
+};
+
+---
+<Root
+  title={themesPage.seo.title}
+  description={themesPage.seo.description}
+  path={themesPage.seo.path}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  <Shell selectedChannel="主题" mainClassName={widePageContainerClass}>
+    <ChannelPanel
+      title="主题"
+      eyebrow="THEMES"
+      description="按主题浏览 AI 公司与产品：从大模型、AI 编程到 AI 办公与创作工具，选好主题后可以继续按分类筛选，查看同方向下的最新动态。"
+      stats={`${meta.total} 篇文章${latest ? ` · 更新至 ${formatMonthDay(latest)}` : ""}`}
+    />
+
+    <ThemeExplorer blocks={blocks} />
+
+    <PageGuide
+      heading="主题是怎么划分的？"
+      description="主题按方向聚合公司；主题下的公司与动态均来自厂商官方渠道，由编辑核对后归档，同一家公司可以出现在多个主题里。"
+    />
+  </Shell>
+</Root>

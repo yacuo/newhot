@@ -1,0 +1,120 @@
+---
+import Root from "@/layouts/Root.astro";
+import Shell from "@/layouts/Shell.astro";
+import PageHeader from "@/components/ui/PageHeader.astro";
+import { cookieCurrentRows, cookieAdsRows } from "@/modules/page-content/legal";
+import { pagePanelClass, widePageContainerClass } from "@/shared/ui/classes";
+
+const description =
+  "NewHot Cookie 政策：列出当前使用的 Cookie 与本地存储，以及启用 Google 广告后可能使用的 Cookie、同意管理与撤回方式。";
+---
+<Root title="Cookie 政策" description={description} path="/cookies/">
+  <Shell mainClassName={widePageContainerClass}>
+    <div class="space-y-5">
+      <PageHeader eyebrow="COOKIES" title="Cookie 政策" description="最后更新：2026 年 11 月 15 日" />
+
+      <article class={pagePanelClass}>
+        <div class="space-y-7">
+          <section>
+            <h2 class="text-base font-semibold text-slate-950">一、这份政策说明什么</h2>
+            <p class="mt-2 text-sm leading-7 text-slate-600">
+              Cookie 与浏览器本地存储用于记住你的设置、保障站点安全，以及在启用广告后控制广告展示。本页列出本站当前使用的项，以及启用 Google 广告后可能使用的 Cookie。
+            </p>
+          </section>
+
+          <section>
+            <h2 class="text-base font-semibold text-slate-950">二、我们当前使用的</h2>
+            <div class="mt-3 overflow-x-auto">
+              <table class="w-full min-w-[640px] border-collapse text-sm">
+                <thead>
+                  <tr class="border-b border-slate-200 text-left text-xs text-slate-500">
+                    <th class="py-2 pr-4 font-medium">名称</th>
+                    <th class="py-2 pr-4 font-medium">类型</th>
+                    <th class="py-2 pr-4 font-medium">用途</th>
+                    <th class="py-2 font-medium">期限</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {cookieCurrentRows.map((row) => (
+                    <tr class="border-b border-slate-100 align-top">
+                      <td class="py-2 pr-4 font-medium text-slate-800">{row.name}</td>
+                      <td class="py-2 pr-4 text-slate-600">{row.type}</td>
+                      <td class="py-2 pr-4 text-slate-600">{row.purpose}</td>
+                      <td class="py-2 text-slate-600">{row.duration}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p class="mt-3 text-xs leading-6 text-slate-400">
+              本站不设置广告 Cookie，也不使用依赖 Cookie 的第三方统计。
+            </p>
+          </section>
+
+          <section>
+            <h2 class="text-base font-semibold text-slate-950">三、启用 Google 广告后可能使用</h2>
+            <p class="mt-2 text-sm leading-7 text-slate-600">
+              若本站接入 Google AdSense，Google 及其合作伙伴会使用下列 Cookie 记录浏览行为与设备信息，用于投放广告和统计效果。具体名称与期限以 Google 官方说明为准。
+            </p>
+            <div class="mt-3 overflow-x-auto">
+              <table class="w-full min-w-[640px] border-collapse text-sm">
+                <thead>
+                  <tr class="border-b border-slate-200 text-left text-xs text-slate-500">
+                    <th class="py-2 pr-4 font-medium">名称</th>
+                    <th class="py-2 pr-4 font-medium">类型</th>
+                    <th class="py-2 pr-4 font-medium">用途</th>
+                    <th class="py-2 font-medium">期限</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {cookieAdsRows.map((row) => (
+                    <tr class="border-b border-slate-100 align-top">
+                      <td class="py-2 pr-4 font-medium text-slate-800">{row.name}</td>
+                      <td class="py-2 pr-4 text-slate-600">{row.type}</td>
+                      <td class="py-2 pr-4 text-slate-600">{row.purpose}</td>
+                      <td class="py-2 text-slate-600">{row.duration}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p class="mt-3 text-xs leading-6 text-slate-400">
+              启用前，我们会通过 Google 认证的同意管理平台向你征求同意；未作出选择前不会加载个性化广告与统计类 Cookie。
+            </p>
+          </section>
+
+          <section>
+            <h2 class="text-base font-semibold text-slate-950">四、如何管理或撤回同意</h2>
+            <ul class="mt-2 space-y-2 text-sm leading-7 text-slate-600">
+              <li>在浏览器设置中清除或阻止 Cookie，部分偏好设置可能不会保留。</li>
+              <li>启用广告与同意管理后，可通过页脚的 Cookie 设置重新打开同意面板，更改或撤回此前的选择。</li>
+              <li>
+                在
+                <a href="https://adssettings.google.com/" target="_blank" rel="noreferrer" class="mx-1 text-indigo-600 hover:underline">
+                  Google 广告设置
+                </a>
+                中关闭个性化广告，或在
+                <a href="https://www.aboutads.info/choices/" target="_blank" rel="noreferrer" class="mx-1 text-indigo-600 hover:underline">
+                  aboutads.info
+                </a>
+                停用第三方广告 Cookie。
+              </li>
+              <li>支持 Global Privacy Control（GPC）的浏览器会自动发送退出信号，我们会按信号处理。</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2 class="text-base font-semibold text-slate-950">五、更多信息</h2>
+            <p class="mt-2 text-sm leading-7 text-slate-600">
+              Cookie 之外的数据处理方式，见
+              <a href="/privacy/" class="mx-1 text-indigo-600 hover:underline">隐私政策</a>
+              ；美国各州访客的退出方式，见
+              <a href="/do-not-sell/" class="mx-1 text-indigo-600 hover:underline">不出售或共享个人信息</a>
+              。
+            </p>
+          </section>
+        </div>
+      </article>
+    </div>
+  </Shell>
+</Root>

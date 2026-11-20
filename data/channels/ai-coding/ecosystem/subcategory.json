@@ -1,0 +1,9 @@
+{
+  "label": "生态与协议",
+  "description": "Model Context Protocol、LangGraph、CrewAI、OpenAI Agents SDK 等 Agent 框架、协议与工具链的版本更新。不收录具体 IDE、编程助手与运行时。",
+  "seo": {
+    "title": "示例分类：生态与协议",
+    "description": "生态与协议的示例分类描述，仅用于演示分类页 SEO 配置，请替换为自己的关键词与介绍。"
+  },
+  "order": 20
+}

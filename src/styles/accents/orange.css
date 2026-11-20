@@ -1,0 +1,25 @@
+/*
+ * 焰橙：纯正高饱和橙。实心块配白字，所以 600 压到「白字还站得住」的最橙一档，
+ * 更亮的橙留在 500/400 做圆点、渐变和 hover 强调。
+ */
+html[data-accent="orange"] {
+  --accent-label: "焰橙";
+  --accent-swatch: #ff7a00;
+  --accent-on: #ffffff;
+
+  --color-indigo-50: #fff7f0;
+  --color-indigo-100: #ffead6;
+  --color-indigo-200: #ffd0a8;
+  --color-indigo-300: #ffb066;
+  --color-indigo-400: #ff9010;
+  --color-indigo-500: #ff7a00;
+  --color-indigo-600: #d94f00;
+  --color-indigo-700: #b03c00;
+  --color-indigo-800: #8f3200;
+
+  --color-violet-50: #fff7f0;
+  --color-violet-100: #ffead6;
+  --color-violet-200: #ffd0a8;
+  --color-violet-500: #ff7a00;
+  --color-violet-700: #b03c00;
+}

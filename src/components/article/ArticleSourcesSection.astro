@@ -1,0 +1,39 @@
+---
+import type { PostMeta } from "@/modules/content/schema";
+
+type Props = { sources?: PostMeta["sources"] };
+const { sources } = Astro.props;
+const primary = sources?.[0];
+---
+{sources?.length && primary ? (
+  <section aria-labelledby="article-sources-title" class="mt-12">
+    <h2 id="article-sources-title" class="scroll-mt-24 text-[18px] font-semibold leading-[28px] tracking-tight text-slate-950">
+      这篇文章的来源是什么？
+    </h2>
+    <p class="mt-2 text-sm leading-7 text-slate-600">
+      文中涉及版本、价格与功能的信息，均以厂商原文为准；下面是可以核对的原始出处。
+    </p>
+
+    <ul class="mt-4 space-y-2 text-[15px] leading-7 text-slate-700">
+      {sources.map((source) => (
+        <li>
+          <a href={source.url} target="_blank" rel="noreferrer" class="text-slate-700">{source.title}</a>
+          {source.publisher ? (
+            <span class="text-slate-500"> · <cite class="not-italic">{source.publisher}</cite></span>
+          ) : null}
+          {source.accessedAt ? <span class="text-slate-400"> · {source.accessedAt}</span> : null}
+        </li>
+      ))}
+    </ul>
+
+    <blockquote cite={primary.url} class="mt-4 border-l-2 border-indigo-300 pl-4 text-sm leading-7 text-slate-600">
+      「{primary.title}」
+      <cite class="ml-2 not-italic text-slate-400">
+        ——{" "}
+        <a href={primary.url} target="_blank" rel="noreferrer" class="text-indigo-600 hover:underline">
+          {primary.publisher ?? "官方发布"}
+        </a>
+      </cite>
+    </blockquote>
+  </section>
+) : null}

@@ -1,0 +1,42 @@
+---
+import SearchTrigger from "@/components/ui/SearchTrigger.astro";
+
+type Props = {
+  eyebrow: string;
+  title: string;
+  description?: string;
+  stats?: string;
+  embedded?: boolean;
+};
+
+const { eyebrow, title, description, stats, embedded = false } = Astro.props;
+const hasSlot = Astro.slots.has("default");
+
+const wrapperClass = embedded
+  ? ""
+  : "panel-glow relative overflow-hidden rounded-2xl bg-surface px-5 py-5 md:px-6 md:py-6";
+---
+<section class={wrapperClass}>
+  <div class="relative">
+    <div class="flex items-start justify-between gap-5">
+      <div class="min-w-0 flex-1">
+        <p class="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400">
+          NewHot <span class="mx-1.5 text-slate-300">/</span><span class="text-slate-500">{eyebrow}</span>
+        </p>
+        <h1 class="mt-2 text-[23px] font-extrabold leading-tight tracking-[-0.025em] text-slate-950 md:text-[28px]">
+          {title}
+        </h1>
+        {description ? <p class="mt-2 text-sm leading-6 text-slate-600">{description}</p> : null}
+      </div>
+      <div class="hidden shrink-0 lg:block">
+        <SearchTrigger />
+      </div>
+    </div>
+    {hasSlot ? <div class="mt-5"><slot /></div> : null}
+    {stats ? (
+      <p class="mt-3 flex flex-wrap items-center justify-end gap-x-2 gap-y-1 font-mono text-[11px] tracking-[0.04em] text-slate-500">
+        {stats}
+      </p>
+    ) : null}
+  </div>
+</section>

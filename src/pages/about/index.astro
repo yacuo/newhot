@@ -1,0 +1,247 @@
+---
+import Root from "@/layouts/Root.astro";
+import Shell from "@/layouts/Shell.astro";
+import PageHeader from "@/components/ui/PageHeader.astro";
+import PageGuide from "@/components/channel/PageGuide.astro";
+import Icon from "@/components/ui/Icon.astro";
+import { readFeedMeta } from "@/modules/content";
+import { aboutPage } from "@/modules/page-content";
+import { topics, getTopicAccent, topicHref } from "@/modules/channel";
+import { companies } from "@/modules/vendor/model";
+import { themes } from "@/modules/vendor/themes";
+import { getSiteUrl, siteConfig } from "@/shared/site";
+import { formatMonthDay } from "@/shared/utils";
+import { pagePanelClass, widePageContainerClass } from "@/shared/ui/classes";
+
+const meta = readFeedMeta();
+if (!meta) throw new Error("meta.json 未生成");
+
+const { intro, metrics, workflow, scope, taxonomy, architecture, contentEntry } = aboutPage;
+const subcategoryCount = topics.reduce((total, topic) => total + topic.subcategories.length, 0);
+const productCount = companies.reduce((total, company) => total + company.products.length, 0);
+
+const metricValues: Record<string, string> = {
+  total: meta.total.toLocaleString("zh-CN"),
+  channels: String(topics.length),
+  subcategories: String(subcategoryCount),
+  themes: String(themes.length),
+  companies: String(Object.keys(meta.companies).length),
+  products: String(productCount),
+  latest: meta.latest ? formatMonthDay(meta.latest) : "—",
+};
+
+const aboutJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  name: "关于我们",
+  description: aboutPage.seo.description,
+  url: getSiteUrl("/about/"),
+  inLanguage: siteConfig.language,
+  mainEntity: {
+    "@type": "Organization",
+    name: siteConfig.name,
+    url: getSiteUrl("/"),
+    description: siteConfig.description,
+    logo: getSiteUrl("/favicon.svg"),
+  },
+};
+---
+<Root title={aboutPage.seo.title} description={aboutPage.seo.description} path="/about/">
+  <script type="application/ld+json" set:html={JSON.stringify(aboutJsonLd)} />
+  <Shell mainClassName={widePageContainerClass} selectedChannel="关于我们">
+    <div class="space-y-5">
+      <PageHeader eyebrow="ABOUT" title={intro.title} description={intro.description} />
+
+      <section class={pagePanelClass}>
+        <h2 class="text-xl font-semibold tracking-tight text-slate-950 md:text-2xl">这是一个开源项目</h2>
+        <p class="mt-3 text-sm leading-7 text-slate-600">
+          本站的源码以
+          <a href="https://github.com/yacuo/newhot" target="_blank" rel="noopener" class="text-indigo-600 underline underline-offset-2 hover:text-indigo-700">GitHub 仓库</a>
+          公开，采用
+          <a href="https://github.com/yacuo/newhot/blob/main/LICENSE" target="_blank" rel="noopener" class="text-indigo-600 underline underline-offset-2 hover:text-indigo-700">NewHot Attribution License 1.0</a>
+          协议。你可以修改源码并部署成自己的站点，但需要保留指向
+          <a href="https://newhot.org" target="_blank" rel="noopener" class="text-indigo-600 underline underline-offset-2 hover:text-indigo-700">NewHot</a>
+          与本仓库的可见署名。
+        </p>
+      </section>
+
+      <section class={pagePanelClass}>
+        <header>
+          <p class="text-sm font-semibold text-slate-500">{metrics.eyebrow}</p>
+          <h2 class="mt-2 text-xl font-semibold tracking-tight text-slate-950 md:text-2xl">{metrics.title}</h2>
+          <p class="mt-2 text-sm leading-7 text-slate-500">{metrics.description}</p>
+        </header>
+
+        <dl class="mt-6 grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-5">
+          {metrics.items.map((item) => (
+            <div class="rounded-md bg-slate-50 p-4">
+              <dd class="font-mono text-2xl font-semibold tracking-tight text-slate-950">{metricValues[item.key]}{item.unit ? <span class="ml-1 text-sm font-normal text-slate-400">{item.unit}</span> : null}</dd>
+              <dt class="mt-1 text-sm font-semibold text-slate-700">{item.label}</dt>
+              <p class="mt-1.5 text-xs leading-5 text-slate-500">{item.description}</p>
+            </div>
+          ))}
+        </dl>
+
+        <p class="mt-4 text-xs text-slate-400">{metrics.note}</p>
+      </section>
+
+      <section class={pagePanelClass}>
+        <header>
+          <p class="text-sm font-semibold text-slate-500">{workflow.eyebrow}</p>
+          <h2 class="mt-2 text-xl font-semibold tracking-tight text-slate-950 md:text-2xl">{workflow.title}</h2>
+          <p class="mt-2 text-sm leading-7 text-slate-500">{workflow.description}</p>
+        </header>
+
+        <ol class="mt-6 grid gap-3 md:grid-cols-2 xl:grid-cols-5">
+          {workflow.steps.map((step, index) => (
+            <li class="rounded-md bg-slate-50 p-4">
+              <span class="font-mono text-xs font-semibold tracking-[0.12em] text-indigo-600">{String(index + 1).padStart(2, "0")}</span>
+              <h3 class="mt-2 text-sm font-semibold text-slate-950">{step.title}</h3>
+              <p class="mt-1.5 text-xs leading-6 text-slate-500">{step.description}</p>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <section class={pagePanelClass}>
+        <header>
+          <p class="text-sm font-semibold text-slate-500">{scope.eyebrow}</p>
+          <h2 class="mt-2 text-xl font-semibold tracking-tight text-slate-950 md:text-2xl">{scope.title}</h2>
+          <p class="mt-2 text-sm leading-7 text-slate-500">{scope.description}</p>
+        </header>
+
+        <div class="mt-6 space-y-6">
+          <div>
+            <h3 class="flex items-center gap-2 text-sm font-semibold text-slate-950">
+              <span class="flex h-5 w-5 items-center justify-center rounded-full bg-indigo-600 text-[color:var(--accent-on)]">
+                <Icon name="Check" size={14} strokeWidth={2} />
+              </span>
+              会写
+            </h3>
+            <ul class="relative mt-4 flex gap-4 overflow-x-auto pb-2 thin-scrollbar">
+              <span aria-hidden="true" class="pointer-events-none absolute left-2 right-0 top-[5px] h-px bg-slate-200"></span>
+              {scope.included.map((item) => (
+                <li class="relative min-w-[13rem] flex-1">
+                  <span aria-hidden="true" class="block h-2.5 w-2.5 rounded-full bg-indigo-500"></span>
+                  <div class="mt-3 rounded-md bg-indigo-50/60 p-4 ring-1 ring-indigo-100">
+                    <p class="text-sm font-medium text-slate-900">{item.title}</p>
+                    <p class="mt-1 text-xs leading-6 text-slate-500">{item.description}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h3 class="flex items-center gap-2 text-sm font-semibold text-slate-950">
+              <span class="flex h-5 w-5 items-center justify-center rounded-full bg-slate-300 text-slate-700">
+                <Icon name="X" size={14} strokeWidth={2} />
+              </span>
+              不写
+            </h3>
+            <ul class="relative mt-4 flex gap-4 overflow-x-auto pb-2 thin-scrollbar">
+              <span aria-hidden="true" class="pointer-events-none absolute left-2 right-0 top-[5px] h-px bg-slate-200"></span>
+              {scope.excluded.map((item) => (
+                <li class="relative min-w-[13rem] flex-1">
+                  <span aria-hidden="true" class="block h-2.5 w-2.5 rounded-full bg-slate-300"></span>
+                  <div class="mt-3 rounded-md bg-slate-50 p-4">
+                    <p class="text-sm font-medium text-slate-900">{item.title}</p>
+                    <p class="mt-1 text-xs leading-6 text-slate-500">{item.description}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        <p class="mt-4 text-xs text-slate-400">{scope.note}</p>
+      </section>
+
+      <section class={pagePanelClass}>
+        <header>
+          <p class="text-sm font-semibold text-slate-500">{taxonomy.eyebrow}</p>
+          <h2 class="mt-2 text-xl font-semibold tracking-tight text-slate-950 md:text-2xl">{taxonomy.title}</h2>
+          <p class="mt-2 text-sm leading-7 text-slate-500">{taxonomy.description}</p>
+        </header>
+
+        <div class="mt-6 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+          {taxonomy.levels.map((level) => (
+            <div class="rounded-md bg-slate-50 p-4">
+              <h3 class="text-sm font-semibold text-slate-950">{level.title}</h3>
+              <p class="mt-1.5 text-xs leading-6 text-slate-500">{level.description}</p>
+            </div>
+          ))}
+        </div>
+
+        <ul class="mt-6 divide-y divide-slate-100 border-t border-slate-100">
+          {topics.map((topic) => {
+            const accent = getTopicAccent(topic.id);
+            const count = meta.channels[topic.id]?.count ?? 0;
+            return (
+              <li>
+                <a href={topicHref(topic.id)} class="group flex items-center gap-3 py-3.5">
+                  <span class={`h-2 w-2 flex-none rounded-full ${accent.dot}`}></span>
+                  <span class="min-w-0 flex-1"><span class={`text-sm font-semibold text-slate-900 transition ${accent.groupHoverText}`}>{topic.label}</span><span class="ml-2 hidden text-xs text-slate-400 sm:inline">{topic.description}</span></span>
+                  <span class="flex-none font-mono text-xs tracking-[0.04em] text-slate-400">{topic.subcategories.length} 个分类 · {count} 条</span>
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+
+        <p class="mt-4 text-xs text-slate-400">{taxonomy.note}</p>
+      </section>
+
+      <section class={pagePanelClass}>
+        <header>
+          <p class="text-sm font-semibold text-slate-500">{architecture.eyebrow}</p>
+          <h2 class="mt-2 text-xl font-semibold tracking-tight text-slate-950 md:text-2xl">{architecture.title}</h2>
+          <p class="mt-2 text-sm leading-7 text-slate-500">{architecture.description}</p>
+        </header>
+
+        <div class="mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+          {architecture.items.map((item) => (
+            <div class="rounded-md bg-slate-50 p-4">
+              <h3 class="text-sm font-semibold text-slate-950">{item.title}</h3>
+              <p class="mt-1.5 text-xs leading-6 text-slate-500">{item.description}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class={pagePanelClass}>
+        <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+          <div>
+            <p class="text-sm font-semibold text-slate-500">{contentEntry.eyebrow}</p>
+            <h2 class="mt-2 text-lg font-semibold tracking-tight text-slate-950 md:text-xl">{contentEntry.title}</h2>
+            <p class="mt-2 text-sm leading-6 text-slate-500">{contentEntry.description}</p>
+          </div>
+          <a href={contentEntry.action.href} class="inline-flex items-center gap-1.5 text-sm font-semibold text-slate-600 underline-offset-4 hover:underline">
+            {contentEntry.action.label}
+            <Icon name="ArrowRight" size={16} strokeWidth={2} />
+          </a>
+        </div>
+      </section>
+
+      <PageGuide
+        largeHeading
+        heading="我们的内容标准是什么？"
+        sourcesHeading="我们主要跟踪哪些官方渠道？"
+        sourcesDescription="以下是我们长期跟踪的官方发布渠道；涉及能力、版本与价格的信息，以厂商原文为准。"
+        description="NewHot 由一支专注 AI 大模型的内容与技术团队运营：只采用厂商官方渠道的信息，原创撰写标题与解读，发布前由编辑逐条人工审核。"
+        points={[
+          "所有信息都来自厂商官方公告、版本说明与官方文档，不采用传闻和二手转述。",
+          "标题、摘要与解读由编辑团队原创撰写，不翻译、不搬运。",
+          "每条内容发布前人工核对版本、价格与时间，确认准确后才上线。",
+          "内容有更正会同步修改，并在更新日志中留下记录。",
+        ]}
+        sources={[
+          { name: "OpenAI News", href: "https://openai.com/news/" },
+          { name: "Anthropic News", href: "https://www.anthropic.com/news" },
+          { name: "Google AI Blog", href: "https://blog.google/technology/ai/" },
+        ]}
+        quote={{ text: "确保通用人工智能造福全人类。", label: "OpenAI 官方使命", href: "https://openai.com/about/" }}
+      />
+    </div>
+  </Shell>
+</Root>

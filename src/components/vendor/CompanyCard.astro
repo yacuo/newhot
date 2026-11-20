@@ -1,0 +1,63 @@
+---
+import Icon from "@/components/ui/Icon.astro";
+import { companyHref, companyTierLabels, getCompanyModel } from "@/modules/vendor/model";
+import type { CompanySummary } from "@/modules/vendor/summary";
+import { getCompanyAccent, getCompanyInitials } from "@/modules/vendor/taxonomy";
+
+type Props = { summary: CompanySummary };
+const { summary } = Astro.props;
+const accent = getCompanyAccent(summary.company.tier);
+const model = getCompanyModel(summary.company);
+const products = summary.company.products;
+---
+<a
+  href={companyHref(summary.company.id)}
+  class="group relative flex flex-col rounded-2xl bg-surface p-5 ring-1 ring-slate-900/[0.07] transition-all duration-300 hover:-translate-y-0.5 hover:bg-slate-50 hover:ring-slate-900/[0.14] hover:shadow-[0_12px_28px_-20px_rgba(17,24,39,0.25)]"
+>
+  <div class="flex items-start gap-3.5">
+    <span class="flex h-11 w-11 flex-none items-center justify-center rounded-xl bg-slate-50 ring-1 ring-slate-900/[0.04]">
+      {summary.company.logo ? (
+        <img src={summary.company.logo} alt="" aria-hidden="true" loading="lazy" class="h-6 w-6 object-contain transition-transform duration-300 group-hover:scale-110" />
+      ) : (
+        <span class={`text-base font-bold ${accent.text}`}>{getCompanyInitials(summary.company.name)}</span>
+      )}
+    </span>
+
+    <div class="min-w-0 flex-1">
+      <h3 class="truncate text-[15px] font-semibold leading-6 tracking-[-0.01em] text-slate-950 transition-colors duration-300 group-hover:text-indigo-600">
+        {summary.company.name}
+        {model ? (
+          <span class="ml-1.5 font-normal text-slate-400">
+            <span class="mr-1.5 text-slate-300">/</span>
+            <span class="text-slate-500 transition-colors duration-300 group-hover:text-indigo-500">{model}</span>
+          </span>
+        ) : null}
+      </h3>
+      <p class="mt-1 truncate text-[12px] text-slate-400">
+        {products.length > 0 ? products.slice(0, 3).map((product) => product.name).join(" · ") : companyTierLabels[summary.company.tier]}
+        {products.length > 3 ? ` +${products.length - 3}` : ""}
+      </p>
+    </div>
+
+    <Icon name="ArrowUpRight" size={16} strokeWidth={2} class="h-4 w-4 flex-none translate-y-0.5 text-slate-300 transition-all duration-300 group-hover:-translate-y-0 group-hover:translate-x-0.5 group-hover:text-indigo-600" />
+  </div>
+
+  {summary.articleCount > 0 ? (
+    <div class="mt-5 flex items-baseline gap-4">
+      {[
+        { value: summary.articleCount, label: "篇动态" },
+        { value: summary.channelCount, label: "个频道" },
+        ...(summary.releaseCount > 0 ? [{ value: summary.releaseCount, label: "次发布" }] : []),
+      ].map((stat) => (
+        <span class="flex items-baseline gap-1">
+          <span class={`text-[19px] font-semibold leading-none tabular-nums ${stat.label === "次发布" ? "text-indigo-600" : "text-slate-900"}`}>
+            {stat.value}
+          </span>
+          <span class="text-[11px] text-slate-400">{stat.label}</span>
+        </span>
+      ))}
+    </div>
+  ) : (
+    <p class="mt-5 text-[13px] text-slate-400">厂商档案已建立，暂无相关动态</p>
+  )}
+</a>

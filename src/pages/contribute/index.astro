@@ -1,0 +1,67 @@
+---
+import Root from "@/layouts/Root.astro";
+import Shell from "@/layouts/Shell.astro";
+import PageHeader from "@/components/ui/PageHeader.astro";
+import LegalSections from "@/components/ui/LegalSections.astro";
+import { siteConfig } from "@/shared/site";
+import { pagePanelClass, widePageContainerClass } from "@/shared/ui/classes";
+
+const description =
+  "NewHot 投稿指南：欢迎 AI 工具实测、编程实践、报错排查和职场效率类原创内容，了解投稿方式与写作要求。";
+
+const sections = [
+  {
+    title: "一、我们欢迎什么内容",
+    paragraphs: [
+      "AI 工具的实测与对比：模型、编程工具、办公工具的实际上手体验、成本变化和适用场景。",
+      "编程与工程实践：可复现的代码示例、架构取舍、部署与调试经验，而不是泛泛的概念介绍。",
+      "报错与问题排查：Codex、Claude Code、WorkBuddy 等工具的真实报错、定位过程和最终解法。",
+      "职场效率：把 AI 真正用进日常工作流的方法，例如周报、文档、数据处理和团队协作。",
+    ],
+  },
+  {
+    title: "二、投稿方式",
+    paragraphs: [
+      "方式一：在 GitHub 仓库提交 Issue，附上文章标题、摘要和正文链接，我们会尽快回复。",
+      "方式二：直接在仓库发起 Pull Request，把文章按现有目录结构放入 content 目录，并补充必要的元信息。",
+      "方式三：如果你已经有成稿，也可以通过仓库 Issue 留下联系方式，我们会与你确认后续流程。",
+    ],
+  },
+  {
+    title: "三、写作要求",
+    paragraphs: [
+      "原创优先：请确保内容为本人原创，未在其他平台标注原创首发，引用需注明出处。",
+      "信息准确：涉及价格、版本号、模型能力和命令参数时，请尽量给出日期和来源。",
+      "结构清晰：建议包含背景、过程、结果和结论，代码与技术细节要可复现。",
+      "避免软文：不接受纯广告、返利推广或缺少实测依据的产品推荐。",
+    ],
+  },
+  {
+    title: "四、审核与发布",
+    paragraphs: [
+      "我们会在收到投稿后尽快评估内容相关性、准确性和可读性。必要时会与作者沟通修改，确认后再安排发布。",
+      "发布时会保留作者署名和原文链接。本站目前以内容分享为主，暂不提供稿酬；如有合作需求，可在投稿时说明。",
+    ],
+  },
+];
+---
+<Root title="投稿指南" description={description} path="/contribute/">
+  <Shell mainClassName={widePageContainerClass}>
+    <div class="space-y-5">
+      <PageHeader
+        eyebrow="CONTRIBUTE"
+        title="投稿指南"
+        description="欢迎把你在 AI 工具、编程实践和职场效率上的真实经验分享给更多读者。"
+      />
+
+      <article class={pagePanelClass}>
+        <LegalSections sections={sections} />
+
+        <div class="mt-8 flex flex-wrap gap-3 border-t border-slate-200 pt-6">
+          <a href={siteConfig.repository} target="_blank" rel="noreferrer" class="inline-flex h-9 items-center rounded border border-indigo-200 bg-surface px-4 text-sm font-medium text-indigo-700 transition hover:border-indigo-300 hover:bg-indigo-50">在 GitHub 查看</a>
+          <a href="/about/" class="inline-flex h-9 items-center rounded border border-indigo-200 bg-surface px-4 text-sm font-medium text-indigo-700 transition hover:border-indigo-300 hover:bg-indigo-50">了解 NewHot</a>
+        </div>
+      </article>
+    </div>
+  </Shell>
+</Root>

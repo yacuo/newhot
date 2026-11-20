@@ -1,0 +1,16 @@
+---
+type Props = { class?: string };
+const className = Astro.props.class ?? "";
+---
+<button
+  type="button"
+  data-search-open
+  aria-label="打开搜索"
+  class={`inline-flex h-11 w-[170px] items-center gap-2 rounded-full border border-slate-200 bg-surface px-5 text-sm text-slate-400 transition hover:border-indigo-200 hover:text-slate-600 hover:shadow-sm ${className}`}
+>
+  <svg viewBox="0 0 24 24" aria-hidden="true" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="11" cy="11" r="6.5" />
+    <path d="m16 16 4 4" />
+  </svg>
+  <span>搜索标题和正文</span>
+</button>

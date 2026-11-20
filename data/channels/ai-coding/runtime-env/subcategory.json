@@ -1,0 +1,9 @@
+{
+  "label": "开发环境与依赖",
+  "description": "Node.js、Deno、Bun、Python、JDK、Docker、pnpm、Vite 等运行时、包管理器、构建工具与容器环境的版本更新。不收录 IDE、AI 编程工具与扩展市场更新。",
+  "seo": {
+    "title": "示例分类：开发环境与依赖",
+    "description": "开发环境与依赖的示例分类描述，仅用于演示分类页 SEO 配置，请替换为自己的关键词与介绍。"
+  },
+  "order": 40
+}

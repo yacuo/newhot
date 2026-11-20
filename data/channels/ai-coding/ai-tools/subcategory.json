@@ -1,0 +1,9 @@
+{
+  "label": "AI 编程工具",
+  "description": "Codex、Copilot、Cursor、Claude Code、Cline 等 AI 编程工具与智能体的版本更新、新能力与兼容性变化。不收录传统 IDE、Agent 框架与协议、非 AI 工具更新。",
+  "seo": {
+    "title": "示例分类：AI 编程工具",
+    "description": "AI 编程工具的示例分类描述，仅用于演示分类页 SEO 配置，请替换为自己的关键词与介绍。"
+  },
+  "order": 10
+}

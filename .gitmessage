@@ -1,0 +1,13 @@
+# <type>(<scope>): <简短说明>
+
+# 类型：feat / fix / docs / refactor / style / perf / test / build / ci / chore / revert
+# scope：受影响的模块或目录，如 themes / tutorial / content / search / deps
+#
+# 示例：
+#   feat(themes): 公司卡片支持按分类筛选
+#   fix(tutorial): 侧边栏在窄屏下宽度溢出
+#
+# 正文（可选）：为什么这样改、影响了什么
+#
+# 破坏性变更（如有）：
+#   BREAKING CHANGE: 说明不兼容的变化

@@ -1,0 +1,25 @@
+---
+import Root from "@/layouts/Root.astro";
+import Shell from "@/layouts/Shell.astro";
+import PageHeader from "@/components/ui/PageHeader.astro";
+import { companies } from "@/modules/vendor/model";
+import { pagePanelClass, widePageContainerClass } from "@/shared/ui/classes";
+
+const description = "NewHot 全部公司索引：按名称浏览正在跟踪的 AI 公司与产品动态。";
+---
+<Root title="全部公司" description={description} path="/companies/">
+  <Shell mainClassName={widePageContainerClass} selectedChannel="主题">
+    <div class="space-y-5">
+      <PageHeader eyebrow="COMPANIES" title="全部公司" description={description} stats={`${companies.length} 家公司`} />
+
+      <div class="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+        {companies.map((company) => (
+          <a href={`/${company.id}/`} data-company-card class={`${pagePanelClass} transition hover:ring-2 hover:ring-indigo-200`}>
+            <p class="text-[15px] font-semibold text-slate-900">{company.name}</p>
+            <p class="mt-1 text-[13px] leading-6 text-slate-500">{company.products.length} 个产品 · {company.region === "cn" ? "中国" : "海外"}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </Shell>
+</Root>

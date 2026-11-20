@@ -1,0 +1,73 @@
+{
+  "version": 1,
+  "companies": {
+    "openai": {
+      "title": "示例公司：OpenAI",
+      "description": "OpenAI的示例公司页描述，仅用于演示公司页 SEO 配置，请替换为自己的介绍与关键词。"
+    },
+    "anthropic": {
+      "title": "示例公司：Anthropic",
+      "description": "Anthropic的示例公司页描述，仅用于演示公司页 SEO 配置，请替换为自己的介绍与关键词。"
+    },
+    "google": {
+      "title": "示例公司：Google",
+      "description": "Google的示例公司页描述，仅用于演示公司页 SEO 配置，请替换为自己的介绍与关键词。"
+    },
+    "microsoft": {
+      "title": "示例公司：Microsoft",
+      "description": "Microsoft的示例公司页描述，仅用于演示公司页 SEO 配置，请替换为自己的介绍与关键词。"
+    },
+    "mistral": {
+      "title": "示例公司：Mistral AI",
+      "description": "Mistral AI的示例公司页描述，仅用于演示公司页 SEO 配置，请替换为自己的介绍与关键词。"
+    },
+    "bfl": {
+      "title": "示例公司：Black Forest Labs",
+      "description": "Black Forest Labs的示例公司页描述，仅用于演示公司页 SEO 配置，请替换为自己的介绍与关键词。"
+    },
+    "elevenlabs": {
+      "title": "示例公司：ElevenLabs",
+      "description": "ElevenLabs的示例公司页描述，仅用于演示公司页 SEO 配置，请替换为自己的介绍与关键词。"
+    },
+    "runway": {
+      "title": "示例公司：Runway",
+      "description": "Runway的示例公司页描述，仅用于演示公司页 SEO 配置，请替换为自己的介绍与关键词。"
+    },
+    "cursor": {
+      "title": "示例公司：Cursor",
+      "description": "Cursor的示例公司页描述，仅用于演示公司页 SEO 配置，请替换为自己的介绍与关键词。"
+    },
+    "mcp": {
+      "title": "示例公司：Model Context Protocol",
+      "description": "Model Context Protocol的示例公司页描述，仅用于演示公司页 SEO 配置，请替换为自己的介绍与关键词。"
+    },
+    "notion": {
+      "title": "示例公司：Notion",
+      "description": "Notion的示例公司页描述，仅用于演示公司页 SEO 配置，请替换为自己的介绍与关键词。"
+    },
+    "zoom": {
+      "title": "示例公司：Zoom",
+      "description": "Zoom的示例公司页描述，仅用于演示公司页 SEO 配置，请替换为自己的介绍与关键词。"
+    },
+    "airtable": {
+      "title": "示例公司：Airtable",
+      "description": "Airtable的示例公司页描述，仅用于演示公司页 SEO 配置，请替换为自己的介绍与关键词。"
+    },
+    "feishu": {
+      "title": "示例公司：飞书",
+      "description": "飞书的示例公司页描述，仅用于演示公司页 SEO 配置，请替换为自己的介绍与关键词。"
+    },
+    "jasper": {
+      "title": "示例公司：Jasper",
+      "description": "Jasper的示例公司页描述，仅用于演示公司页 SEO 配置，请替换为自己的介绍与关键词。"
+    },
+    "ollama": {
+      "title": "示例公司：Ollama",
+      "description": "Ollama的示例公司页描述，仅用于演示公司页 SEO 配置，请替换为自己的介绍与关键词。"
+    },
+    "nodejs": {
+      "title": "示例公司：Node.js 生态",
+      "description": "Node.js 生态的示例公司页描述，仅用于演示公司页 SEO 配置，请替换为自己的介绍与关键词。"
+    }
+  }
+}

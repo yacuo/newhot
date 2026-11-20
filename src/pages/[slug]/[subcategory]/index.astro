@@ -1,0 +1,409 @@
+---
+import Root from "@/layouts/Root.astro";
+import Shell from "@/layouts/Shell.astro";
+import ChannelPanel from "@/components/channel/ChannelPanel.astro";
+import ChannelTabs from "@/components/channel/ChannelTabs.astro";
+import ArticleList from "@/components/channel/ArticleList.astro";
+import PageGuide from "@/components/channel/PageGuide.astro";
+import ArticleMetaList from "@/components/article/ArticleMetaList.astro";
+import ArticleFaqSection from "@/components/article/ArticleFaqSection.astro";
+import ArticleGlossarySection from "@/components/article/ArticleGlossarySection.astro";
+import ArticleSourcesSection from "@/components/article/ArticleSourcesSection.astro";
+import TableOfContents from "@/components/ui/TableOfContents.astro";
+import MobileArticleToc from "@/components/ui/MobileArticleToc.astro";
+import TutorialArticle from "@/components/tutorial/TutorialArticle.astro";
+import Icon from "@/components/ui/Icon.astro";
+import { topics, getTopicById, getSubcategory, getSubcategoryLabel, getTopicLabel, subcategoryHref, topicHref } from "@/modules/channel";
+import { getAllPosts, readFeedMeta, readListShard } from "@/modules/content";
+import { findTutorialArticle, getResolvedTutorialCatalogById, getTutorialStaticParams } from "@/modules/tutorial";
+import { LIST_INITIAL_SIZE } from "@/modules/content/list-shards";
+import { buildBreadcrumbJsonLd, buildCollectionJsonLd } from "@/shared/seo/jsonld";
+import { getSiteUrl, siteConfig } from "@/shared/site";
+import { formatMonthDay } from "@/shared/utils";
+import { pagePanelClass, widePageContainerClass } from "@/shared/ui/classes";
+
+export async function getStaticPaths() {
+  const posts = await getAllPosts();
+
+  return [
+    ...topics.flatMap((topic) =>
+      topic.subcategories.map((subcategory) => ({
+        params: { slug: topic.id, subcategory: subcategory.id },
+        props: { kind: "category", channel: topic.id, subcategory: subcategory.id },
+      })),
+    ),
+    ...posts
+      .filter((post) => post.subcategory)
+      .map((post) => ({
+        params: { slug: post.subcategory, subcategory: post.slug },
+        props: { kind: "post", channel: post.subcategory, subcategory: post.slug },
+      })),
+    ...getTutorialStaticParams(posts).map((article) => ({
+      params: { slug: article.tutorialId, subcategory: article.slug },
+      props: { kind: "tutorial", channel: article.tutorialId, subcategory: article.slug },
+    })),
+  ];
+}
+
+const { kind, channel = "", subcategory = "" } = Astro.props;
+const posts = await getAllPosts();
+const meta = readFeedMeta();
+
+const isCategory = kind === "category";
+const topic = isCategory ? getTopicById(channel) : null;
+const sub = isCategory ? getSubcategory(channel, subcategory) : null;
+if (isCategory && (!topic || !sub)) throw new Error(`分类不存在：${channel}/${subcategory}`);
+
+// slug 只在频道内唯一，跨频道可能重名；必须按完整路径查，否则会渲染成另一频道的同名文章
+const post = !isCategory ? posts.find((item) => item.href === `/${channel}/${subcategory}/`) : null;
+
+let article = null;
+
+if (post) {
+  const currentIndex = posts.findIndex((item) => item.href === post.href);
+  const previousPost = posts[currentIndex + 1];
+  const nextPost = posts[currentIndex - 1];
+  const categoryHref = topicHref(post.category);
+  const topicLabel = getTopicLabel(post.category);
+  const subcategoryLabel = post.subcategory ? getSubcategoryLabel(post.category, post.subcategory) : null;
+  const subcategoryPath = post.subcategory ? subcategoryHref(post.category, post.subcategory) : null;
+  const articleUrl = getSiteUrl(post.href);
+  const ogImageUrl = getSiteUrl(siteConfig.ogImage);
+
+  article = {
+    current: post,
+    previousPost,
+    nextPost,
+    categoryHref,
+    topicLabel,
+    subcategoryLabel,
+    subcategoryPath,
+    visibleTags: post.tags.slice(0, 5),
+    articleJsonLd: {
+      "@context": "https://schema.org",
+      "@type": post.subcategory === "pricing" ? "Article" : "NewsArticle",
+      headline: post.title,
+      description: post.description,
+      datePublished: post.date,
+      dateModified: post.updated ?? post.date,
+      author: { "@type": "Organization", name: post.author || siteConfig.author },
+      publisher: {
+        "@type": "Organization",
+        name: siteConfig.name,
+        url: getSiteUrl("/"),
+        logo: { "@type": "ImageObject", url: getSiteUrl("/favicon.svg") },
+      },
+      mainEntityOfPage: articleUrl,
+      url: articleUrl,
+      image: { "@type": "ImageObject", url: ogImageUrl, width: 1200, height: 630 },
+      articleSection: subcategoryLabel ?? post.category,
+      inLanguage: siteConfig.language,
+      isAccessibleForFree: true,
+      citation: post.sources?.map((source) => source.url),
+    },
+    breadcrumbJsonLd: {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "首页", item: getSiteUrl("/") },
+        { "@type": "ListItem", position: 2, name: topicLabel, item: getSiteUrl(categoryHref) },
+        ...(subcategoryLabel && subcategoryPath
+          ? [{ "@type": "ListItem", position: 3, name: subcategoryLabel, item: getSiteUrl(subcategoryPath) }]
+          : []),
+        { "@type": "ListItem", position: subcategoryLabel ? 4 : 3, name: post.title, item: articleUrl },
+      ],
+    },
+    faqJsonLd: post.faqs?.length
+      ? {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: post.faqs.map((faq) => ({
+            "@type": "Question",
+            name: faq.question,
+            acceptedAnswer: { "@type": "Answer", text: faq.answer },
+          })),
+        }
+      : null,
+    glossaryJsonLd: post.glossary?.length
+      ? {
+          "@context": "https://schema.org",
+          "@type": "DefinedTermSet",
+          name: `${post.title} 相关术语`,
+          hasDefinedTerm: post.glossary.map((item) => ({
+            "@type": "DefinedTerm",
+            name: item.term,
+            description: item.definition,
+          })),
+        }
+      : null,
+  };
+}
+
+let tutorial = null;
+
+if (kind === "tutorial" && post) {
+  const catalog = getResolvedTutorialCatalogById(posts, channel);
+  const catalogArticle = catalog ? findTutorialArticle(catalog, subcategory) : null;
+
+  if (catalog && catalogArticle) {
+    const articleUrl = getSiteUrl(post.href);
+
+    tutorial = {
+      catalog,
+      post,
+      jsonLd: {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        headline: post.title,
+        description: post.description,
+        datePublished: post.date,
+        dateModified: post.updated ?? post.date,
+        author: { "@type": "Organization", name: siteConfig.author },
+        publisher: { "@type": "Organization", name: siteConfig.name },
+        mainEntityOfPage: articleUrl,
+        url: articleUrl,
+        image: getSiteUrl(siteConfig.ogImage),
+        articleSection: catalogArticle.section.title,
+        isPartOf: { "@type": "CollectionPage", name: catalog.title, url: getSiteUrl(`/tutorials/${catalog.id}/`) },
+      },
+      faqJsonLd: post.faqs?.length
+        ? {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: post.faqs.map((faq) => ({
+              "@type": "Question",
+              name: faq.question,
+              acceptedAnswer: { "@type": "Answer", text: faq.answer },
+            })),
+          }
+        : null,
+    };
+  }
+}
+
+let category = null;
+
+if (topic && sub) {
+  const stat = meta?.subcategories[`${topic.id}/${sub.id}`];
+  const initialItems = readListShard(`${topic.id}/${sub.id}`, 1)?.items.slice(0, LIST_INITIAL_SIZE) ?? [];
+  const seoTitle = sub.seo?.title ?? `${topic.label} · ${sub.label}`;
+  const seoDescription = sub.seo?.description ?? sub.description;
+
+  category = {
+    topic,
+    sub,
+    stat,
+    total: stat?.count ?? 0,
+    initialItems,
+    seoTitle,
+    seoDescription,
+    collectionJsonLd: buildCollectionJsonLd({
+      name: seoTitle,
+      description: seoDescription,
+      path: subcategoryHref(topic.id, sub.id),
+      items: initialItems,
+    }),
+    breadcrumbJsonLd: buildBreadcrumbJsonLd([
+      { name: "首页", href: "/" },
+      { name: topic.label, href: topicHref(topic.id) },
+      { name: sub.label, href: subcategoryHref(topic.id, sub.id) },
+    ]),
+  };
+}
+---
+{tutorial ? (
+  <Root
+    title={`${tutorial.post.title} - ${tutorial.catalog.title}`}
+    description={tutorial.post.description}
+    path={tutorial.post.href}
+    type="article"
+    post={tutorial.post}
+    absoluteTitle
+  >
+    <script type="application/ld+json" set:html={JSON.stringify(tutorial.jsonLd)} />
+    {tutorial.faqJsonLd ? <script type="application/ld+json" set:html={JSON.stringify(tutorial.faqJsonLd)} /> : null}
+
+    <Shell
+      mobileShowChannels
+      selectedChannel={getTopicLabel(tutorial.post.category)}
+      mainClassName={`${widePageContainerClass} bg-surface`}
+    >
+      <TutorialArticle catalog={tutorial.catalog} post={tutorial.post} />
+    </Shell>
+
+    <script>
+      import "../../../scripts/toc";
+      import "../../../scripts/mermaid";
+    </script>
+  </Root>
+) : article ? (
+  <Root
+    title={article.current.title}
+    description={article.current.description}
+    path={article.current.href}
+    type="article"
+    post={article.current}
+    authors={article.current.author ? [article.current.author] : undefined}
+    section={article.current.subcategory}
+    absoluteTitle
+  >
+    <script type="application/ld+json" set:html={JSON.stringify(article.articleJsonLd)} />
+    <script type="application/ld+json" set:html={JSON.stringify(article.breadcrumbJsonLd)} />
+    {article.faqJsonLd ? <script type="application/ld+json" set:html={JSON.stringify(article.faqJsonLd)} /> : null}
+    {article.glossaryJsonLd ? <script type="application/ld+json" set:html={JSON.stringify(article.glossaryJsonLd)} /> : null}
+
+    <Shell mobileShowChannels selectedChannel={article.topicLabel} mainClassName={`${widePageContainerClass} bg-surface`}>
+      <MobileArticleToc headings={article.current.headings} />
+      <article class="grid justify-center gap-x-8 pt-3 lg:grid-cols-[clamp(180px,16vw,280px)_minmax(0,860px)_clamp(150px,12vw,190px)] xl:grid-cols-[clamp(180px,16vw,280px)_minmax(0,860px)_clamp(200px,15vw,280px)]">
+        <div class="hidden lg:col-start-1 lg:row-span-3 lg:row-start-1 lg:block">
+          <div class="sticky top-[var(--site-article-sticky-offset)]">
+            <a
+              href={article.subcategoryPath ?? article.categoryHref}
+              class="group -ml-1 -mt-1 inline-flex items-center gap-1.5 px-1 py-0.5 text-[13px] font-medium leading-5 text-slate-600 transition-colors hover:text-indigo-600"
+            >
+              <Icon name="ArrowLeft" size={14} strokeWidth={2} class="transition-transform group-hover:-translate-x-0.5" />
+              返回列表
+            </a>
+          </div>
+        </div>
+
+        <nav aria-label="面包屑" class="mb-8 flex flex-wrap items-center gap-1.5 border-b border-slate-200/80 pb-3 pr-12 text-[13px] text-slate-500 lg:col-start-2 lg:row-start-1 xl:pr-0">
+          <a href="/" class="transition-colors hover:text-indigo-500">首页</a>
+          <span aria-hidden="true" class="text-slate-300">/</span>
+          <a href={article.categoryHref} class="transition-colors hover:text-indigo-500">{article.topicLabel}</a>
+          {article.subcategoryLabel && article.subcategoryPath ? (
+            <>
+              <span aria-hidden="true" class="text-slate-300">/</span>
+              <a href={article.subcategoryPath} class="transition-colors hover:text-indigo-500">{article.subcategoryLabel}</a>
+            </>
+          ) : null}
+        </nav>
+
+        <div class="lg:col-start-2 lg:row-start-2">
+          <div class="border-b border-slate-200/70 pb-3">
+            <h1 class="text-[21px] font-semibold leading-tight tracking-tight text-slate-950 md:text-[26px]">{article.current.title}</h1>
+          </div>
+        </div>
+
+        <aside class="hidden lg:col-start-1 lg:row-start-3 lg:block">
+          <div class="sticky top-[calc(var(--site-article-sticky-offset)_+_33px)] max-h-[calc(100vh-var(--site-article-sticky-offset)-1rem)] overflow-y-auto overflow-x-hidden pb-4">
+            <div class="border-t border-slate-200/70"></div>
+            <div class="mt-3">
+              <ArticleMetaList post={article.current} backHref={article.subcategoryPath ?? article.categoryHref} backLabel="返回列表" showBackLink={false} />
+            </div>
+          </div>
+        </aside>
+
+        <div class="min-w-0 lg:col-start-2 lg:row-start-3">
+          <header class="pb-2">
+            {article.visibleTags.length ? (
+              <div class="mt-3 flex flex-wrap items-center gap-2">
+                {article.visibleTags.map((tag) => (
+                  <span class="theme-tag rounded px-2.5 py-0.5 text-xs">{tag}</span>
+                ))}
+              </div>
+            ) : null}
+            <p class="mt-3 rounded-md bg-slate-50 px-4 py-3 text-[15px] leading-7 text-slate-600">{article.current.description}</p>
+          </header>
+
+          <section aria-label="文章正文" class="prose mt-7 max-w-none" set:html={article.current.html} />
+          <ArticleFaqSection faqs={article.current.faqs} />
+          <ArticleGlossarySection glossary={article.current.glossary} />
+          <ArticleSourcesSection sources={article.current.sources} />
+
+          <nav aria-label="上一篇和下一篇" class="mt-12 space-y-3">
+            {article.previousPost ? (
+              <a href={article.previousPost.href} class="group relative flex items-center overflow-hidden rounded-2xl py-4 transition-colors duration-300">
+                <span class="relative flex min-w-0 flex-col gap-1.5">
+                  <span class="flex items-center gap-2 font-mono text-[11px] tracking-[0.18em] text-indigo-500">
+                    <Icon name="ArrowLeft" size={14} strokeWidth={2} class="transition-transform duration-300 group-hover:-translate-x-1" />
+                    上一篇
+                    <span class="text-slate-300">PREV</span>
+                  </span>
+                  <span class="line-clamp-2 text-[17px] font-semibold leading-7 text-slate-900 transition-colors duration-300 group-hover:text-indigo-700">
+                    {article.previousPost.title}
+                  </span>
+                </span>
+                <span class="absolute inset-x-0 bottom-0 h-[2px] origin-left scale-x-0 bg-gradient-to-r from-indigo-500 via-indigo-400 to-transparent transition-transform duration-500 group-hover:scale-x-100"></span>
+              </a>
+            ) : null}
+            {article.nextPost ? (
+              <a href={article.nextPost.href} class="group relative flex items-center justify-end overflow-hidden rounded-2xl py-4 text-right transition-colors duration-300">
+                <span class="relative flex min-w-0 flex-col items-end gap-1.5">
+                  <span class="flex items-center gap-2 font-mono text-[11px] tracking-[0.18em] text-indigo-500">
+                    <span class="text-slate-300">NEXT</span>
+                    下一篇
+                    <Icon name="ArrowRight" size={14} strokeWidth={2} class="transition-transform duration-300 group-hover:translate-x-1" />
+                  </span>
+                  <span class="line-clamp-2 text-[17px] font-semibold leading-7 text-slate-900 transition-colors duration-300 group-hover:text-indigo-700">
+                    {article.nextPost.title}
+                  </span>
+                </span>
+                <span class="absolute inset-x-0 bottom-0 h-[2px] origin-right scale-x-0 bg-gradient-to-l from-indigo-500 via-indigo-400 to-transparent transition-transform duration-500 group-hover:scale-x-100"></span>
+              </a>
+            ) : null}
+          </nav>
+        </div>
+
+        <aside class="hidden lg:col-start-3 lg:row-start-3 lg:block">
+          <div class="sticky -mt-[33px] top-[var(--site-article-sticky-offset)] max-h-[calc(100vh-var(--site-article-sticky-offset)-1rem)] overflow-y-auto">
+            <p class="mb-3 border-b border-slate-200/70 pb-3 text-sm font-medium text-slate-950">文章目录</p>
+            <TableOfContents headings={article.current.headings} showTitle={false} />
+          </div>
+        </aside>
+      </article>
+    </Shell>
+
+    <script>
+      import "../../../scripts/toc";
+      import "../../../scripts/mermaid";
+    </script>
+  </Root>
+) : category ? (
+  <Root title={category.seoTitle} description={category.seoDescription} path={subcategoryHref(category.topic.id, category.sub.id)}>
+    <Shell selectedChannel={category.topic.label} mainClassName={widePageContainerClass}>
+      <script type="application/ld+json" set:html={JSON.stringify(category.collectionJsonLd)} />
+      <script type="application/ld+json" set:html={JSON.stringify(category.breadcrumbJsonLd)} />
+      <ChannelPanel
+        title={category.sub.label}
+        eyebrow={category.topic.labelEn}
+        description={category.sub.description}
+        stats={category.stat ? `${category.total} 篇文章 · 更新至 ${formatMonthDay(category.stat.latest)}` : undefined}
+      />
+
+      <section class={`mt-5 ${pagePanelClass}`}>
+        <h2 class="text-base font-semibold text-slate-900">最新动态</h2>
+        <ChannelTabs
+          tabs={[
+            { id: "all", label: "全部", href: topicHref(category.topic.id) },
+            ...category.topic.subcategories.map((entry) => ({
+              id: entry.id,
+              label: entry.label,
+              href: subcategoryHref(category.topic.id, entry.id),
+              active: entry.id === category.sub.id,
+            })),
+          ]}
+          class="mt-3"
+        />
+        <p class="mt-3 text-sm leading-6 text-slate-500">
+          {`${category.sub.label}分类整理${category.topic.label}频道里厂商官方发布的动态，共 ${category.total} 篇，按发布时间倒序排列；点开任意一条查看完整内容与原始来源。`}
+        </p>
+        <ArticleList class="mt-2" scope={`${category.topic.id}/${category.sub.id}`} total={category.total} initialItems={category.initialItems} showTopic={false} showSubcategory={false} />
+      </section>
+
+      <PageGuide
+        heading={`${category.sub.label}分类写哪些内容？`}
+        description={category.topic.standards?.description ?? "内容由 NewHot 编辑部原创整理，只采用厂商官方渠道发布的信息，经人工审核后发布；同一条动态只保留一份记录，并按公司归档。"}
+        points={category.topic.standards ? [`本分类写什么：${category.sub.description}`, ...category.topic.standards.points] : [category.sub.description]}
+        sourcesHeading={category.topic.standards?.sourcesHeading}
+        sourcesDescription={category.topic.standards?.sourcesDescription}
+        quote={category.topic.standards ? category.topic.standards.quote ?? null : undefined}
+        topicId={category.topic.id}
+      />
+    </Shell>
+
+    <script>
+      import "../../../scripts/list";
+    </script>
+  </Root>
+) : null}

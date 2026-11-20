@@ -1,0 +1,32 @@
+---
+type Section = {
+  title: string;
+  paragraphs?: readonly string[];
+  points?: readonly string[];
+  tail?: readonly string[];
+};
+
+type Props = { sections: readonly Section[] };
+
+const { sections } = Astro.props;
+---
+<div class="space-y-7">
+  {sections.map((section) => (
+    <section>
+      <h2 class="text-base font-semibold text-slate-950">{section.title}</h2>
+      {(section.paragraphs ?? []).map((paragraph) => (
+        <p class="mt-2 text-sm leading-7 text-slate-600">{paragraph}</p>
+      ))}
+      {section.points?.length ? (
+        <ul class="mt-2 list-disc space-y-2 pl-5 text-sm leading-7 text-slate-600">
+          {section.points.map((point) => (
+            <li>{point}</li>
+          ))}
+        </ul>
+      ) : null}
+      {(section.tail ?? []).map((paragraph) => (
+        <p class="mt-2 text-sm leading-7 text-slate-600">{paragraph}</p>
+      ))}
+    </section>
+  ))}
+</div>

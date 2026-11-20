@@ -1,0 +1,21 @@
+---
+import type { PostMeta } from "@/modules/content/schema";
+
+type Props = { faqs?: PostMeta["faqs"] };
+const { faqs } = Astro.props;
+---
+{faqs?.length ? (
+  <section aria-labelledby="article-faq-title" class="mt-12">
+    <h2 id="article-faq-title" class="scroll-mt-24 text-[18px] font-semibold leading-[28px] tracking-tight text-slate-950">
+      常见问题
+    </h2>
+    <dl class="mt-5 space-y-6">
+      {faqs.map((faq) => (
+        <div>
+          <dt class="text-[16px] font-semibold leading-7 text-slate-900">{faq.question}</dt>
+          <dd class="mt-1.5 text-[15px] leading-7 text-slate-700">{faq.answer}</dd>
+        </div>
+      ))}
+    </dl>
+  </section>
+) : null}

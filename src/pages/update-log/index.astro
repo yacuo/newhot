@@ -1,0 +1,167 @@
+---
+import Root from "@/layouts/Root.astro";
+import Shell from "@/layouts/Shell.astro";
+import PageHeader from "@/components/ui/PageHeader.astro";
+import PageGuide from "@/components/channel/PageGuide.astro";
+import DayGroup from "@/components/channel/DayGroup.astro";
+import Icon from "@/components/ui/Icon.astro";
+import {
+  countLogChanges,
+  updateLogEntries,
+  updateLogPage,
+  type UpdateLogEntry,
+} from "@/modules/page-content/update-log";
+import { getSiteUrl, siteConfig } from "@/shared/site";
+import { pagePanelClass, widePageContainerClass } from "@/shared/ui/classes";
+
+const { page } = updateLogPage;
+const entries = updateLogEntries;
+const latest = entries[0];
+
+const WEEKDAYS = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"];
+
+/** 2026-11-14 → 11月14日 / 周六 */
+const formatDay = (value: string) => {
+  const [year, month, day] = value.split("-").map(Number);
+  const weekday = WEEKDAYS[new Date(Date.UTC(year, month - 1, day)).getUTCDay()];
+  return { label: `${month}月${day}日`, weekday };
+};
+
+const stats = latest ? `共 ${entries.length} 篇 · 最近更新 ${formatDay(latest.date).label}` : "暂无日志";
+
+/** 按日期分组，保持传入顺序（已按时间倒序） */
+const groups: { date: string; entries: UpdateLogEntry[] }[] = [];
+for (const entry of entries) {
+  const last = groups[groups.length - 1];
+  if (last && last.date === entry.date) last.entries.push(entry);
+  else groups.push({ date: entry.date, entries: [entry] });
+}
+
+const collectionJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: page.title,
+  description: page.description,
+  url: getSiteUrl("/update-log/"),
+  inLanguage: siteConfig.language,
+  mainEntity: {
+    "@type": "ItemList",
+    numberOfItems: entries.length,
+    itemListElement: entries.map((entry, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      item: {
+        "@type": "Article",
+        headline: entry.title,
+        description: entry.summary,
+        url: getSiteUrl(`/update-log/${entry.slug}/`),
+        datePublished: entry.date,
+        author: { "@type": "Organization", name: `${siteConfig.name} 编辑部`, url: getSiteUrl("/about/") },
+      },
+    })),
+  },
+};
+---
+<Root title={updateLogPage.seo.title} description={updateLogPage.seo.description} path="/update-log/">
+  <script type="application/ld+json" set:html={JSON.stringify(collectionJsonLd)} />
+
+  <Shell selectedChannel="更新日志" mainClassName={widePageContainerClass}>
+    <div class="space-y-5">
+      <PageHeader
+        eyebrow="CHANGELOG"
+        title={page.title}
+        description={page.description}
+        stats={stats}
+      />
+
+      <section class={pagePanelClass}>
+        <header class="flex flex-wrap items-end justify-between gap-2">
+          <div>
+            <h2 class="text-lg font-semibold tracking-tight text-slate-950 md:text-xl">全部日志</h2>
+            <p class="mt-1.5 text-sm leading-6 text-slate-500">
+              按发布时间倒序，和文章列表一样逐条排列；点开任意一篇查看完整变更。
+            </p>
+          </div>
+          <span class="font-mono text-xs tracking-[0.04em] text-slate-400">DESC</span>
+        </header>
+
+        <div class="mt-5">
+          {groups.map((group) => (
+            <DayGroup date={group.date} weekday={formatDay(group.date).weekday} count={group.entries.length}>
+              {group.entries.map((entry) => (
+                <li class="xl:grid xl:grid-cols-[148px_minmax(0,1fr)] xl:gap-x-8">
+                  <div class="relative hidden border-r border-slate-200 pr-5 pt-4 text-right xl:block">
+                    <p class="mt-[22px] font-mono text-sm leading-6 text-slate-900">{entry.version}</p>
+                    <span class="absolute -right-[4.5px] top-[46px] h-2 w-2 rounded-full bg-slate-950 ring-2 ring-surface"></span>
+                  </div>
+
+                  <a href={`/update-log/${entry.slug}/`} class="group block border-t border-slate-100 py-4">
+                    <div class="flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs leading-5">
+                      <span class="badge badge-accent">{entry.version}</span>
+                      {entry.tags.map((tag) => (
+                        <span class="badge badge-muted">{tag}</span>
+                      ))}
+                      <span class="text-slate-400">{countLogChanges(entry)} 项变更</span>
+                      {entry.placeholder ? (
+                        <span class="rounded bg-amber-50 px-1.5 py-0.5 text-[11px] font-medium text-amber-700">格式示例</span>
+                      ) : null}
+                    </div>
+                    <h3 class="mt-1.5 truncate text-[15px] font-medium leading-6 text-slate-900 transition-colors group-hover:text-slate-600">
+                      {entry.title}
+                    </h3>
+                    <p class="mt-1 text-sm leading-6 text-slate-500">{entry.summary}</p>
+                  </a>
+                </li>
+              ))}
+            </DayGroup>
+          ))}
+        </div>
+
+        {entries.length > 0 ? (
+          <p class="border-t border-slate-100 pt-4 text-center text-xs text-slate-400">已展示全部 {entries.length} 篇日志</p>
+        ) : (
+          <p class="border-t border-slate-100 pt-5 text-sm leading-6 text-slate-500">
+            还没有发布日志。站点上线后，第一条记录会写在这里。
+          </p>
+        )}
+      </section>
+
+      <section class={pagePanelClass}>
+        <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+          <div>
+            <h2 class="text-base font-semibold text-slate-950">想了解这个站点本身？</h2>
+            <p class="mt-1 text-sm leading-6 text-slate-500">
+              核心指标、数据采集范围、内容分类体系和运行流程都在关于我们页面。
+            </p>
+          </div>
+          <a
+            href="/about/"
+            class="inline-flex items-center gap-1.5 text-sm font-semibold text-slate-600 underline-offset-4 hover:underline"
+          >
+            关于我们
+            <Icon name="ArrowRight" size={16} strokeWidth={2} class="h-4 w-4" />
+          </a>
+        </div>
+      </section>
+
+      <PageGuide
+        heading="这个更新日志记录什么？"
+        description={updateLogPage.page.description}
+        points={[
+          "每条日志由编辑核对官方发布后整理，版本号与日期以厂商原文为准。",
+          "一版一篇日志，标注版本号与发布日期，并按时间倒序排列。",
+          "变更分成新增、优化、修复三类，没有内容的分类直接省略。",
+          "每条日志都能单独打开，也能在列表里按日期分组浏览。",
+        ]}
+        sources={[
+          { name: "GitHub", href: siteConfig.repository },
+        ]}
+        quote={{ text: "版本号由主版本、次版本与修订号三段组成。", label: "语义化版本 2.0.0", href: "https://semver.org/lang/zh-CN/" }}
+      />
+    </div>
+  </Shell>
+</Root>
+
+<script>
+  import "../../scripts/day-group";
+</script>

@@ -1,0 +1,50 @@
+[
+  {
+    "name": "Sample Notes",
+    "repo": "example/sample-notes",
+    "description": "示例项目：一个用于演示开源项目卡片的笔记应用，支持 Markdown 与标签整理。",
+    "category": "示例分类",
+    "status": "示例状态",
+    "stars": 12,
+    "stack": [
+      "TypeScript",
+      "示例"
+    ],
+    "links": {
+      "github": "https://example.com/sample-notes",
+      "demo": "https://example.com/sample-notes-demo"
+    }
+  },
+  {
+    "name": "Sample CLI",
+    "repo": "example/sample-cli",
+    "description": "示例项目：用于演示命令行工具类项目的卡片布局与信息层级。",
+    "category": "示例分类",
+    "status": "示例状态",
+    "stars": 8,
+    "stack": [
+      "Node.js",
+      "示例"
+    ],
+    "links": {
+      "github": "https://example.com/sample-cli",
+      "demo": "https://example.com/sample-cli-demo"
+    }
+  },
+  {
+    "name": "Sample UI",
+    "repo": "example/sample-ui",
+    "description": "示例项目：用于演示前端组件库类项目的展示方式与链接结构。",
+    "category": "示例分类",
+    "status": "示例状态",
+    "stars": 5,
+    "stack": [
+      "TypeScript",
+      "示例"
+    ],
+    "links": {
+      "github": "https://example.com/sample-ui",
+      "demo": "https://example.com/sample-ui-demo"
+    }
+  }
+]

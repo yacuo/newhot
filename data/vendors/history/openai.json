@@ -1,0 +1,53 @@
+{
+  "version": 1,
+  "companyId": "openai",
+  "updatedAt": "2026-11-20",
+  "events": [
+    {
+      "id": "openai-demo-found",
+      "companyId": "openai",
+      "date": "2020",
+      "datePrecision": "year",
+      "kind": "founding",
+      "title": "OpenAI 示例成立",
+      "summary": "示例数据：用于演示公司发展史的时间线结构，不代表真实历史。",
+      "highlights": [
+        {
+          "label": "说明",
+          "value": "示例数据"
+        }
+      ],
+      "importance": 2,
+      "origin": "reference",
+      "verified": true,
+      "source": {
+        "title": "示例来源",
+        "url": "https://example.com/openai/founding",
+        "accessedAt": "2026-11-20"
+      }
+    },
+    {
+      "id": "openai-demo-release",
+      "companyId": "openai",
+      "date": "2026-10-01",
+      "datePrecision": "day",
+      "kind": "product",
+      "title": "OpenAI 示例产品发布",
+      "summary": "示例数据：用于演示产品节点的展示方式，内容为虚构。",
+      "highlights": [
+        {
+          "label": "说明",
+          "value": "示例数据"
+        }
+      ],
+      "importance": 3,
+      "origin": "reference",
+      "verified": true,
+      "source": {
+        "title": "示例来源",
+        "url": "https://example.com/openai/release",
+        "accessedAt": "2026-11-20"
+      }
+    }
+  ]
+}

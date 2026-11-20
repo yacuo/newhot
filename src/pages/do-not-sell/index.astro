@@ -1,0 +1,25 @@
+---
+import Root from "@/layouts/Root.astro";
+import Shell from "@/layouts/Shell.astro";
+import PageHeader from "@/components/ui/PageHeader.astro";
+import LegalSections from "@/components/ui/LegalSections.astro";
+import { doNotSellSections } from "@/modules/page-content/legal";
+import { pagePanelClass, widePageContainerClass } from "@/shared/ui/classes";
+
+const description = "NewHot 不出售或共享个人信息：说明美国各州访客的退出权、当前做法，以及启用个性化广告后的处理方式。";
+---
+<Root title="不出售或共享个人信息" description={description} path="/do-not-sell/">
+  <Shell mainClassName={widePageContainerClass}>
+    <div class="space-y-5">
+      <PageHeader
+        eyebrow="DO NOT SELL"
+        title="不出售或共享个人信息"
+        description="最后更新：2026 年 11 月 15 日"
+      />
+
+      <article class={pagePanelClass}>
+        <LegalSections sections={doNotSellSections} />
+      </article>
+    </div>
+  </Shell>
+</Root>

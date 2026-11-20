@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" fill="none">
+  <defs>
+    <!-- 与字标同一套落日渐变：玫红 → 朱橙 → 琥珀 -->
+    <linearGradient id="nh-bg" x1="96" y1="0" x2="928" y2="1024" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#D81B60" />
+      <stop offset="0.58" stop-color="#F4511E" />
+      <stop offset="1" stop-color="#FF9100" />
+    </linearGradient>
+  </defs>
+
+  <rect x="0" y="0" width="1024" height="1024" rx="236" ry="236" fill="url(#nh-bg)" />
+  <!-- 极细内描边：浅色页面里也能收回方块边缘 -->
+  <rect x="1.5" y="1.5" width="1021" height="1021" rx="235" ry="235" stroke="#FFFFFF" stroke-opacity="0.16" stroke-width="3" />
+
+  <!-- N 与 H 共用中间立柱：N 加宽到和 H 等宽，避免中间挤在一起；整体轻微斜切 -->
+  <g transform="translate(512 512) skewX(-9) translate(-512 -512)" fill="#FFFFFF">
+    <!-- N：左竖笔 + 斜笔；斜笔两端收在竖笔内部，避免和圆角相减出现缺口 -->
+    <rect x="179" y="322" width="98" height="380" rx="14" />
+    <path d="M179 336 H277 L561 674 H463 Z" />
+    <!-- 中间立柱：N 的右笔，也是 H 的左笔 -->
+    <rect x="463" y="322" width="98" height="380" rx="14" />
+    <!-- H：右竖笔与横笔，宽度保持 382 不变 -->
+    <rect x="747" y="322" width="98" height="380" rx="14" />
+    <rect x="463" y="463" width="382" height="98" rx="14" />
+  </g>
+
+  <!-- 热点标记：H 右上方的深色点，在暖色底上做一点压色 -->
+  <circle cx="836" cy="258" r="23" fill="#3A0C1E" />
+</svg>

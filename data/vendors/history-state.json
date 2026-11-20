@@ -1,0 +1,95 @@
+{
+  "version": 1,
+  "cutoff": "2026-11-14",
+  "updatedAt": "2026-11-20T00:00:00.000Z",
+  "companies": {
+    "microsoft": {
+      "lastEventDate": "2026-10-01",
+      "lastFetchedAt": "2026-11-20",
+      "lastCheckedAt": "2026-11-20",
+      "eventCount": 2,
+      "lastSources": [
+        "https://example.com/microsoft/founding",
+        "https://example.com/microsoft/release"
+      ],
+      "contentHash": "sha256:demo"
+    },
+    "google": {
+      "lastEventDate": "2026-10-01",
+      "lastFetchedAt": "2026-11-20",
+      "lastCheckedAt": "2026-11-20",
+      "eventCount": 2,
+      "lastSources": [
+        "https://example.com/google/founding",
+        "https://example.com/google/release"
+      ],
+      "contentHash": "sha256:demo"
+    },
+    "openai": {
+      "lastEventDate": "2026-10-01",
+      "lastFetchedAt": "2026-11-20",
+      "lastCheckedAt": "2026-11-20",
+      "eventCount": 2,
+      "lastSources": [
+        "https://example.com/openai/founding",
+        "https://example.com/openai/release"
+      ],
+      "contentHash": "sha256:demo"
+    },
+    "runway": {
+      "lastEventDate": "2026-10-01",
+      "lastFetchedAt": "2026-11-20",
+      "lastCheckedAt": "2026-11-20",
+      "eventCount": 2,
+      "lastSources": [
+        "https://example.com/runway/founding",
+        "https://example.com/runway/release"
+      ],
+      "contentHash": "sha256:demo"
+    },
+    "anthropic": {
+      "lastEventDate": "2026-10-01",
+      "lastFetchedAt": "2026-11-20",
+      "lastCheckedAt": "2026-11-20",
+      "eventCount": 2,
+      "lastSources": [
+        "https://example.com/anthropic/founding",
+        "https://example.com/anthropic/release"
+      ],
+      "contentHash": "sha256:demo"
+    },
+    "elevenlabs": {
+      "lastEventDate": "2026-10-01",
+      "lastFetchedAt": "2026-11-20",
+      "lastCheckedAt": "2026-11-20",
+      "eventCount": 2,
+      "lastSources": [
+        "https://example.com/elevenlabs/founding",
+        "https://example.com/elevenlabs/release"
+      ],
+      "contentHash": "sha256:demo"
+    },
+    "mistral": {
+      "lastEventDate": "2026-10-01",
+      "lastFetchedAt": "2026-11-20",
+      "lastCheckedAt": "2026-11-20",
+      "eventCount": 2,
+      "lastSources": [
+        "https://example.com/mistral/founding",
+        "https://example.com/mistral/release"
+      ],
+      "contentHash": "sha256:demo"
+    },
+    "bfl": {
+      "lastEventDate": "2026-10-01",
+      "lastFetchedAt": "2026-11-20",
+      "lastCheckedAt": "2026-11-20",
+      "eventCount": 2,
+      "lastSources": [
+        "https://example.com/bfl/founding",
+        "https://example.com/bfl/release"
+      ],
+      "contentHash": "sha256:demo"
+    }
+  }
+}

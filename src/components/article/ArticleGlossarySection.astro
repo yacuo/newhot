@@ -1,0 +1,21 @@
+---
+import type { PostMeta } from "@/modules/content/schema";
+
+type Props = { glossary?: PostMeta["glossary"] };
+const { glossary } = Astro.props;
+---
+{glossary?.length ? (
+  <section aria-labelledby="article-glossary-title" class="mt-12">
+    <h2 id="article-glossary-title" class="scroll-mt-24 text-[18px] font-semibold leading-[28px] tracking-tight text-slate-950">
+      相关术语
+    </h2>
+    <dl class="mt-5 space-y-5">
+      {glossary.map((item) => (
+        <div>
+          <dt class="text-[16px] font-semibold leading-7 text-slate-900">{item.term}</dt>
+          <dd class="mt-1 text-[15px] leading-7 text-slate-700">{item.definition}</dd>
+        </div>
+      ))}
+    </dl>
+  </section>
+) : null}

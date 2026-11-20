@@ -1,0 +1,77 @@
+---
+import DayGroup from "./DayGroup.astro";
+import type { ArticleListItem } from "@/modules/content/schema";
+import { isSameEntity } from "@/shared/utils";
+
+type Props = {
+  items: ArticleListItem[];
+  showTopic?: boolean;
+  showSubcategory?: boolean;
+  empty?: boolean;
+  companyId?: string;
+  productMap?: Map<string, string>;
+};
+const { items, showTopic = true, showSubcategory = true, empty = true, companyId, productMap } = Astro.props;
+
+const productKeyOf = (item: ArticleListItem) =>
+  productMap?.get(item.href) ??
+  (companyId && item.productId ? `${item.company ?? companyId}:${item.productId}` : item.productId ?? "");
+
+const getWeekday = (date: string) =>
+  new Intl.DateTimeFormat("zh-CN", { weekday: "short", timeZone: "Asia/Shanghai" }).format(
+    new Date(`${date}T00:00:00+08:00`),
+  );
+
+const groups: { date: string; items: ArticleListItem[] }[] = [];
+for (const item of items) {
+  const last = groups[groups.length - 1];
+  if (last && last.date === item.date) last.items.push(item);
+  else groups.push({ date: item.date, items: [item] });
+}
+---
+{items.length === 0 ? (
+  empty ? <p data-empty-state class="py-12 text-center text-sm text-slate-500">这里还没有内容。</p> : null
+) : (
+  <div data-timeline>
+    {groups.map((group) => (
+      <DayGroup date={group.date} weekday={getWeekday(group.date)} count={group.items.length}>
+        {group.items.map((item) => {
+          const subcategory = item.subcategory ? item.subcategoryLabel ?? item.subcategory : null;
+          const primaryLabel = showTopic
+            ? subcategory ?? item.categoryLabel ?? item.category
+            : showSubcategory
+              ? subcategory
+              : null;
+          const entityLabel = item.product ?? item.author ?? null;
+          const inlineAuthor =
+            item.author && item.product && !isSameEntity(item.product, item.author) ? item.author : null;
+
+          return (
+            <li data-article-item data-category={item.category} data-product={productKeyOf(item)} class="xl:grid xl:grid-cols-[148px_minmax(0,1fr)] xl:gap-x-8">
+              <div class="relative hidden border-r border-slate-200 pr-5 pt-4 text-right xl:block">
+                {item.author ? (
+                  <p class="mt-[22px] truncate text-[13px] leading-6 text-slate-900" title={item.author}>{item.author}</p>
+                ) : item.time ? (
+                  <p class="mt-[22px] font-mono text-sm leading-6 text-slate-900">{item.time}</p>
+                ) : null}
+                <span class="absolute -right-[4.5px] top-[46px] h-2 w-2 rounded-full bg-slate-950 ring-2 ring-surface"></span>
+              </div>
+
+              <a href={item.href} class="group block border-t border-slate-100 py-4">
+                <div class="flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs leading-5">
+                  {primaryLabel ? <span class="badge badge-accent">{primaryLabel}</span> : null}
+                  {entityLabel ? <span class="badge badge-muted">{entityLabel}</span> : null}
+                  {inlineAuthor ? <span class="text-slate-500 xl:hidden">@{inlineAuthor}</span> : null}
+                </div>
+                <h3 class="mt-1.5 truncate text-[15px] font-medium leading-6 text-slate-900 transition-colors group-hover:text-slate-600">
+                  {item.title}
+                </h3>
+                <p class="mt-1 truncate text-sm leading-6 text-slate-500">{item.description}</p>
+              </a>
+            </li>
+          );
+        })}
+      </DayGroup>
+    ))}
+  </div>
+)}

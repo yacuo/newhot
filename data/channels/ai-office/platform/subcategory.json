@@ -1,0 +1,9 @@
+{
+  "label": "综合办公平台",
+  "description": "一体化办公套件与通用办公 Agent，如 Microsoft 365 Copilot、Google Workspace、飞书、钉钉、企业微信、WPS、WorkBuddy。只收跨工作面的平台级发布，单点功能更新归对应分类。",
+  "seo": {
+    "title": "示例分类：综合办公平台",
+    "description": "综合办公平台的示例分类描述，仅用于演示分类页 SEO 配置，请替换为自己的关键词与介绍。"
+  },
+  "order": 10
+}

@@ -1,0 +1,79 @@
+---
+import "@/styles/global.css";
+import SiteAnalytics from "@/components/analytics/SiteAnalytics.astro";
+import SeoHead from "@/components/ui/SeoHead.astro";
+import { readFeedMeta } from "@/modules/content";
+import { getSiteUrl, siteConfig } from "@/shared/site";
+
+type Props = {
+  title?: string;
+  description?: string;
+  path?: string;
+  type?: "website" | "article";
+  post?: { date: string; updated?: string };
+  authors?: string[];
+  section?: string;
+  absoluteTitle?: boolean;
+};
+
+const meta = readFeedMeta();
+
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: siteConfig.name,
+  url: getSiteUrl("/"),
+  logo: getSiteUrl("/favicon.svg"),
+  description: siteConfig.description,
+  sameAs: [siteConfig.repository],
+};
+
+const websiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: siteConfig.name,
+  url: getSiteUrl("/"),
+  description: siteConfig.description,
+  inLanguage: siteConfig.language,
+  author: {
+    "@type": "Organization",
+    name: `${siteConfig.name} 编辑部`,
+    url: getSiteUrl("/about/"),
+  },
+  publisher: {
+    "@type": "Organization",
+    name: siteConfig.name,
+    url: getSiteUrl("/"),
+  },
+  dateModified: meta?.latest ?? undefined,
+};
+---
+<!doctype html>
+<html lang={siteConfig.language}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script is:inline>
+      (function(){try{var a=localStorage.getItem('newhot-accent');if(a){document.documentElement.setAttribute('data-accent',a);}var t=localStorage.getItem('newhot-theme');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}if(t==='dark'){document.documentElement.setAttribute('data-theme','dark');}}catch(e){}})();
+    </script>
+    <script is:inline>
+      (function(){try{if('scrollRestoration' in history){history.scrollRestoration='manual';}window.scrollTo(0,0);}catch(e){}})();
+    </script>
+    <script is:inline>
+      (function(){try{var desktop=window.matchMedia('(min-width:1024px)').matches;if(desktop){document.documentElement.style.setProperty('--site-header-height','0px');}var stored=localStorage.getItem('newhot:sidebar-collapsed');var narrow=window.matchMedia('(min-width:1024px) and (max-width:1279px)').matches;if(narrow&&stored!=='0'){document.documentElement.setAttribute('data-sidebar-collapsed','');}}catch(e){}})();
+    </script>
+    <SeoHead {...Astro.props} />
+    <SiteAnalytics />
+    {process.env.SITE_NOINDEX === "1" ? <meta name="robots" content="noindex, nofollow, nocache" /> : null}
+    <meta name="newhot-build" content={import.meta.env.PUBLIC_BUILD_ID ?? "dev"} />
+    <link rel="icon" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+    <script type="application/ld+json" set:html={JSON.stringify(organizationJsonLd)} />
+    <script type="application/ld+json" set:html={JSON.stringify(websiteJsonLd)} />
+  </head>
+  <body>
+    <slot />
+    <slot name="scripts" />
+  </body>
+</html>

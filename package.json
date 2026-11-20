@@ -1,0 +1,60 @@
+{
+  "name": "newhot",
+  "version": "0.1.0",
+  "private": false,
+  "description": "AI 技术热点与前沿资讯站，基于 Astro 的静态内容站点。",
+  "license": "SEE LICENSE IN LICENSE",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yacuo/newhot.git"
+  },
+  "homepage": "https://newhot.org",
+  "bugs": {
+    "url": "https://github.com/yacuo/newhot/issues"
+  },
+  "keywords": [
+    "astro",
+    "static-site",
+    "seo",
+    "ai-news",
+    "content-site"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "npm run --silent icons >/dev/null && npm run --silent content:feed >/dev/null && npm run --silent content:lists >/dev/null && ASTRO_TELEMETRY_DISABLED=1 astro dev",
+    "build": "npm run --silent icons >/dev/null && npm run --silent content:feed >/dev/null && npm run --silent content:lists >/dev/null && ASTRO_TELEMETRY_DISABLED=1 astro build",
+    "icons": "tsx scripts/gen-icons-sprite.ts",
+    "preview": "ASTRO_TELEMETRY_DISABLED=1 astro preview",
+    "check": "ASTRO_TELEMETRY_DISABLED=1 astro check",
+    "content:feed": "tsx scripts/generate-article-feeds.ts",
+    "content:lists": "tsx scripts/generate-article-lists.ts",
+    "start": "astro preview",
+    "check:budget": "node scripts/check-budget.mjs"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.12",
+    "@tailwindcss/vite": "^4.3.5",
+    "astro": "^7.4.12",
+    "gray-matter": "latest",
+    "mermaid": "^11.15.0",
+    "rehype-autolink-headings": "latest",
+    "rehype-highlight": "latest",
+    "rehype-slug": "latest",
+    "rehype-stringify": "latest",
+    "remark-gfm": "latest",
+    "remark-html": "latest",
+    "remark-parse": "latest",
+    "remark-rehype": "latest",
+    "unified": "latest",
+    "zod": "latest"
+  },
+  "devDependencies": {
+    "@types/node": "latest",
+    "eslint": "latest",
+    "tailwindcss": "latest",
+    "tsx": "^4.23.15",
+    "typescript": "latest"
+  }
+}

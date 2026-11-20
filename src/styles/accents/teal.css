@@ -1,0 +1,25 @@
+/*
+ * 青绿：偏薄荷的高亮鲜青。和橙色同理，600 用最亮的青，
+ * 实心块前景压成深墨绿（--accent-on），对比度足够。
+ */
+html[data-accent="teal"] {
+  --accent-label: "青绿";
+  --accent-swatch: #00c49c;
+  --accent-on: #00332b;
+
+  --color-indigo-50: #effcf8;
+  --color-indigo-100: #d0f7ea;
+  --color-indigo-200: #a0eed6;
+  --color-indigo-300: #5fe3c3;
+  --color-indigo-400: #17d6ae;
+  --color-indigo-500: #00c49c;
+  --color-indigo-600: #00b389;
+  --color-indigo-700: #00775f;
+  --color-indigo-800: #005c4a;
+
+  --color-violet-50: #effcf8;
+  --color-violet-100: #d0f7ea;
+  --color-violet-200: #a0eed6;
+  --color-violet-500: #00c49c;
+  --color-violet-700: #00775f;
+}

@@ -1,0 +1,44 @@
+---
+import ArticleTimeline from "./ArticleTimeline.astro";
+import type { ArticleListItem } from "@/modules/content/schema";
+
+type Props = {
+  scope: string;
+  total: number;
+  initialItems: ArticleListItem[];
+  showTopic?: boolean;
+  showSubcategory?: boolean;
+  class?: string;
+  companyId?: string;
+  productMap?: Map<string, string>;
+};
+
+const { scope, total, initialItems, showTopic = true, showSubcategory = true, companyId, productMap } = Astro.props;
+const className = Astro.props.class ?? "";
+---
+<div
+  class={className}
+  data-article-list
+  data-scope={scope}
+  data-total={total}
+  data-show-topic={showTopic ? "1" : "0"}
+  data-show-subcategory={showSubcategory ? "1" : "0"}
+  data-company-id={companyId}
+>
+  <ArticleTimeline items={initialItems} showTopic={showTopic} showSubcategory={showSubcategory} empty={total === 0} companyId={companyId} productMap={productMap} />
+
+  {initialItems.length < total ? (
+    <div
+      data-list-status
+      role="status"
+      aria-live="polite"
+      class="flex min-h-12 items-center justify-center border-t border-slate-100 py-3 text-xs text-slate-400"
+    >
+      继续向下滚动加载更多
+    </div>
+  ) : total > 0 ? (
+    <p class="border-t border-slate-100 py-4 text-center text-xs text-slate-400">
+      已加载全部 {total} 篇
+    </p>
+  ) : null}
+</div>

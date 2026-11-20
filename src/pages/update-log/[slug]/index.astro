@@ -1,0 +1,113 @@
+---
+import Root from "@/layouts/Root.astro";
+import Shell from "@/layouts/Shell.astro";
+import Icon from "@/components/ui/Icon.astro";
+import { getUpdateLogEntry, updateLogEntries } from "@/modules/page-content/update-log";
+import { pagePanelClass, widePageContainerClass } from "@/shared/ui/classes";
+
+export function getStaticPaths() {
+  return updateLogEntries.map((entry) => ({ params: { slug: entry.slug }, props: { slug: entry.slug } }));
+}
+
+const { slug } = Astro.props;
+const entry = getUpdateLogEntry(slug);
+if (!entry) throw new Error(`更新日志不存在：${slug}`);
+
+const index = updateLogEntries.findIndex((item) => item.slug === entry.slug);
+const newer = index > 0 ? updateLogEntries[index - 1] : null;
+const older = index < updateLogEntries.length - 1 ? updateLogEntries[index + 1] : null;
+
+const changeGroups = [
+  { key: "added", title: "新增功能", items: entry.added, accent: true },
+  { key: "improved", title: "优化内容", items: entry.improved, accent: false },
+  { key: "fixed", title: "问题修复", items: entry.fixed, accent: false },
+].filter((group) => group.items.length > 0);
+
+/** 2026-11-14 → 2026 年 11 月 14 日 */
+const formatDate = (value: string) => {
+  const [year, month, day] = value.split("-").map(Number);
+  return `${year} 年 ${month} 月 ${day} 日`;
+};
+---
+<Root
+  title={`${entry.title} · ${entry.version}`}
+  description={entry.summary}
+  path={`/update-log/${entry.slug}/`}
+  type="article"
+  absoluteTitle
+>
+  <Shell selectedChannel="更新日志" mainClassName={widePageContainerClass}>
+    <div class="space-y-5">
+      <article class={pagePanelClass}>
+        <a
+          href="/update-log/"
+          class="inline-flex items-center gap-1.5 text-sm text-slate-500 transition-colors hover:text-slate-900"
+        >
+          <Icon name="ArrowLeft" size={16} strokeWidth={2} class="h-4 w-4" />
+          返回更新日志
+        </a>
+
+        <div class="mt-5 flex flex-wrap items-center gap-2">
+          <time datetime={entry.date} class="font-mono text-xs tracking-[0.04em] text-slate-400">{formatDate(entry.date)}</time>
+          <span class="badge badge-accent">{entry.version}</span>
+          {entry.tags.map((tag) => (
+            <span class="badge badge-muted">{tag}</span>
+          ))}
+          {entry.placeholder ? (
+            <span class="rounded bg-amber-50 px-1.5 py-0.5 text-[11px] font-medium text-amber-700">格式示例</span>
+          ) : null}
+        </div>
+
+        <h1 class="mt-3 text-[24px] font-semibold leading-[1.35] tracking-tight text-slate-950 md:text-[30px]">{entry.title}</h1>
+        <p class="mt-4 text-sm leading-7 text-slate-500 md:text-base md:leading-8">{entry.summary}</p>
+
+        {entry.placeholder ? (
+          <p class="mt-5 rounded-md bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-700">
+            本条为格式示例，用于说明日志结构，后续会替换为真实发布记录。
+          </p>
+        ) : null}
+
+        <div class="mt-7 space-y-7 border-t border-slate-200/70 pt-7">
+          {changeGroups.map((group) => (
+            <section>
+              <h2 class="text-base font-semibold text-slate-950">{group.title}</h2>
+              <ul class="mt-3 space-y-2">
+                {group.items.map((item) => (
+                  <li class="flex gap-2.5 text-sm leading-7 text-slate-600">
+                    <span
+                      aria-hidden="true"
+                      class={`mt-3 h-1.5 w-1.5 flex-none rounded-full ${group.accent ? "bg-indigo-500" : "bg-slate-300"}`}
+                    ></span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ))}
+        </div>
+      </article>
+
+      <nav class={`grid gap-3 ${newer && older ? "md:grid-cols-2" : ""}`} aria-label="日志翻页">
+        {newer ? (
+          <a href={`/update-log/${newer.slug}/`} class={`${pagePanelClass} group block`}>
+            <span class="flex items-center gap-1.5 text-xs text-slate-400">
+              <Icon name="ArrowLeft" size={14} strokeWidth={2} class="h-3.5 w-3.5" />
+              更新的一篇 · {newer.version}
+            </span>
+            <p class="mt-2 truncate text-sm font-semibold text-slate-900 transition-colors group-hover:text-slate-600">{newer.title}</p>
+          </a>
+        ) : null}
+
+        {older ? (
+          <a href={`/update-log/${older.slug}/`} class={`${pagePanelClass} group block md:text-right`}>
+            <span class="flex items-center gap-1.5 text-xs text-slate-400 md:justify-end">
+              更早的一篇 · {older.version}
+              <Icon name="ArrowRight" size={14} strokeWidth={2} class="h-3.5 w-3.5" />
+            </span>
+            <p class="mt-2 truncate text-sm font-semibold text-slate-900 transition-colors group-hover:text-slate-600">{older.title}</p>
+          </a>
+        ) : null}
+      </nav>
+    </div>
+  </Shell>
+</Root>

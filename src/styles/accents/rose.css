@@ -1,0 +1,22 @@
+/* 玫红：高饱和品红，亮而不脏；600 档是能压住白字的最亮玫红 */
+html[data-accent="rose"] {
+  --accent-label: "玫红";
+  --accent-swatch: #ff2d6b;
+  --accent-on: #ffffff;
+
+  --color-indigo-50: #fff0f4;
+  --color-indigo-100: #ffe0e8;
+  --color-indigo-200: #ffc2d3;
+  --color-indigo-300: #ff8fab;
+  --color-indigo-400: #ff5c8a;
+  --color-indigo-500: #ff2d6b;
+  --color-indigo-600: #e6004e;
+  --color-indigo-700: #b80040;
+  --color-indigo-800: #900033;
+
+  --color-violet-50: #fff0f4;
+  --color-violet-100: #ffe0e8;
+  --color-violet-200: #ffc2d3;
+  --color-violet-500: #ff2d6b;
+  --color-violet-700: #b80040;
+}
