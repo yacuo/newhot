@@ -2,7 +2,10 @@ export type TimelineItem = {
   href: string;
   title: string;
   description: string;
+  /** 原文日期；仅用于发展与排序兜底 */
   date: string;
+  /** 站内发布日期；列表按它与它分组 */
+  publishedAt: string;
   time?: string;
   author?: string;
   product?: string;
@@ -96,8 +99,9 @@ export function timelineMarkup(
   const groups: { date: string; items: TimelineItem[] }[] = [];
   for (const item of items) {
     const last = groups[groups.length - 1];
-    if (last && last.date === item.date) last.items.push(item);
-    else groups.push({ date: item.date, items: [item] });
+    const day = item.publishedAt;
+    if (last && last.date === day) last.items.push(item);
+    else groups.push({ date: day, items: [item] });
   }
 
   return groups

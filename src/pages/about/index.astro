@@ -27,7 +27,7 @@ const metricValues: Record<string, string> = {
   themes: String(themes.length),
   companies: String(Object.keys(meta.companies).length),
   products: String(productCount),
-  latest: meta.latest ? formatMonthDay(meta.latest) : "—",
+  latest: meta.latestPublished ? formatMonthDay(meta.latestPublished) : "—",
 };
 
 const aboutJsonLd = {

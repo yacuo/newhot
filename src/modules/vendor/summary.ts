@@ -34,7 +34,7 @@ export function buildCompanySummaries(stats: FeedMeta["companies"]): CompanySumm
       releaseCount: entry.releaseCount,
       channelCount: entry.channels.length,
       channels: [...entry.channels],
-      lastUpdated: entry.latest,
+      lastUpdated: entry.latestPublished,
     } satisfies CompanySummary;
   });
 }

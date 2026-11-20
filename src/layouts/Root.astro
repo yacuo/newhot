@@ -10,7 +10,7 @@ type Props = {
   description?: string;
   path?: string;
   type?: "website" | "article";
-  post?: { date: string; updated?: string };
+  post?: { publishedAt: string; updated?: string };
   authors?: string[];
   section?: string;
   absoluteTitle?: boolean;
@@ -45,7 +45,7 @@ const websiteJsonLd = {
     name: siteConfig.name,
     url: getSiteUrl("/"),
   },
-  dateModified: meta?.latest ?? undefined,
+  dateModified: meta?.latestPublished ?? meta?.latest ?? undefined,
 };
 ---
 <!doctype html>

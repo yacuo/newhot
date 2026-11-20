@@ -20,8 +20,8 @@ const accent = getTopicAccent(post.category);
 const subcategoryLabel = post.subcategory ? getSubcategoryLabel(post.category, post.subcategory) : null;
 const subcategoryPath = post.subcategory ? subcategoryHref(post.category, post.subcategory) : null;
 const contentType = post.type ?? resolveContentType(post.category, post.subcategory ?? "") ?? undefined;
-/** 发布时间：我们收录并发布这篇稿子的日期，原文日期不对外展示 */
-const sitePublishedAt = post.publishedAt ?? post.fetchedAt?.slice(0, 10) ?? post.date;
+/** 发布时间：AI 写稿当天创建文章的日期，原文日期不对外展示 */
+const sitePublishedAt = post.publishedAt;
 const company = getCompany(post.company);
 // 有作者显示作者，没有就用公司名
 const authorName = post.author?.trim() || company?.name || null;

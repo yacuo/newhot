@@ -46,7 +46,7 @@ const relatedThemes = [
 const primaryTheme = getPrimaryTheme(company.id);
 const releaseCount = stat?.releaseCount ?? 0;
 const channelCount = stat?.channels.length ?? 0;
-const latest = stat?.latest ?? null;
+const latest = stat?.latestPublished ?? null;
 const seo = getCompanySeo(company);
 
 const organizationJsonLd = {

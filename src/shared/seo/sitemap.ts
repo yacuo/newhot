@@ -14,16 +14,18 @@ export type SitemapUrl = {
 /** 兜底日期：内容数据缺失时用构建当天，避免 sitemap 出现过期时间 */
 const BUILD_LASTMOD = new Date().toISOString().slice(0, 10);
 
-/** 全站内容的最新日期：所有聚合页与静态页的 lastmod 以它为基准 */
+/** 全站内容的最新发布日期：所有聚合页与静态页的 lastmod 以它为基准 */
 function contentLatest() {
-  return readFeedMeta()?.latest ?? BUILD_LASTMOD;
+  const meta = readFeedMeta();
+
+  return meta?.latestPublished ?? meta?.latest ?? BUILD_LASTMOD;
 }
 
-/** 一组公司里最新的动态日期；没有任何动态时退回全站最新日期 */
+/** 一组公司里最新的站内发布日期；没有任何动态时退回全站最新日期 */
 function latestOfCompanies(companyIds: string[]) {
   const stats = readFeedMeta()?.companies;
   const latest = companyIds.reduce((max, id) => {
-    const value = stats?.[id]?.latest;
+    const value = stats?.[id]?.latestPublished;
     return value && value > max ? value : max;
   }, "");
 
@@ -149,7 +151,7 @@ export function getThemeSitemapUrls(): SitemapUrl[] {
     // 主题页下面挂着厂商列表，这里把厂商详情页一起聚合进来
     ...companies.map((company) => ({
       loc: getSiteUrl(companyHref(company.id)),
-      lastmod: stats?.[company.id]?.latest ?? contentLatest(),
+      lastmod: stats?.[company.id]?.latestPublished ?? contentLatest(),
     })),
   ];
 }
@@ -158,13 +160,13 @@ export function getCategorySitemapUrls(): SitemapUrl[] {
   const meta = readFeedMeta();
 
   return topics.flatMap((topic) => {
-    const channelLatest = meta?.channels[topic.id]?.latest ?? contentLatest();
+    const channelLatest = meta?.channels[topic.id]?.latestPublished ?? contentLatest();
 
     return [
       { loc: getSiteUrl(`/${topic.id}/`), lastmod: channelLatest },
       ...topic.subcategories.map((subcategory) => ({
         loc: getSiteUrl(`/${topic.id}/${subcategory.id}/`),
-        lastmod: meta?.subcategories[`${topic.id}/${subcategory.id}`]?.latest ?? channelLatest,
+        lastmod: meta?.subcategories[`${topic.id}/${subcategory.id}`]?.latestPublished ?? channelLatest,
       })),
     ];
   });
@@ -179,7 +181,10 @@ export function getTutorialSitemapUrls(posts: Post[]): SitemapUrl[] {
         .filter((article) => !article.external && article.slug && article.href.startsWith(`/${catalog.id}/`))
         .map((article) => ({
           loc: getSiteUrl(article.href),
-          lastmod: article.post?.updated ?? article.post?.date ?? contentLatest(),
+          lastmod:
+            article.post?.updated && article.post.updated > (article.post.publishedAt ?? "")
+              ? article.post.updated
+              : (article.post?.publishedAt ?? contentLatest()),
         })),
     );
     const catalogLatest = articles.reduce(
@@ -202,6 +207,6 @@ export function getChannelSitemapUrls(posts: Post[], channelId: string): Sitemap
     .filter((post) => post.category === channelId)
     .map((post) => ({
       loc: getSiteUrl(post.href),
-      lastmod: post.updated ?? post.date,
+      lastmod: post.updated && post.updated > post.publishedAt ? post.updated : post.publishedAt,
     }));
 }

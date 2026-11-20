@@ -36,7 +36,7 @@ const collectionJsonLd = {
   url: getSiteUrl("/"),
   description: siteConfig.description,
   inLanguage: siteConfig.language,
-  dateModified: meta.latest ?? undefined,
+  dateModified: meta.latestPublished ?? undefined,
   author: { "@type": "Organization", name: `${siteConfig.name} 编辑部`, url: getSiteUrl("/about/") },
   publisher: { "@type": "Organization", name: siteConfig.name, url: getSiteUrl("/") },
   mainEntity: {
@@ -49,7 +49,7 @@ const collectionJsonLd = {
         "@type": "Article",
         headline: item.title,
         url: getSiteUrl(item.href),
-        datePublished: item.date,
+        datePublished: item.publishedAt,
         author: { "@type": "Organization", name: item.author ?? `${siteConfig.name} 编辑部` },
       },
     })),
@@ -114,7 +114,7 @@ const description = "AI 厂商官方更新汇总：大模型发布与 API 价格
       <div class="flex items-baseline justify-between gap-4">
         <h2 class="text-base font-semibold text-slate-900">最新动态</h2>
         <p class="shrink-0 font-mono text-[11px] tracking-[0.04em] text-slate-400">
-          {`${meta.total} 篇文章${meta.latest ? ` · 更新至 ${formatMonthDay(meta.latest)}` : ""}`}
+          {`${meta.total} 篇文章${meta.latestPublished ? ` · 更新至 ${formatMonthDay(meta.latestPublished)}` : ""}`}
         </p>
       </div>
       <p class="mt-2 text-sm leading-7 text-slate-500">
@@ -160,7 +160,7 @@ const description = "AI 厂商官方更新汇总：大模型发布与 API 价格
       <div class="mt-4 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-slate-500">
         <span>编辑：<a href="/about/" class="font-medium text-indigo-600 hover:underline">NewHot 编辑部</a></span>
         <span aria-hidden="true" class="text-slate-300">·</span>
-        <span>更新于 <time datetime={meta.latest ?? undefined}>{formatFullDate(meta.latest)}</time></span>
+        <span>更新于 <time datetime={meta.latestPublished ?? undefined}>{formatFullDate(meta.latestPublished)}</time></span>
       </div>
 
       <blockquote class="mt-4 border-l-2 border-indigo-300 pl-4 text-sm leading-7 text-slate-600">

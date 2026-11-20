@@ -56,6 +56,12 @@ function normalizeDateValue(value: unknown) {
   return null;
 }
 
+/** 统一成 YYYY-MM-DD；fetchedAt 这类带时间的字符串只取日期 */
+function normalizeDayValue(value: unknown) {
+  const normalized = normalizeDateValue(value);
+  return normalized ? normalized.slice(0, 10) : null;
+}
+
 function resolveContentType(meta: Record<string, unknown>, sourcePath: string): ContentTypeId {
   if (typeof meta.type === "string" && contentTypeConfig.types.some((entry) => entry.id === meta.type)) {
     return meta.type as ContentTypeId;
@@ -75,6 +81,13 @@ function normalizePost(meta: Record<string, unknown>, content: string, sourcePat
 
   if (!date) {
     throw new Error(`${sourcePath}: 文章必须设置 date`);
+  }
+
+  /** 站内发布日期：只认 AI 写稿当天写入的 publishedAt，原文 date 不得拿来当发布时间 */
+  const publishedAt = normalizeDayValue(meta.publishedAt);
+
+  if (!publishedAt) {
+    throw new Error(`${sourcePath}: 文章必须设置 publishedAt（AI 写稿当天日期）`);
   }
 
   if (typeof meta.subcategory !== "string" || !meta.subcategory) {
@@ -110,7 +123,8 @@ function normalizePost(meta: Record<string, unknown>, content: string, sourcePat
     description: String(meta.description ?? ""),
     date,
     time: typeof meta.time === "string" ? meta.time : undefined,
-    updated: normalizeDateValue(meta.updated) ?? date,
+    publishedAt,
+    updated: normalizeDateValue(meta.updated) ?? undefined,
     author: typeof meta.author === "string" ? meta.author : undefined,
     company: companyId,
     category: String(meta.category ?? ""),
@@ -140,5 +154,10 @@ export function readArticleItems(): ArticleListItem[] {
       return normalizePost(parsed.data as Record<string, unknown>, parsed.content, filePath);
     })
     .filter((post): post is ArticleListItem => post !== null)
-    .sort((a, b) => b.date.localeCompare(a.date) || (b.time ?? "").localeCompare(a.time ?? ""));
+    .sort(
+      (a, b) =>
+        b.publishedAt.localeCompare(a.publishedAt) ||
+        b.date.localeCompare(a.date) ||
+        (b.time ?? "").localeCompare(a.time ?? ""),
+    );
 }

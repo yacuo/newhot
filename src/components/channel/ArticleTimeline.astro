@@ -23,9 +23,10 @@ const getWeekday = (date: string) =>
 
 const groups: { date: string; items: ArticleListItem[] }[] = [];
 for (const item of items) {
+  const day = item.publishedAt;
   const last = groups[groups.length - 1];
-  if (last && last.date === item.date) last.items.push(item);
-  else groups.push({ date: item.date, items: [item] });
+  if (last && last.date === day) last.items.push(item);
+  else groups.push({ date: day, items: [item] });
 }
 ---
 {items.length === 0 ? (

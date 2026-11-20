@@ -4,7 +4,8 @@ type ListItem = {
   title: string;
   href: string;
   description?: string;
-  date?: string;
+  /** 站内发布日期：AI 写稿当天创建文章的日期 */
+  publishedAt: string;
   author?: string;
 };
 
@@ -31,14 +32,14 @@ export function buildCollectionJsonLd(options: {
       itemListElement: options.items.slice(0, 50).map((item, index) => ({
         "@type": "ListItem",
         position: index + 1,
-        ...(item.date
+        ...(item.publishedAt
           ? {
               item: {
                 "@type": "Article",
                 headline: item.title,
                 url: getSiteUrl(item.href),
                 description: item.description,
-                datePublished: item.date,
+                datePublished: item.publishedAt,
                 author: {
                   "@type": "Organization",
                   name: item.author ?? `${siteConfig.name} 编辑部`,

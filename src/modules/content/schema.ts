@@ -33,8 +33,8 @@ export const postMetaSchema = z.object({
     .string()
     .regex(/^\d{2}:\d{2}$/, "time 必须是 HH:MM")
     .optional(),
-  /** 站内发布时间：我们收录并发布这篇稿子的日期；缺失时按 fetchedAt 的日期兜底 */
-  publishedAt: z.string().date("publishedAt 必须是 YYYY-MM-DD").optional(),
+  /** 站内发布时间：AI 写完稿、创建文章的日期；不允许用原文发布日期，原文日期只写进 date 供发展史使用 */
+  publishedAt: z.string().date("publishedAt 必须是 YYYY-MM-DD"),
   updated: z.string().date("updated 必须是 YYYY-MM-DD").optional(),
   author: z.string().min(1, "author 不能为空").optional(),
   /** 公司归属：对应 data/vendors/companies.json 的 id，由采集流程按来源映射写入 */
@@ -66,7 +66,10 @@ export const postMetaSchema = z.object({
 
 export type PostMeta = z.infer<typeof postMetaSchema>;
 
-export type ArticleListItem = Pick<PostMeta, "title" | "description" | "date" | "time" | "updated" | "author" | "company" | "category" | "subcategory" | "tags"> & {
+export type ArticleListItem = Pick<
+  PostMeta,
+  "title" | "description" | "date" | "time" | "publishedAt" | "updated" | "author" | "company" | "category" | "subcategory" | "tags"
+> & {
   slug: string;
   type: ContentTypeId;
   readingTime: number;
@@ -89,9 +92,11 @@ export type FeedMeta = {
   generatedAt: string;
   total: number;
   latest: string | null;
-  channels: Record<string, { count: number; latest: string }>;
-  subcategories: Record<string, { count: number; latest: string }>;
-  companies: Record<string, { count: number; releaseCount: number; channels: string[]; latest: string }>;
+  /** 全站最新站内发布日期，sitemap 与聚合页用它，而不是原文日期 */
+  latestPublished: string | null;
+  channels: Record<string, { count: number; latest: string; latestPublished: string }>;
+  subcategories: Record<string, { count: number; latest: string; latestPublished: string }>;
+  companies: Record<string, { count: number; releaseCount: number; channels: string[]; latest: string; latestPublished: string }>;
 };
 
 /** 首页只带各层级的首批条目，不再有全站全量 feed */

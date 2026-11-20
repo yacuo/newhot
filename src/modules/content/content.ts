@@ -50,7 +50,7 @@ function hydratePostMeta(meta: Record<string, unknown>) {
   return {
     ...meta,
     date: normalizedDate,
-    updated: normalizeDateValue(meta.updated) ?? normalizedDate,
+    updated: normalizeDateValue(meta.updated),
   };
 }
 

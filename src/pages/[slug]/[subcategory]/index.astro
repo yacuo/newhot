@@ -69,8 +69,10 @@ if (post) {
   const subcategoryPath = post.subcategory ? subcategoryHref(post.category, post.subcategory) : null;
   const articleUrl = getSiteUrl(post.href);
   const ogImageUrl = getSiteUrl(siteConfig.ogImage);
-  /** 站内发布时间：原文日期只用于发展史与列表排序，不作为文章发布时间输出 */
-  const sitePublishedAt = post.publishedAt ?? post.fetchedAt?.slice(0, 10) ?? post.date;
+  /** 站内发布时间：AI 写完稿、创建文章的日期；原文日期只用于发展史，不参与发布时间 */
+  const sitePublishedAt = post.publishedAt;
+  /** 更新时间不能早于发布时间，否则搜索引擎会继续显示原文的旧日期 */
+  const siteModifiedAt = post.updated && post.updated > sitePublishedAt ? post.updated : sitePublishedAt;
 
   article = {
     current: post,
@@ -87,7 +89,7 @@ if (post) {
       headline: post.title,
       description: post.description,
       datePublished: sitePublishedAt,
-      dateModified: post.updated ?? sitePublishedAt,
+      dateModified: siteModifiedAt,
       author: { "@type": "Organization", name: post.author || siteConfig.author },
       publisher: {
         "@type": "Organization",
@@ -149,6 +151,8 @@ if (kind === "tutorial" && post) {
 
   if (catalog && catalogArticle) {
     const articleUrl = getSiteUrl(post.href);
+    const sitePublishedAt = post.publishedAt;
+    const siteModifiedAt = post.updated && post.updated > sitePublishedAt ? post.updated : sitePublishedAt;
 
     tutorial = {
       catalog,
@@ -158,8 +162,8 @@ if (kind === "tutorial" && post) {
         "@type": "BlogPosting",
         headline: post.title,
         description: post.description,
-        datePublished: post.date,
-        dateModified: post.updated ?? post.date,
+        datePublished: sitePublishedAt,
+        dateModified: siteModifiedAt,
         author: { "@type": "Organization", name: siteConfig.author },
         publisher: { "@type": "Organization", name: siteConfig.name },
         mainEntityOfPage: articleUrl,
@@ -377,7 +381,7 @@ if (topic && sub) {
           <h2 class="text-base font-semibold text-slate-900">最新动态</h2>
           {category.stat ? (
             <p class="shrink-0 font-mono text-[11px] tracking-[0.04em] text-slate-400">
-              {`${category.total} 篇文章 · 更新至 ${formatMonthDay(category.stat.latest)}`}
+              {`${category.total} 篇文章 · 更新至 ${formatMonthDay(category.stat.latestPublished)}`}
             </p>
           ) : null}
         </div>

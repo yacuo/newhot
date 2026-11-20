@@ -37,14 +37,20 @@ for (const entry of fs.readdirSync(outputDir, { withFileTypes: true })) {
 const posts = readArticleItems();
 const generatedAt = new Date().toISOString();
 
-function bump(record: Record<string, { count: number; latest: string }>, key: string, date: string) {
+function bump(
+  record: Record<string, { count: number; latest: string; latestPublished: string }>,
+  key: string,
+  date: string,
+  publishedAt: string,
+) {
   const entry = record[key];
 
   if (entry) {
     entry.count += 1;
     if (date > entry.latest) entry.latest = date;
+    if (publishedAt > entry.latestPublished) entry.latestPublished = publishedAt;
   } else {
-    record[key] = { count: 1, latest: date };
+    record[key] = { count: 1, latest: date, latestPublished: publishedAt };
   }
 }
 
@@ -52,16 +58,20 @@ const meta: FeedMeta = {
   generatedAt,
   total: posts.length,
   latest: posts[0]?.date ?? null,
+  latestPublished: posts.reduce<string | null>(
+    (latest, post) => (!latest || post.publishedAt > latest ? post.publishedAt : latest),
+    null,
+  ),
   channels: {},
   subcategories: {},
   companies: {},
 };
 
 for (const post of posts) {
-  bump(meta.channels, post.category, post.date);
+  bump(meta.channels, post.category, post.date, post.publishedAt);
 
   if (post.subcategory) {
-    bump(meta.subcategories, `${post.category}/${post.subcategory}`, post.date);
+    bump(meta.subcategories, `${post.category}/${post.subcategory}`, post.date, post.publishedAt);
   }
 
   if (!post.company) continue;
@@ -74,12 +84,14 @@ for (const post of posts) {
       if (post.type === "release") company.releaseCount += 1;
       if (!company.channels.includes(post.category)) company.channels.push(post.category);
       if (post.date > company.latest) company.latest = post.date;
+      if (post.publishedAt > company.latestPublished) company.latestPublished = post.publishedAt;
     } else {
       meta.companies[companyId] = {
         count: 1,
         releaseCount: post.type === "release" ? 1 : 0,
         channels: [post.category],
         latest: post.date,
+        latestPublished: post.publishedAt,
       };
     }
   }

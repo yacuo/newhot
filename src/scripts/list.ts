@@ -10,6 +10,8 @@ type Item = {
   title: string;
   description: string;
   date: string;
+  /** 站内发布日期；列表按它与它分组 */
+  publishedAt: string;
   time?: string;
   author?: string;
   product?: string;
@@ -220,15 +222,16 @@ class LazyList {
     let added = 0;
     while (this.queue.length && this.visible < this.total) {
       const item = this.queue[0];
+      const day = item.publishedAt;
       const lastGroup = timeline.querySelector<HTMLElement>("[data-day-group]:last-of-type");
 
-      if (lastGroup && lastGroup.dataset.dayDate === item.date) {
+      if (lastGroup && lastGroup.dataset.dayDate === day) {
         const list = lastGroup.querySelector("[data-day-list]");
         list?.insertAdjacentHTML("beforeend", rowMarkup(item, this.showTopic, this.showSubcategory, this.companyId));
-        this.updateGroupCount(lastGroup, item.date);
+        this.updateGroupCount(lastGroup, day);
       } else {
-        if (lastGroup) this.updateGroupCount(lastGroup, lastGroup.dataset.dayDate ?? item.date);
-        timeline.insertAdjacentHTML("beforeend", groupMarkup(item.date, 1));
+        if (lastGroup) this.updateGroupCount(lastGroup, lastGroup.dataset.dayDate ?? day);
+        timeline.insertAdjacentHTML("beforeend", groupMarkup(day, 1));
         timeline
           .querySelector<HTMLElement>("[data-day-group]:last-of-type [data-day-list]")
           ?.insertAdjacentHTML("beforeend", rowMarkup(item, this.showTopic, this.showSubcategory, this.companyId));
