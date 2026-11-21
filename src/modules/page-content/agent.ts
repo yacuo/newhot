@@ -82,6 +82,7 @@ export const agentPage = loadPageData("agent", {
     header: headerSchema,
     badges: z.array(badgeSchema).min(1, "badges 至少一个"),
     intro: z.string().min(1, "intro 不能为空"),
+    choicesTitle: z.string().min(1, "choicesTitle 不能为空"),
     choices: z
       .array(
         z.object({

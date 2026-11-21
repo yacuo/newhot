@@ -14,6 +14,7 @@
     { "label": "示例标签三", "tone": "amber" }
   ],
   "intro": "示例：这里写一段接入方式的总述，说明数据范围与使用限制，上线前请替换为自己的说明。",
+  "choicesTitle": "挑一个就行",
   "choices": [
     { "name": "方式一", "href": "/agent/rss/", "description": "示例：这里写这种方式适合什么场景。" },
     { "name": "方式二", "href": "/agent/api/", "description": "示例：这里写这种方式适合什么场景。" }
