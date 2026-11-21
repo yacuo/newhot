@@ -2,152 +2,15 @@
 import Root from "@/layouts/Root.astro";
 import Shell from "@/layouts/Shell.astro";
 import AgentShell from "@/components/agent/AgentShell.astro";
+import Badge from "@/components/agent/Badge.astro";
 import CopyButton from "@/components/agent/CopyButton.astro";
 import CodeBlock from "@/components/agent/CodeBlock.astro";
+import InlineText from "@/components/ui/InlineText.astro";
 import { pagePanelClass, widePageContainerClass } from "@/shared/ui/classes";
 import { buildBreadcrumbJsonLd, buildTechArticleJsonLd } from "@/shared/seo/jsonld";
+import { agentPage } from "@/modules/page-content";
 
-const seoTitle = "REST API：按主题、厂商、分类查询文章";
-const seoDescription =
-  "REST API 读的是和 Skill、MCP、RSS 同一份数据：精选、模型发布、价格与限制、服务状态、AI 编程、AI 办公、AI 创作、故障排查。免费、匿名 GET，不用注册，只返回最近 7 天的标题、摘要、链接和发布时间。";
-
-const queryLinks = [
-  ["全站最新", "/api/v1/articles?limit=20"],
-  ["大模型频道", "/api/v1/articles?channel=llm&limit=20"],
-  ["主题 · 大模型（全部）", "/api/v1/articles?theme=llm&limit=20"],
-  ["主题 · 大模型 / 海外", "/api/v1/articles?theme=llm&group=global&limit=20"],
-  ["主题 · 大模型 / 中国", "/api/v1/articles?theme=llm&group=cn&limit=20"],
-  ["主题 · AI 编程 / 工具", "/api/v1/articles?theme=ai-coding&group=agents&limit=20"],
-  ["厂商 · OpenAI", "/api/v1/articles?company=openai&limit=20"],
-  ["标签 · MCP", "/api/v1/articles?tag=MCP&limit=20"],
-  ["类型 · 服务故障", "/api/v1/articles?type=incident&limit=20"],
-] as const;
-
-const paramGroups = [
-  {
-    title: "筛选",
-    desc: "按内容归属筛，多个参数同时生效（AND）",
-    rows: [
-      ["channel", "string", "频道 id", "llm"],
-      ["subcategory", "string", "二级分类 id，可跨频道", "status"],
-      ["theme", "string", "厂商主题 id", "llm"],
-      ["group", "string", "主题下的分组，必须同时传 theme", "cn"],
-      ["company", "string", "厂商 id", "openai"],
-      ["product", "string", "厂商下的产品，必须同时传 company", "codex"],
-      ["tag", "string", "标签精确匹配，不区分大小写", "MCP"],
-      ["type", "string", "文章类型：release / update / incident / fix", "incident"],
-      ["q", "string", "关键词，匹配标题、摘要和标签，最多 100 字", "Gemini"],
-    ],
-  },
-  {
-    title: "时间",
-    desc: "只在这个区间里取，且不会超出最近 7 天",
-    rows: [
-      ["since", "date", "起始日期，含当天，YYYY-MM-DD", "2026-11-01"],
-      ["until", "date", "结束日期，含当天，YYYY-MM-DD", "2026-11-20"],
-    ],
-  },
-  {
-    title: "分页",
-    desc: "默认按站内发布时间倒序，第一页 20 条",
-    rows: [
-      ["limit", "integer", "每页条数，1-50，默认 20", "20"],
-      ["cursor", "string", "上一页返回的 nextCursor", "20"],
-    ],
-  },
-] as const;
-
-const fields = [
-  ["id", "string", "文章唯一标识，等于二级分类 + slug", "ai-tools/codex-cli-0-171-0"],
-  ["title", "string", "标题", "OpenAI Codex 0.171.0 发布…"],
-  ["description", "string", "摘要，不是正文", "OpenAI Codex CLI 0.171.0 发布…"],
-  ["url", "string", "站内 canonical 页面，引用时用这个", "https://newhot.org/ai-tools/…/"],
-  ["channel", "string", "频道 id", "ai-coding"],
-  ["subcategory", "string", "二级分类 id", "ai-tools"],
-  ["publishedAt", "date", "站内发布时间，YYYY-MM-DD", "2026-11-20"],
-] as const;
-
-const headers = [
-  ["X-API-Version", "所有响应", "当前 API 版本，固定 v1"],
-  ["X-RateLimit-Limit", "所有 JSON 响应", "当前档位的请求上限，比如 1"],
-  ["X-RateLimit-Policy", "所有 JSON 响应", "额度和窗口，比如 1;w=600"],
-  ["Retry-After", "429", "还要等多少秒才能再请求"],
-  ["ETag", "200", "内容指纹，用来做缓存校验"],
-  ["If-None-Match", "请求头", "带上上次的 ETag，没变化就返回 304"],
-  ["Cache-Control", "200", "浏览器和 CDN 可以缓存多久"],
-  ["X-Robots-Tag", "所有响应", "固定 noindex，接口内容不进搜索"],
-] as const;
-
-const endpointGroups = [
-  {
-    id: "articles",
-    title: "文章",
-    tone: "sky",
-    desc: "按条件查文章、读单篇元数据、拉整份快照",
-    rows: [
-      ["/api/v1/articles", "最近 7 天文章，多维筛选", "10 分钟一次", "1 次/10 分钟"],
-      ["/api/v1/articles/{subcategory}/{slug}", "单篇元数据（不含正文）", "10 分钟一次", "1 次/10 分钟"],
-      ["/api/v1/articles/all", "最近 7 天全部文章快照", "10 分钟一次", "1 次/10 分钟"],
-    ],
-  },
-  {
-    id: "paths",
-    title: "页面直达",
-    tone: "indigo",
-    desc: "站点每个页面都能直接当接口用，路径里就是页面 id",
-    rows: [
-      ["/api/v1/channels/{channel}/articles", "频道页文章", "10 分钟一次", "1 次/10 分钟"],
-      ["/api/v1/channels/{channel}/{subcategory}/articles", "二级分类页文章", "10 分钟一次", "1 次/10 分钟"],
-      ["/api/v1/themes/{theme}/articles", "主题页文章", "10 分钟一次", "1 次/10 分钟"],
-      ["/api/v1/themes/{theme}/{group}/articles", "主题胶囊文章", "10 分钟一次", "1 次/10 分钟"],
-      ["/api/v1/vendors/{vendor}/articles", "公司页文章", "10 分钟一次", "1 次/10 分钟"],
-      ["/api/v1/vendors/{vendor}/channels/{channel}/articles", "公司 + 频道", "10 分钟一次", "1 次/10 分钟"],
-      ["/api/v1/vendors/{vendor}/subcategories/{subcategory}/articles", "公司 + 二级分类", "10 分钟一次", "1 次/10 分钟"],
-      ["/api/v1/vendors/{vendor}/products/{product}/articles", "公司 + 产品", "10 分钟一次", "1 次/10 分钟"],
-      ["/api/v1/tags/{tag}/articles", "标签文章", "10 分钟一次", "1 次/10 分钟"],
-      ["/api/v1/types/{type}/articles", "按类型取文章", "10 分钟一次", "1 次/10 分钟"],
-    ],
-  },
-  {
-    id: "index",
-    title: "索引",
-    tone: "violet",
-    desc: "先查 id，再拿 id 去查文章",
-    rows: [
-      ["/api/v1/channels", "频道、二级分类和统计", "每天或内容变化时", "1 次/10 分钟"],
-      ["/api/v1/channels/{channel}", "单个频道", "每天或内容变化时", "1 次/10 分钟"],
-      ["/api/v1/subcategories?channel=", "扁平二级分类索引", "每天或内容变化时", "1 次/10 分钟"],
-      ["/api/v1/vendors?tier=&theme=", "厂商索引，带文章数", "每天或内容变化时", "1 次/10 分钟"],
-      ["/api/v1/vendors/{vendor}", "单个厂商", "每天或内容变化时", "1 次/10 分钟"],
-      ["/api/v1/vendors/{vendor}/facets", "公司页的频道、分类、产品胶囊", "每天或内容变化时", "1 次/10 分钟"],
-      ["/api/v1/themes", "主题与分组", "每天或内容变化时", "1 次/10 分钟"],
-      ["/api/v1/themes/{theme}", "单个主题（含分组）", "每天或内容变化时", "1 次/10 分钟"],
-      ["/api/v1/tags?limit=", "标签索引，按文章数排序", "每天或内容变化时", "1 次/10 分钟"],
-      ["/api/v1/meta", "总数、类型枚举和限流规则", "启动时读一次", "1 次/10 分钟"],
-    ],
-  },
-  {
-    id: "agent",
-    title: "Agent",
-    tone: "emerald",
-    desc: "给 Agent 客户端用的入口",
-    rows: [
-      ["POST /api/v1/mcp", "MCP JSON-RPC 工具调用", "一次会话多次调用", "60 次/10 分钟"],
-      ["/api/v1/agent-skill", "Agent Skill 使用说明", "装一次，按需读", "不限流"],
-    ],
-  },
-  {
-    id: "feeds",
-    title: "订阅与定义",
-    tone: "amber",
-    desc: "RSS 订阅与机器可读的接口定义",
-    rows: [
-      ["/feed.xml", "RSS 全站", "不低于 15 分钟一次", "不限流"],
-      ["/{channel}/feed.xml", "RSS 单频道", "不低于 15 分钟一次", "不限流"],
-      ["/openapi-v1.json", "OpenAPI 3.1 定义", "装一次，按需读", "不限流"],
-    ],
-  },
-] as const;
+const { api } = agentPage;
 
 const groupTones = {
   sky: { head: "bg-sky-50/70", dot: "bg-sky-500", badge: "text-sky-700 ring-sky-200" },
@@ -157,157 +20,68 @@ const groupTones = {
   amber: { head: "bg-amber-50/70", dot: "bg-amber-500", badge: "text-amber-700 ring-amber-200" },
 } as const;
 
-const endpointCount = endpointGroups.reduce((total, group) => total + group.rows.length, 0);
+const tierTones = [
+  "bg-sky-50 text-sky-700",
+  "bg-violet-50 text-violet-700",
+  "bg-amber-50 text-amber-700",
+  "bg-fuchsia-50 text-fuchsia-700",
+];
 
-const scenarios = [
-  {
-    step: "01",
-    title: "先拿 id",
-    desc: "不知道有哪些频道、主题、厂商、标签，先读 /api/v1/meta 和对应索引；返回的 id 直接拿去查文章。",
-  },
-  {
-    step: "02",
-    title: "只盯一家公司",
-    desc: "先读 /api/v1/vendors/openai/facets，拿到频道、二级分类、产品胶囊，再按 /vendors/openai/articles 或产品路径拉取。",
-  },
-  {
-    step: "03",
-    title: "翻页",
-    desc: "把返回的 nextCursor 传回 cursor，hasMore 为 false 就停；不要自己算 offset。",
-  },
-  {
-    step: "04",
-    title: "做看板",
-    desc: "整份数据用 /api/v1/articles/all，10 分钟拉一次，带 If-None-Match；增量按 id 去重，不要按标题。",
-  },
-] as const;
-
-const rateLimitExample = `{
-  "apiVersion": "v1",
-  "error": "rate_limited",
-  "message": "全量快照限流：同一 IP 10 分钟最多 1 次。",
-  "limit": 1,
-  "window": 600,
-  "retryAfter": 600
-}`;
-
-const headersExample = `HTTP/1.1 200 OK
-Content-Type: application/json; charset=utf-8
-X-API-Version: v1
-Cache-Control: public, max-age=60
-ETag: "5f3a1c-1d2"
-X-RateLimit-Limit: 1
-X-RateLimit-Policy: 1;w=600`;
-
-const paginationExample = `# 第一页
-curl -s "https://newhot.org/api/v1/articles?company=openai&limit=20"
-
-# 返回里 nextCursor 是 "20"，再取第二页
-curl -s "https://newhot.org/api/v1/articles?company=openai&limit=20&cursor=20"`;
-
-const curlExample = `curl -s "https://newhot.org/api/v1/articles?company=openai&limit=5"`;
-
-const responseExample = `{
-  "apiVersion": "v1",
-  "site": "https://newhot.org/",
-  "generatedAt": "2026-11-21T03:00:00.000Z",
-  "window": { "days": 7, "since": "2026-11-14" },
-  "query": {
-    "channel": null,
-    "subcategory": null,
-    "theme": null,
-    "group": null,
-    "company": "openai",
-    "product": null,
-    "tag": null,
-    "type": null,
-    "q": null,
-    "since": null,
-    "until": null,
-    "limit": 5
-  },
-  "total": 14,
-  "count": 5,
-  "hasMore": true,
-  "nextCursor": "5",
-  "items": [
-    {
-      "id": "ai-tools/codex-cli-0-171-0",
-      "title": "OpenAI Codex 0.171.0 发布…",
-      "description": "OpenAI Codex CLI 0.171.0 发布，TUI 工作区默认开启…",
-      "url": "https://newhot.org/ai-tools/codex-cli-0-171-0/",
-      "channel": "ai-coding",
-      "subcategory": "ai-tools",
-      "publishedAt": "2026-11-20"
-    }
-  ]
-}`;
+const endpointCount = api.endpoints.groups.reduce((total, group) => total + group.rows.length, 0);
 
 const articleJsonLd = buildTechArticleJsonLd({
-  headline: seoTitle,
-  description: seoDescription,
-  path: "/agent/api/",
+  headline: api.seo.title,
+  description: api.seo.description,
+  path: api.seo.path,
   about: ["REST API", "OpenAPI", "JSON"],
 });
 
 const breadcrumbJsonLd = buildBreadcrumbJsonLd([
   { name: "首页", href: "/" },
   { name: "Agent 接入", href: "/agent/" },
-  { name: "REST API", href: "/agent/api/" },
+  { name: "REST API", href: api.seo.path },
 ]);
 ---
 
-<Root title={seoTitle} description={seoDescription} path="/agent/api/">
+<Root title={api.seo.title} description={api.seo.description} path={api.seo.path}>
   <Shell mainClassName={widePageContainerClass} selectedChannel="Agent 接入">
-    <AgentShell
-      title="REST API"
-      description="匿名 GET。按频道、主题、厂商、标签、类型和日期查，不用每次拉全量。"
-    >
+    <AgentShell title={api.header.title} description={api.header.description}>
       <section class={pagePanelClass}>
         <div class="flex flex-wrap gap-2">
-          <span class="rounded-full bg-emerald-50 px-2.5 py-1 text-[11px] font-medium text-emerald-700">匿名 API</span>
-          <span class="rounded-full bg-sky-50 px-2.5 py-1 text-[11px] font-medium text-sky-700">不用注册</span>
-          <span class="rounded-full bg-violet-50 px-2.5 py-1 text-[11px] font-medium text-violet-700">无需 API Key</span>
-          <span class="rounded-full bg-teal-50 px-2.5 py-1 text-[11px] font-medium text-teal-700">免费</span>
-          <span class="rounded-full bg-amber-50 px-2.5 py-1 text-[11px] font-medium text-amber-700">仅最近 7 天</span>
+          {api.badges.map((badge) => <Badge label={badge.label} tone={badge.tone} />)}
         </div>
         <p class="mt-4 text-sm leading-7 text-slate-700">
-          REST API 是四种方式之一，和其他三种读的是同一份数据：精选、模型发布、价格与限制、服务状态、AI 编程、AI 办公、AI 创作、故障排查。全部匿名 GET，不用注册，也不用 API Key，只返回最近 7 天的标题、摘要、canonical 链接和发布时间。
+          <InlineText text={api.intro} />
         </p>
       </section>
 
       <section class={pagePanelClass}>
-        <h2 class="text-lg font-semibold tracking-tight text-slate-950">接口约定</h2>
+        <h2 class="text-lg font-semibold tracking-tight text-slate-950">{api.convention.title}</h2>
         <div class="mt-3 flex flex-wrap gap-2">
-          <span class="rounded-full bg-indigo-50 px-2.5 py-1 text-[11px] font-medium text-indigo-700">API v1</span>
-          <span class="rounded-full bg-sky-50 px-2.5 py-1 text-[11px] font-medium text-sky-700">查询 1 次/10 分钟</span>
-          <span class="rounded-full bg-violet-50 px-2.5 py-1 text-[11px] font-medium text-violet-700">索引 1 次/10 分钟</span>
-          <span class="rounded-full bg-amber-50 px-2.5 py-1 text-[11px] font-medium text-amber-700">快照 1 次/10 分钟</span>
-          <span class="rounded-full bg-fuchsia-50 px-2.5 py-1 text-[11px] font-medium text-fuchsia-700">MCP 60 次/10 分钟</span>
+          {api.convention.badges.map((badge) => <Badge label={badge.label} tone={badge.tone} />)}
         </div>
         <p class="mt-3 text-sm leading-7 text-slate-600">
-          所有机器可读入口（<span class="font-mono text-[12px] text-slate-900">/api/*</span>、RSS、OpenAPI、<span class="font-mono text-[12px] text-slate-900">llms.txt</span>）按入口类型分四档限流，每条请求独立计数（MCP 按 IP 汇总），超出返回 429，按
-          <span class="font-mono text-[12px] text-slate-900">Retry-After</span> 等待。HTML 页面和静态资源不按 IP 限流。
+          <InlineText text={api.convention.description} />
         </p>
       </section>
 
       <section class={pagePanelClass}>
-        <h2 class="text-lg font-semibold tracking-tight text-slate-950">先跑一条命令</h2>
+        <h2 class="text-lg font-semibold tracking-tight text-slate-950">{api.quickstart.title}</h2>
         <p class="mt-2 text-sm leading-7 text-slate-600">
-          只看 OpenAI 最近的 5 条。返回里有下一页的 <span class="font-mono text-[12px] text-slate-900">nextCursor</span>。
+          <InlineText text={api.quickstart.description} />
         </p>
         <div class="mt-4">
-          <CodeBlock code={curlExample} lang="bash" label="按厂商取最近文章" />
+          <CodeBlock code={api.quickstart.code} lang="bash" label={api.quickstart.codeLabel} />
         </div>
       </section>
 
       <section class={pagePanelClass}>
-        <h2 class="text-lg font-semibold tracking-tight text-slate-950">常用地址</h2>
+        <h2 class="text-lg font-semibold tracking-tight text-slate-950">{api.commonUrls.title}</h2>
         <p class="mt-2 text-sm leading-7 text-slate-600">
-          频道、主题、主题分组、厂商、标签、类型各给一条，复制就能用。只返回最近 7 天的文章，默认每页 20 条。
+          {api.commonUrls.description}
         </p>
         <div class="mt-4 grid gap-2 sm:grid-cols-2">
-          {queryLinks.map(([label, path]) => (
+          {api.commonUrls.items.map(([label, path]) => (
             <div class="flex items-center justify-between gap-3 rounded-xl bg-slate-50 px-4 py-3">
               <div class="min-w-0">
                 <p class="text-[13px] font-semibold text-slate-950">{label}</p>
@@ -323,111 +97,67 @@ const breadcrumbJsonLd = buildBreadcrumbJsonLd([
       </section>
 
       <section class={pagePanelClass}>
-        <h2 class="text-lg font-semibold tracking-tight text-slate-950">主题页的胶囊就是参数</h2>
+        <h2 class="text-lg font-semibold tracking-tight text-slate-950">{api.themeCapsules.title}</h2>
         <p class="mt-2 text-sm leading-7 text-slate-600">
-          主题页顶部每个胶囊（全部、海外模型、中国模型、AI 编程工具…）都对应一个 <span class="font-mono text-[12px] text-slate-900">group</span>。先用 <span class="font-mono text-[12px] text-slate-900">/api/v1/themes</span> 拿到主题下的 group id，再查文章：
+          <InlineText text={api.themeCapsules.description} />
         </p>
         <div class="mt-4 overflow-x-auto">
           <table class="w-full min-w-[760px] text-left text-sm">
             <thead class="border-b border-slate-200 text-xs text-slate-400">
               <tr>
-                <th class="py-2 pr-4 font-medium">页面上的胶囊</th>
-                <th class="py-2 pr-4 font-medium">查询参数</th>
-                <th class="py-2 font-medium">路径直达</th>
+                {api.themeCapsules.columns.map((column) => (
+                  <th class="py-2 pr-4 font-medium">{column}</th>
+                ))}
               </tr>
             </thead>
             <tbody class="divide-y divide-slate-100 text-slate-600">
-              <tr>
-                <td class="py-2.5 pr-4">大模型 · 全部</td>
-                <td class="py-2.5 pr-4 font-mono text-[12px] text-slate-900">{`/api/v1/articles?theme=llm`}</td>
-                <td class="py-2.5 font-mono text-[12px] text-slate-900">{`/api/v1/themes/llm/articles`}</td>
-              </tr>
-              <tr>
-                <td class="py-2.5 pr-4">大模型 · 海外模型厂商</td>
-                <td class="py-2.5 pr-4 font-mono text-[12px] text-slate-900">{`/api/v1/articles?theme=llm&group=global`}</td>
-                <td class="py-2.5 font-mono text-[12px] text-slate-900">{`/api/v1/themes/llm/global/articles`}</td>
-              </tr>
-              <tr>
-                <td class="py-2.5 pr-4">大模型 · 中国模型厂商</td>
-                <td class="py-2.5 pr-4 font-mono text-[12px] text-slate-900">{`/api/v1/articles?theme=llm&group=cn`}</td>
-                <td class="py-2.5 font-mono text-[12px] text-slate-900">{`/api/v1/themes/llm/cn/articles`}</td>
-              </tr>
-              <tr>
-                <td class="py-2.5 pr-4">AI 编程 · AI 编程工具</td>
-                <td class="py-2.5 pr-4 font-mono text-[12px] text-slate-900">{`/api/v1/articles?theme=ai-coding&group=agents`}</td>
-                <td class="py-2.5 font-mono text-[12px] text-slate-900">{`/api/v1/themes/ai-coding/agents/articles`}</td>
-              </tr>
+              {api.themeCapsules.rows.map(([capsule, query, direct]) => (
+                <tr>
+                  <td class="py-2.5 pr-4">{capsule}</td>
+                  <td class="py-2.5 pr-4 font-mono text-[12px] text-slate-900">{query}</td>
+                  <td class="py-2.5 font-mono text-[12px] text-slate-900">{direct}</td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
       </section>
 
       <section class={pagePanelClass}>
-        <h2 class="text-lg font-semibold tracking-tight text-slate-950">页面直达地址</h2>
+        <h2 class="text-lg font-semibold tracking-tight text-slate-950">{api.direct.title}</h2>
         <p class="mt-2 text-sm leading-7 text-slate-600">
-          站点每个页面都能直接当接口用，路径里的 id 和页面地址一致。翻页、日期、关键词这些照常带查询参数。
+          {api.direct.description}
         </p>
         <div class="mt-4 overflow-x-auto">
           <table class="w-full min-w-[720px] text-left text-sm">
             <thead class="border-b border-slate-200 text-xs text-slate-400">
               <tr>
-                <th class="py-2 pr-4 font-medium">页面</th>
-                <th class="py-2 font-medium">接口地址</th>
+                {api.direct.columns.map((column) => (
+                  <th class="py-2 pr-4 font-medium">{column}</th>
+                ))}
               </tr>
             </thead>
             <tbody class="divide-y divide-slate-100 text-slate-600">
-              <tr>
-                <td class="py-2.5 pr-4">频道 <span class="font-mono text-[11px] text-slate-400">/llm/</span></td>
-                <td class="py-2.5 font-mono text-[12px] text-slate-900">{`/api/v1/channels/llm/articles`}</td>
-              </tr>
-              <tr>
-                <td class="py-2.5 pr-4">二级分类 <span class="font-mono text-[11px] text-slate-400">/llm/release/</span></td>
-                <td class="py-2.5 font-mono text-[12px] text-slate-900">{`/api/v1/channels/llm/release/articles`}</td>
-              </tr>
-              <tr>
-                <td class="py-2.5 pr-4">主题 <span class="font-mono text-[11px] text-slate-400">/t/llm/</span></td>
-                <td class="py-2.5 font-mono text-[12px] text-slate-900">{`/api/v1/themes/llm/articles`}</td>
-              </tr>
-              <tr>
-                <td class="py-2.5 pr-4">主题分组 <span class="font-mono text-[11px] text-slate-400">/t/llm/cn/</span></td>
-                <td class="py-2.5 font-mono text-[12px] text-slate-900">{`/api/v1/themes/llm/cn/articles`}</td>
-              </tr>
-              <tr>
-                <td class="py-2.5 pr-4">公司 <span class="font-mono text-[11px] text-slate-400">/openai/</span></td>
-                <td class="py-2.5 font-mono text-[12px] text-slate-900">{`/api/v1/vendors/openai/articles`}</td>
-              </tr>
-              <tr>
-                <td class="py-2.5 pr-4">公司页胶囊 <span class="font-mono text-[11px] text-slate-400">/openai/</span></td>
-                <td class="py-2.5 font-mono text-[12px] text-slate-900">{`/api/v1/vendors/openai/facets`}</td>
-              </tr>
-              <tr>
-                <td class="py-2.5 pr-4">公司 + 产品 <span class="font-mono text-[11px] text-slate-400">/openai/ · GPT</span></td>
-                <td class="py-2.5 font-mono text-[12px] text-slate-900">{`/api/v1/vendors/openai/products/gpt/articles`}</td>
-              </tr>
-              <tr>
-                <td class="py-2.5 pr-4">标签</td>
-                <td class="py-2.5 font-mono text-[12px] text-slate-900">{`/api/v1/tags/MCP/articles`}</td>
-              </tr>
-              <tr>
-                <td class="py-2.5 pr-4">类型</td>
-                <td class="py-2.5 font-mono text-[12px] text-slate-900">{`/api/v1/types/incident/articles`}</td>
-              </tr>
+              {api.direct.rows.map(([page, path]) => (
+                <tr>
+                  <td class="py-2.5 pr-4"><InlineText text={page} /></td>
+                  <td class="py-2.5 font-mono text-[12px] text-slate-900">{path}</td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
         <p class="mt-3 text-xs leading-6 text-slate-500">
-          索引详情：<span class="font-mono text-slate-700">/api/v1/channels/{`{channel}`}</span>、<span class="font-mono text-slate-700">/api/v1/themes/{`{theme}`}</span>、<span class="font-mono text-slate-700">/api/v1/vendors/{`{vendor}`}</span>。
-          标签里带斜杠时用 <span class="font-mono text-slate-700">%2F</span> 编码，或者直接用 <span class="font-mono text-slate-700">?tag=</span>。
-          公司页的频道、二级分类、产品胶囊用 <span class="font-mono text-slate-700">/api/v1/vendors/{`{vendor}`}/facets</span> 一次拿全，再按对应的路径或参数取文章。这些地址和查询参数完全等价，额度按查询档算。
+          <InlineText text={api.direct.note} />
         </p>
       </section>
 
       <section class={pagePanelClass}>
         <div class="flex flex-wrap items-end justify-between gap-3">
           <div>
-            <h2 class="text-lg font-semibold tracking-tight text-slate-950">接口一览</h2>
+            <h2 class="text-lg font-semibold tracking-tight text-slate-950">{api.endpoints.title}</h2>
             <p class="mt-2 text-sm leading-7 text-slate-600">
-              按用途分成 5 组。点上面的分类跳到对应表格，不用在长表里找。
+              {api.endpoints.description}
             </p>
           </div>
           <span class="rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-medium text-slate-500">
@@ -436,7 +166,7 @@ const breadcrumbJsonLd = buildBreadcrumbJsonLd([
         </div>
 
         <div class="mt-4 flex flex-wrap gap-2">
-          {endpointGroups.map((group) => (
+          {api.endpoints.groups.map((group) => (
             <a
               href={`#api-${group.id}`}
               class="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 text-[12px] font-medium text-slate-600 ring-1 ring-slate-900/[0.08] transition hover:text-slate-900 hover:ring-slate-900/20"
@@ -449,7 +179,7 @@ const breadcrumbJsonLd = buildBreadcrumbJsonLd([
         </div>
 
         <div class="mt-4 space-y-4">
-          {endpointGroups.map((group) => (
+          {api.endpoints.groups.map((group) => (
             <section
               id={`api-${group.id}`}
               class="scroll-mt-24 overflow-hidden rounded-xl ring-1 ring-slate-900/[0.07]"
@@ -458,7 +188,7 @@ const breadcrumbJsonLd = buildBreadcrumbJsonLd([
                 <div class="flex min-w-0 items-center gap-2">
                   <span class={`h-2 w-2 shrink-0 rounded-full ${groupTones[group.tone].dot}`}></span>
                   <p class="text-sm font-semibold text-slate-900">{group.title}</p>
-                  <span class="hidden text-[11px] text-slate-500 sm:inline">{group.desc}</span>
+                  <span class="hidden text-[11px] text-slate-500 sm:inline">{group.description}</span>
                 </div>
                 <span
                   class={`rounded-full bg-white px-2 py-0.5 text-[10px] font-medium ring-1 ${groupTones[group.tone].badge}`}
@@ -470,10 +200,9 @@ const breadcrumbJsonLd = buildBreadcrumbJsonLd([
                 <table class="w-full min-w-[720px] text-left text-sm">
                   <thead class="border-b border-slate-100 text-xs text-slate-400">
                     <tr>
-                      <th class="py-2 pl-4 pr-4 font-medium">路径</th>
-                      <th class="py-2 pr-4 font-medium">用来做什么</th>
-                      <th class="py-2 pr-4 font-medium">多久取一次</th>
-                      <th class="py-2 pr-4 font-medium">限流</th>
+                      {api.endpoints.columns.map((column, index) => (
+                        <th class={`py-2 pr-4 font-medium ${index === 0 ? "pl-4" : ""}`}>{column}</th>
+                      ))}
                     </tr>
                   </thead>
                   <tbody class="divide-y divide-slate-100 text-slate-600">
@@ -493,32 +222,29 @@ const breadcrumbJsonLd = buildBreadcrumbJsonLd([
         </div>
 
         <p class="mt-3 text-xs leading-6 text-slate-500">
-          <span class="font-mono text-slate-700">{`{channel}`}</span> 换成 llm、ai-coding、ai-office、ai-creation、troubleshooting；
-          <span class="font-mono text-slate-700">{`{subcategory}/{slug}`}</span> 就是返回里的 <span class="font-mono text-slate-700">id</span>。
-          查询、列表索引、全量快照各 1 次/10 分钟，按「IP + 完整请求」计数，换条件不占额度；MCP 按 IP 汇总 60 次/10 分钟；HTML 页面和静态资源不按 IP 限流。
+          <InlineText text={api.endpoints.note} />
         </p>
       </section>
 
       <section class={pagePanelClass}>
-        <h2 class="text-lg font-semibold tracking-tight text-slate-950">查询参数</h2>
+        <h2 class="text-lg font-semibold tracking-tight text-slate-950">{api.params.title}</h2>
         <p class="mt-2 text-sm leading-7 text-slate-600">
-          筛选、时间、分页三类参数可以任意叠加，多个筛选条件同时生效。页面直达地址和这些参数完全等价，路径里的值优先。
+          {api.params.description}
         </p>
         <div class="mt-4 space-y-4">
-          {paramGroups.map((group) => (
+          {api.params.groups.map((group) => (
             <div class="overflow-hidden rounded-xl ring-1 ring-slate-900/[0.07]">
               <div class="flex flex-wrap items-baseline justify-between gap-2 bg-slate-50 px-4 py-2.5">
                 <p class="text-sm font-semibold text-slate-900">{group.title}</p>
-                <p class="text-[11px] text-slate-500">{group.desc}</p>
+                <p class="text-[11px] text-slate-500">{group.description}</p>
               </div>
               <div class="overflow-x-auto">
                 <table class="w-full min-w-[680px] text-left text-sm">
                   <thead class="border-b border-slate-100 text-xs text-slate-400">
                     <tr>
-                      <th class="py-2 pl-4 pr-4 font-medium">参数</th>
-                      <th class="py-2 pr-4 font-medium">类型</th>
-                      <th class="py-2 pr-4 font-medium">说明</th>
-                      <th class="py-2 pr-4 font-medium">示例</th>
+                      {api.params.columns.map((column, index) => (
+                        <th class={`py-2 pr-4 font-medium ${index === 0 ? "pl-4" : ""}`}>{column}</th>
+                      ))}
                     </tr>
                   </thead>
                   <tbody class="divide-y divide-slate-100 text-slate-600">
@@ -539,30 +265,28 @@ const breadcrumbJsonLd = buildBreadcrumbJsonLd([
           ))}
         </div>
         <div class="mt-4 space-y-1.5 text-xs leading-6 text-slate-500">
-          <p>不传任何参数时，返回最近 7 天的第一页，按站内发布时间倒序。</p>
-          <p>组合示例：<span class="font-mono text-slate-700">{`?theme=llm&type=release&since=2026-11-01`}</span>。</p>
-          <p>未知的 channel、theme、group 返回 400；<span class="font-mono text-slate-700">group</span> 必须带 theme，<span class="font-mono text-slate-700">product</span> 必须带 company。</p>
+          {api.params.notes.map((note) => (
+            <p><InlineText text={note} /></p>
+          ))}
         </div>
       </section>
 
       <section class={pagePanelClass}>
-        <h2 class="text-lg font-semibold tracking-tight text-slate-950">只返回核心字段</h2>
+        <h2 class="text-lg font-semibold tracking-tight text-slate-950">{api.fields.title}</h2>
         <p class="mt-2 text-sm leading-7 text-slate-600">
-          接口是“索引 + 摘要”，不做全文分发。列表、单篇、全量快照、MCP 返回的都是同一套字段，外层固定带
-          <span class="font-mono text-[12px] text-slate-900">apiVersion: v1</span>，响应头也带同样的版本号。
+          <InlineText text={api.fields.description} />
         </p>
         <div class="mt-4 overflow-x-auto">
           <table class="w-full min-w-[760px] text-left text-sm">
             <thead class="border-b border-slate-200 text-xs text-slate-400">
               <tr>
-                <th class="py-2 pr-4 font-medium">字段</th>
-                <th class="py-2 pr-4 font-medium">类型</th>
-                <th class="py-2 pr-4 font-medium">说明</th>
-                <th class="py-2 font-medium">示例</th>
+                {api.fields.columns.map((column) => (
+                  <th class="py-2 pr-4 font-medium">{column}</th>
+                ))}
               </tr>
             </thead>
             <tbody class="divide-y divide-slate-100 text-slate-600">
-              {fields.map(([name, type, desc, example]) => (
+              {api.fields.rows.map(([name, type, desc, example]) => (
                 <tr>
                   <td class="py-2.5 pr-4 font-mono text-[12px] text-slate-900">{name}</td>
                   <td class="py-2.5 pr-4">
@@ -577,120 +301,91 @@ const breadcrumbJsonLd = buildBreadcrumbJsonLd([
         </div>
 
         <div class="mt-4 rounded-xl bg-rose-50/60 p-4 ring-1 ring-rose-100">
-          <p class="text-[11px] font-semibold uppercase tracking-[0.12em] text-rose-500">不会返回</p>
+          <p class="text-[11px] font-semibold uppercase tracking-[0.12em] text-rose-500">{api.fields.excluded.title}</p>
           <div class="mt-2 flex flex-wrap gap-1.5">
-            {["正文", "HTML", "作者", "来源清单", "tags", "company", "product", "阅读量"].map((item) => (
+            {api.fields.excluded.items.map((item) => (
               <span class="rounded-full bg-white px-2.5 py-1 text-[11px] text-rose-600 ring-1 ring-rose-100">{item}</span>
             ))}
           </div>
           <p class="mt-3 text-[12px] leading-6 text-slate-600">
-            需要全文就打开 <span class="font-mono text-[11px] text-slate-900">url</span>；接口只负责告诉你“有什么、在哪读”。
-            这样既不分发正文，也不会让调用方拿到用不上的大字段。
+            <InlineText text={api.fields.excluded.note} />
           </p>
         </div>
 
-        <p class="mt-4 text-[11px] font-semibold text-slate-500">完整响应长这样</p>
+        <p class="mt-4 text-[11px] font-semibold text-slate-500">{api.fields.exampleLabel}</p>
         <div class="mt-2">
-          <CodeBlock code={responseExample} lang="json" label="JSON" />
+          <CodeBlock code={api.fields.example} lang="json" label="JSON" />
         </div>
       </section>
 
       <section class={pagePanelClass}>
-        <h2 class="text-lg font-semibold tracking-tight text-slate-950">接上之后</h2>
+        <h2 class="text-lg font-semibold tracking-tight text-slate-950">{api.scenarios.title}</h2>
         <p class="mt-2 text-sm leading-7 text-slate-600">
-          按使用场景选一条路，不用把所有接口都接一遍。
+          {api.scenarios.description}
         </p>
         <div class="mt-4 grid gap-3 sm:grid-cols-2">
-          {scenarios.map((scenario) => (
+          {api.scenarios.items.map((scenario) => (
             <div class="rounded-xl bg-slate-50 p-4">
               <p class="font-mono text-[10px] font-semibold tracking-[0.12em] text-slate-400">{scenario.step}</p>
               <p class="mt-1 text-sm font-semibold text-slate-900">{scenario.title}</p>
-              <p class="mt-2 text-[13px] leading-6 text-slate-600">{scenario.desc}</p>
+              <p class="mt-2 text-[13px] leading-6 text-slate-600">{scenario.description}</p>
             </div>
           ))}
         </div>
 
-        <p class="mt-5 text-[11px] font-semibold text-slate-500">翻页怎么接</p>
+        <p class="mt-5 text-[11px] font-semibold text-slate-500">{api.scenarios.paginationLabel}</p>
         <div class="mt-2">
-          <CodeBlock code={paginationExample} lang="bash" label="翻页命令" />
+          <CodeBlock code={api.scenarios.paginationCode} lang="bash" label={api.scenarios.paginationCodeLabel} />
         </div>
 
         <div class="mt-4 rounded-xl bg-slate-50 p-4 text-[13px] leading-6 text-slate-600">
-          引用时链接 <span class="font-mono text-[11px] text-slate-900">url</span>；时间以
-          <span class="font-mono text-[11px] text-slate-900">publishedAt</span> 为准；不要转载正文。
-          所有文章接口只覆盖最近 7 天，响应里的 <span class="font-mono text-[11px] text-slate-900">window</span> 会写明
-          <span class="font-mono text-[11px] text-slate-900">days</span> 和 <span class="font-mono text-[11px] text-slate-900">since</span>。
+          <InlineText text={api.scenarios.note} />
         </div>
       </section>
 
       <section class={pagePanelClass}>
-        <h2 class="text-lg font-semibold tracking-tight text-slate-950">限流与响应头</h2>
+        <h2 class="text-lg font-semibold tracking-tight text-slate-950">{api.rateLimit.title}</h2>
         <p class="mt-2 text-sm leading-7 text-slate-600">
-          按 IP + 请求分四档，10 分钟一个窗口。同一条完整请求（路径 + 查询参数）只算 1 次：查过
-          <span class="font-mono text-[12px] text-slate-900">/api/v1/articles?company=openai</span>，再查
-          <span class="font-mono text-[12px] text-slate-900">?theme=llm</span> 或单篇都用各自额度，不会互相顶掉。MCP 例外，按 IP 汇总 60 次；RSS、<span class="font-mono text-[12px] text-slate-900">llms.txt</span>、OpenAPI 和 Agent Skill 是静态文件，不限流。
+          <InlineText text={api.rateLimit.description} />
         </p>
 
-        <p class="mt-5 text-[11px] font-semibold text-slate-500">四档额度</p>
+        <p class="mt-5 text-[11px] font-semibold text-slate-500">{api.rateLimit.tiers.title}</p>
         <div class="mt-2 overflow-x-auto">
           <table class="w-full min-w-[760px] text-left text-sm">
             <thead class="border-b border-slate-200 text-xs text-slate-400">
               <tr>
-                <th class="py-2 pr-4 font-medium">档位</th>
-                <th class="py-2 pr-4 font-medium">包含哪些接口</th>
-                <th class="py-2 pr-4 font-medium">额度（每条请求）</th>
-                <th class="py-2 font-medium">超出后</th>
+                {api.rateLimit.tiers.columns.map((column) => (
+                  <th class="py-2 pr-4 font-medium">{column}</th>
+                ))}
               </tr>
             </thead>
             <tbody class="divide-y divide-slate-100 text-slate-600">
-              <tr>
-                <td class="py-2.5 pr-4">
-                  <span class="rounded-full bg-sky-50 px-2 py-0.5 text-[11px] font-medium text-sky-700">查询</span>
-                </td>
-                <td class="py-2.5 pr-4">articles、页面直达、单篇</td>
-                <td class="py-2.5 pr-4">1 次 / 10 分钟</td>
-                <td class="py-2.5">429</td>
-              </tr>
-              <tr>
-                <td class="py-2.5 pr-4">
-                  <span class="rounded-full bg-violet-50 px-2 py-0.5 text-[11px] font-medium text-violet-700">索引</span>
-                </td>
-                <td class="py-2.5 pr-4">channels、subcategories、vendors、themes、tags、meta、facets</td>
-                <td class="py-2.5 pr-4">1 次 / 10 分钟</td>
-                <td class="py-2.5">429</td>
-              </tr>
-              <tr>
-                <td class="py-2.5 pr-4">
-                  <span class="rounded-full bg-amber-50 px-2 py-0.5 text-[11px] font-medium text-amber-700">快照</span>
-                </td>
-                <td class="py-2.5 pr-4">articles/all</td>
-                <td class="py-2.5 pr-4">1 次 / 10 分钟</td>
-                <td class="py-2.5">429，响应缓存 10 分钟</td>
-              </tr>
-              <tr>
-                <td class="py-2.5 pr-4">
-                  <span class="rounded-full bg-fuchsia-50 px-2 py-0.5 text-[11px] font-medium text-fuchsia-700">MCP</span>
-                </td>
-                <td class="py-2.5 pr-4">/api/v1/mcp（initialize、tools/list、tools/call 一起算）</td>
-                <td class="py-2.5 pr-4">60 次 / 10 分钟（按 IP 汇总）</td>
-                <td class="py-2.5">429</td>
-              </tr>
+              {api.rateLimit.tiers.rows.map(([tier, scope, quota, over], index) => (
+                <tr>
+                  <td class="py-2.5 pr-4">
+                    <span class={`rounded-full px-2 py-0.5 text-[11px] font-medium ${tierTones[index % tierTones.length]}`}>{tier}</span>
+                  </td>
+                  <td class="py-2.5 pr-4">{scope}</td>
+                  <td class="py-2.5 pr-4">{quota}</td>
+                  <td class="py-2.5">{over}</td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
 
-        <p class="mt-5 text-[11px] font-semibold text-slate-500">响应头</p>
+        <p class="mt-5 text-[11px] font-semibold text-slate-500">{api.rateLimit.headers.title}</p>
         <div class="mt-2 overflow-x-auto">
           <table class="w-full min-w-[680px] text-left text-sm">
             <thead class="border-b border-slate-200 text-xs text-slate-400">
               <tr>
-                <th class="py-2 pr-4 font-medium">响应头</th>
-                <th class="py-2 pr-4 font-medium">出现时机</th>
-                <th class="py-2 font-medium">含义</th>
+                {api.rateLimit.headers.columns.map((column) => (
+                  <th class="py-2 pr-4 font-medium">{column}</th>
+                ))}
               </tr>
             </thead>
             <tbody class="divide-y divide-slate-100 text-slate-600">
-              {headers.map(([name, when, meaning]) => (
+              {api.rateLimit.headers.rows.map(([name, when, meaning]) => (
                 <tr>
                   <td class="py-2.5 pr-4 font-mono text-[12px] text-slate-900">{name}</td>
                   <td class="py-2.5 pr-4 text-slate-500">{when}</td>
@@ -702,46 +397,36 @@ const breadcrumbJsonLd = buildBreadcrumbJsonLd([
         </div>
 
         <div class="mt-4">
-          <CodeBlock code={headersExample} lang="plaintext" label="响应头示例" />
+          <CodeBlock code={api.rateLimit.example} lang="json" label={api.rateLimit.exampleLabel} />
         </div>
 
         <ul class="mt-4 space-y-2 text-sm leading-7 text-slate-600">
-          <li>超出返回 <span class="font-mono text-[12px] text-slate-900">429</span>，响应体里有 <span class="font-mono text-[12px] text-slate-900">retryAfter</span>，响应头里有 <span class="font-mono text-[12px] text-slate-900">Retry-After</span>；按它等待，不要并发重试。</li>
-          <li>所有 JSON 响应带 <span class="font-mono text-[12px] text-slate-900">ETag</span>；下次带上 <span class="font-mono text-[12px] text-slate-900">If-None-Match</span>，内容没变就直接返回 304；304 仍然计入请求次数。</li>
-          <li>同一 IP、同一条请求共享额度：NAT 后面的多个用户请求同一条会共用这 1 次，换条件或换接口各有独立额度。</li>
-          <li>HTML 页面和静态资源不按 IP 限流，正常浏览不受影响。</li>
-        </ul>
-        <div class="mt-4">
-          <CodeBlock code={rateLimitExample} lang="json" label="429 JSON" />
-        </div>
-      </section>
-
-      <section class={pagePanelClass}>
-        <h2 class="text-lg font-semibold tracking-tight text-slate-950">规范依据</h2>
-        <ul class="mt-3 space-y-2 text-sm leading-7 text-slate-600">
-          <li>
-            接口定义遵循
-            <a class="text-indigo-600 hover:underline" href="https://spec.openapis.org/oas/v3.1.0" target="_blank" rel="noreferrer">OpenAPI 3.1</a>，机器可读版本是 /openapi-v1.json。
-          </li>
-          <li>
-            GET / HEAD、ETag、If-None-Match 与 304 的语义按
-            <a class="text-indigo-600 hover:underline" href="https://www.rfc-editor.org/rfc/rfc9110.html" target="_blank" rel="noreferrer">RFC 9110</a>。
-          </li>
-          <li>
-            超出额度返回 429 并带 Retry-After，按
-            <a class="text-indigo-600 hover:underline" href="https://www.rfc-editor.org/rfc/rfc6585.html" target="_blank" rel="noreferrer">RFC 6585</a>。
-          </li>
+          {api.rateLimit.notes.map((note) => (
+            <li><InlineText text={note} /></li>
+          ))}
         </ul>
       </section>
 
       <section class={pagePanelClass}>
-        <h2 class="text-lg font-semibold tracking-tight text-slate-950">没接上？</h2>
+        <h2 class="text-lg font-semibold tracking-tight text-slate-950">{api.specs.title}</h2>
         <ul class="mt-3 space-y-2 text-sm leading-7 text-slate-600">
-          <li><span class="font-medium text-slate-900">400</span>：参数不对，看返回里的 <span class="font-mono text-[12px] text-slate-900">error</span> 和 <span class="font-mono text-[12px] text-slate-900">message</span>。未知主题会返回 <span class="font-mono text-[12px] text-slate-900">unknown_theme</span>。</li>
-          <li><span class="font-medium text-slate-900">404</span>：查询是 <span class="font-mono text-[12px] text-slate-900">/api/v1/articles</span>，全量快照是 <span class="font-mono text-[12px] text-slate-900">/api/v1/articles/all</span>，都不带 <span class="font-mono text-[12px] text-slate-900">.json</span>；早于 7 天的单篇也会返回 404。</li>
-          <li><span class="font-medium text-slate-900">429</span>：请求太密，按 <span class="font-mono text-[12px] text-slate-900">Retry-After</span> 等待。</li>
-          <li><span class="font-medium text-slate-900">中文乱码</span>：加 <span class="font-mono text-[12px] text-slate-900">--compressed</span>，并确认响应头带 <span class="font-mono text-[12px] text-slate-900">charset=utf-8</span>。</li>
-          <li><span class="font-medium text-slate-900">想看接口定义</span>：<a class="text-indigo-600 hover:underline" href="/openapi-v1.json">/openapi-v1.json</a>。</li>
+          {api.specs.items.map((item) => (
+            <li>
+              <a class="text-indigo-600 hover:underline" href={item.href} target="_blank" rel="noreferrer">{item.label}</a>
+              <span class="ml-2 text-slate-500">{item.note}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section class={pagePanelClass}>
+        <h2 class="text-lg font-semibold tracking-tight text-slate-950">{api.troubleshooting.title}</h2>
+        <ul class="mt-3 space-y-2 text-sm leading-7 text-slate-600">
+          {api.troubleshooting.items.map((item) => (
+            <li>
+              <span class="font-medium text-slate-900">{item.label}</span>：<InlineText text={item.text} />
+            </li>
+          ))}
         </ul>
       </section>
     </AgentShell>

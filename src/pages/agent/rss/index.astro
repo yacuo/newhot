@@ -2,80 +2,50 @@
 import Root from "@/layouts/Root.astro";
 import Shell from "@/layouts/Shell.astro";
 import AgentShell from "@/components/agent/AgentShell.astro";
+import Badge from "@/components/agent/Badge.astro";
 import CopyButton from "@/components/agent/CopyButton.astro";
 import CodeBlock from "@/components/agent/CodeBlock.astro";
+import InlineText from "@/components/ui/InlineText.astro";
 import { pagePanelClass, widePageContainerClass } from "@/shared/ui/classes";
+import { getSiteUrl } from "@/shared/site";
 import { buildBreadcrumbJsonLd, buildTechArticleJsonLd } from "@/shared/seo/jsonld";
+import { agentPage } from "@/modules/page-content";
 
-const seoTitle = "RSS 订阅：复制地址就能用";
-const seoDescription =
-  "RSS 读的是和 Skill、MCP、API 同一份数据：精选、模型发布、价格与限制、服务状态、AI 编程、AI 办公、AI 创作、故障排查。全站和 5 个频道各一条 feed，只有标题、摘要、时间和链接。";
-
-const channels = [
-  { id: "llm", label: "大模型" },
-  { id: "ai-coding", label: "AI 编程" },
-  { id: "ai-office", label: "AI 办公" },
-  { id: "ai-creation", label: "AI 创作" },
-  { id: "troubleshooting", label: "故障排查" },
-] as const;
-
-const feeds = [
-  { path: "/feed.xml", label: "全站", desc: "所有频道" },
-  ...channels.map((channel) => ({
-    path: `/${channel.id}/feed.xml`,
-    label: channel.label,
-    desc: `${channel.label}频道`,
-  })),
-];
-
-const sample = `<item>
-  <title>OpenAI Codex 0.171.0 发布…</title>
-  <link>https://newhot.org/ai-tools/codex-cli-0-171-0/</link>
-  <guid isPermaLink="true">https://newhot.org/ai-tools/codex-cli-0-171-0/</guid>
-  <pubDate>Thu, 19 Nov 2026 16:00:00 GMT</pubDate>
-  <description>OpenAI Codex CLI 0.171.0 发布，TUI 工作区默认开启…</description>
-</item>`;
+const { rss } = agentPage;
 
 const articleJsonLd = buildTechArticleJsonLd({
-  headline: seoTitle,
-  description: seoDescription,
-  path: "/agent/rss/",
+  headline: rss.seo.title,
+  description: rss.seo.description,
+  path: rss.seo.path,
   about: ["RSS", "RSS 2.0", "feed"],
 });
 
 const breadcrumbJsonLd = buildBreadcrumbJsonLd([
   { name: "首页", href: "/" },
   { name: "Agent 接入", href: "/agent/" },
-  { name: "RSS", href: "/agent/rss/" },
+  { name: "RSS", href: rss.seo.path },
 ]);
 ---
 
-<Root title={seoTitle} description={seoDescription} path="/agent/rss/">
+<Root title={rss.seo.title} description={rss.seo.description} path={rss.seo.path}>
   <Shell mainClassName={widePageContainerClass} selectedChannel="Agent 接入">
-    <AgentShell
-      title="RSS 订阅"
-      description="挑一个地址，粘到阅读器里就行。每条只有标题、摘要、时间和站内页面地址。"
-    >
+    <AgentShell title={rss.header.title} description={rss.header.description}>
       <section class={pagePanelClass}>
         <div class="flex flex-wrap gap-2">
-          <span class="rounded-full bg-emerald-50 px-2.5 py-1 text-[11px] font-medium text-emerald-700">匿名 API</span>
-          <span class="rounded-full bg-sky-50 px-2.5 py-1 text-[11px] font-medium text-sky-700">不用注册</span>
-          <span class="rounded-full bg-violet-50 px-2.5 py-1 text-[11px] font-medium text-violet-700">无需 API Key</span>
-          <span class="rounded-full bg-teal-50 px-2.5 py-1 text-[11px] font-medium text-teal-700">免费</span>
-          <span class="rounded-full bg-amber-50 px-2.5 py-1 text-[11px] font-medium text-amber-700">仅最近 7 天</span>
+          {rss.badges.map((badge) => <Badge label={badge.label} tone={badge.tone} />)}
         </div>
         <p class="mt-4 text-sm leading-7 text-slate-700">
-          RSS 是四种方式之一，和其他三种读的是同一份数据：精选、模型发布、价格与限制、服务状态、AI 编程、AI 办公、AI 创作、故障排查。把 https://newhot.org/feed.xml 粘进阅读器就行，不用注册，也不用 API Key，只有标题、摘要、时间和链接。
+          <InlineText text={rss.intro} />
         </p>
       </section>
 
       <section class={pagePanelClass}>
-        <h2 class="text-lg font-semibold tracking-tight text-slate-950">复制地址就能订阅</h2>
+        <h2 class="text-lg font-semibold tracking-tight text-slate-950">{rss.feeds.title}</h2>
         <p class="mt-2 text-sm leading-7 text-slate-600">
-          全站一条，五个频道各一条。阅读器、n8n、AI 抓取管线都能直接用。
+          {rss.feeds.description}
         </p>
         <div class="mt-4 grid gap-3 sm:grid-cols-2">
-          {feeds.map((feed) => (
+          {rss.feeds.items.map((feed) => (
             <div class="flex items-start justify-between gap-3 rounded-xl bg-slate-50 p-4">
               <div class="min-w-0">
                 <p class="text-sm font-semibold text-slate-950">{feed.label}</p>
@@ -83,44 +53,37 @@ const breadcrumbJsonLd = buildBreadcrumbJsonLd([
                   class="mt-1 block break-all font-mono text-[12px] text-indigo-600 hover:underline"
                   href={feed.path}
                 >{feed.path}</a>
-                <p class="mt-1 text-[11px] text-slate-400">{feed.desc}</p>
+                <p class="mt-1 text-[11px] text-slate-400">{feed.description}</p>
               </div>
-              <CopyButton text={`https://newhot.org${feed.path}`} />
+              <CopyButton text={getSiteUrl(feed.path)} />
             </div>
           ))}
         </div>
         <p class="mt-3 text-xs leading-6 text-slate-500">
-          RSS 只有这一组原生地址，没有单独的 API 版本。阅读器、脚本和抓取管线都用同一份 feed。
+          {rss.feeds.note}
         </p>
       </section>
 
       <section class={pagePanelClass}>
-        <h2 class="text-lg font-semibold tracking-tight text-slate-950">每条包含什么</h2>
+        <h2 class="text-lg font-semibold tracking-tight text-slate-950">{rss.itemFields.title}</h2>
         <ul class="mt-3 space-y-2 text-sm leading-7 text-slate-600">
-          <li><span class="font-mono text-[12px] text-slate-900">title</span>：文章标题。</li>
-          <li><span class="font-mono text-[12px] text-slate-900">link</span>：站内页面地址，引用时用这个。</li>
-          <li><span class="font-mono text-[12px] text-slate-900">pubDate</span>：站内发布时间，不是原文发布日期。</li>
-          <li><span class="font-mono text-[12px] text-slate-900">description</span>：摘要，不含正文。</li>
-          <li><span class="font-mono text-[12px] text-slate-900">guid</span>：稳定不变，用来判断是不是新条目。</li>
+          {rss.itemFields.items.map((item) => (
+            <li>
+              <span class="font-mono text-[12px] text-slate-900">{item.name}</span>：<InlineText text={item.description} />
+            </li>
+          ))}
         </ul>
         <div class="mt-4">
-          <CodeBlock code={sample} lang="xml" label="RSS" />
+          <CodeBlock code={rss.itemFields.sample} lang="xml" label="RSS" />
         </div>
       </section>
 
       <section class={pagePanelClass}>
-        <h2 class="text-lg font-semibold tracking-tight text-slate-950">更新与去重</h2>
+        <h2 class="text-lg font-semibold tracking-tight text-slate-950">{rss.updates.title}</h2>
         <ul class="mt-3 space-y-2 text-sm leading-7 text-slate-600">
-          <li>按 <span class="font-mono text-[12px] text-slate-900">guid</span> 或 <span class="font-mono text-[12px] text-slate-900">link</span> 去重，别按标题。</li>
-          <li>feed 不返回全文，想读正文就访问 <span class="font-mono text-[12px] text-slate-900">link</span>。</li>
-          <li>轮询间隔建议 15 分钟以上，别把它当实时接口用。</li>
-          <li>feed 不进站点地图，但阅读器和 AI 可以直接抓。</li>
-          <li>
-            feed 结构和
-            <span class="font-mono text-[12px] text-slate-900">pubDate</span>
-            格式遵循
-            <a class="text-indigo-600 hover:underline" href="https://www.rssboard.org/rss-specification" target="_blank" rel="noreferrer">RSS 2.0 规范</a>。
-          </li>
+          {rss.updates.items.map((item) => (
+            <li><InlineText text={item} /></li>
+          ))}
         </ul>
       </section>
     </AgentShell>

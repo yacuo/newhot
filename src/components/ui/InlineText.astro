@@ -1,0 +1,24 @@
+---
+type Props = {
+  text: string;
+};
+
+const { text } = Astro.props;
+
+const escapeHtml = (value: string) =>
+  value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+/** 只支持两种行内标记：`代码` 与 [文字](链接)，其余按纯文本输出 */
+const html = escapeHtml(text)
+  .replace(
+    /`([^`]+)`/g,
+    '<code class="rounded bg-slate-100 px-1 py-0.5 font-mono text-[12px] text-slate-900">$1</code>',
+  )
+  .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (_, label: string, href: string) => {
+    const external = /^https?:\/\//.test(href);
+    const attrs = external ? ' target="_blank" rel="noreferrer"' : "";
+    return `<a class="text-indigo-600 hover:underline" href="${href}"${attrs}>${label}</a>`;
+  });
+---
+
+<Fragment set:html={html} />

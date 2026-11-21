@@ -1,15 +1,19 @@
 ---
 import Root from "@/layouts/Root.astro";
 import Shell from "@/layouts/Shell.astro";
+import { sharedPage } from "@/modules/page-content/shared";
+
+const { notFound } = sharedPage;
 ---
-<Root title="页面不存在" description="你访问的页面不存在或已移动。" path="/404">
+
+<Root title={notFound.title} description={notFound.description} path={notFound.path}>
   <Shell>
     <div class="rounded-2xl bg-surface panel-glow p-8 text-center">
-      <p class="text-[11px] font-semibold tracking-[0.16em] text-slate-400">404</p>
-      <h1 class="mt-2 text-2xl font-bold tracking-tight text-slate-950">页面不存在</h1>
-      <p class="mt-2 text-sm text-slate-600">你访问的页面不存在或已移动。</p>
-      <a href="/" class="mt-5 inline-flex rounded-full bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-indigo-700">
-        返回首页
+      <p class="text-[11px] font-semibold tracking-[0.16em] text-slate-400">{notFound.code}</p>
+      <h1 class="mt-2 text-2xl font-bold tracking-tight text-slate-950">{notFound.heading}</h1>
+      <p class="mt-2 text-sm text-slate-600">{notFound.message}</p>
+      <a href={notFound.action.href} class="mt-5 inline-flex rounded-full bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-indigo-700">
+        {notFound.action.label}
       </a>
     </div>
   </Shell>

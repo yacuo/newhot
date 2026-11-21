@@ -2,37 +2,19 @@
 import Root from "@/layouts/Root.astro";
 import Shell from "@/layouts/Shell.astro";
 import AgentShell from "@/components/agent/AgentShell.astro";
+import Badge from "@/components/agent/Badge.astro";
+import InlineText from "@/components/ui/InlineText.astro";
 import Icon from "@/components/ui/Icon.astro";
 import { pagePanelClass, widePageContainerClass } from "@/shared/ui/classes";
 import { getSiteUrl, siteConfig } from "@/shared/site";
 import { buildBreadcrumbJsonLd } from "@/shared/seo/jsonld";
+import { agentPage } from "@/modules/page-content";
 
-const seoTitle = "Agent 接入：RSS、API 与 MCP";
-const seoDescription =
-  "Skill、MCP、RSS、API 四种方式读同一份 NewHot 数据：精选、模型发布、价格与限制、服务状态、AI 编程、AI 办公、AI 创作、故障排查。免费、匿名只读，不用注册，也不用 API Key。";
+const { overview } = agentPage;
+const { choices } = overview;
 
-const choices = [
-  {
-    name: "RSS",
-    href: "/agent/rss/",
-    desc: "复制一个地址到阅读器，最省事。只含标题、链接、时间和摘要。",
-  },
-  {
-    name: "REST API",
-    href: "/agent/api/",
-    desc: "自己写脚本、做看板时用。按频道、主题、厂商、标签和日期查，不用拉全量。",
-  },
-  {
-    name: "MCP",
-    href: "/agent/mcp/",
-    desc: "Claude Code、Cursor 这类客户端，填一个地址就多出四个工具。",
-  },
-  {
-    name: "Agent Skill",
-    href: "/agent/skill/",
-    desc: "不想配任何东西，让 Agent 自己装，装完直接用大白话问。",
-  },
-];
+const seoTitle = overview.seo.title;
+const seoDescription = overview.seo.description;
 
 const collectionJsonLd = {
   "@context": "https://schema.org",
@@ -59,23 +41,15 @@ const breadcrumbJsonLd = buildBreadcrumbJsonLd([
 ]);
 ---
 
-<Root title={seoTitle} description={seoDescription} path="/agent/">
+<Root title={overview.seo.title} description={overview.seo.description} path={overview.seo.path}>
   <Shell mainClassName={widePageContainerClass} selectedChannel="Agent 接入">
-    <AgentShell
-      title="Agent 接入"
-      description="四种方式读同一份数据，按你手上的工具选一种就行。"
-    >
+    <AgentShell title={overview.header.title} description={overview.header.description}>
       <section class={pagePanelClass}>
         <div class="flex flex-wrap gap-2">
-          <span class="rounded-full bg-emerald-50 px-2.5 py-1 text-[11px] font-medium text-emerald-700">匿名 API</span>
-          <span class="rounded-full bg-sky-50 px-2.5 py-1 text-[11px] font-medium text-sky-700">不用注册</span>
-          <span class="rounded-full bg-violet-50 px-2.5 py-1 text-[11px] font-medium text-violet-700">无需 API Key</span>
-          <span class="rounded-full bg-teal-50 px-2.5 py-1 text-[11px] font-medium text-teal-700">免费</span>
-          <span class="rounded-full bg-amber-50 px-2.5 py-1 text-[11px] font-medium text-amber-700">仅最近 7 天</span>
-          <span class="rounded-full bg-indigo-50 px-2.5 py-1 text-[11px] font-medium text-indigo-700">四种入口同一份数据</span>
+          {overview.badges.map((badge) => <Badge label={badge.label} tone={badge.tone} />)}
         </div>
         <p class="mt-4 text-sm leading-7 text-slate-700">
-          四种方式读的是同一份数据：精选、模型发布、价格与限制、服务状态、AI 编程、AI 办公、AI 创作、故障排查。按你用的工具选一种就行，全部免费、匿名只读，不用注册，也不用 API Key。
+          <InlineText text={overview.intro} />
         </p>
       </section>
 
@@ -95,88 +69,65 @@ const breadcrumbJsonLd = buildBreadcrumbJsonLd([
                   class="text-slate-300 transition-transform group-hover:translate-x-0.5 group-hover:text-slate-500"
                 />
               </div>
-              <p class="mt-1.5 text-[13px] leading-6 text-slate-500">{choice.desc}</p>
+              <p class="mt-1.5 text-[13px] leading-6 text-slate-500">{choice.description}</p>
             </a>
           ))}
         </div>
       </section>
 
       <section class={pagePanelClass}>
-        <h2 class="text-lg font-semibold tracking-tight text-slate-950">第一次接，按这个顺序</h2>
+        <h2 class="text-lg font-semibold tracking-tight text-slate-950">{overview.gettingStarted.title}</h2>
         <ol class="mt-3 space-y-2 text-sm leading-7 text-slate-600">
-          <li>先用 RSS 或 REST API 验证数据是否符合预期。</li>
-          <li>需要 Agent 直接调用时，再接 MCP。</li>
-          <li>需要让 Agent 长期知道怎么用 NewHot，再安装 Agent Skill。</li>
+          {overview.gettingStarted.items.map((item) => (
+            <li><InlineText text={item} /></li>
+          ))}
         </ol>
       </section>
 
       <section class={pagePanelClass}>
-        <h2 class="text-lg font-semibold tracking-tight text-slate-950">接入资源</h2>
+        <h2 class="text-lg font-semibold tracking-tight text-slate-950">{overview.resources.title}</h2>
         <p class="mt-2 text-sm leading-7 text-slate-600">
-          给 Agent 或开发者用的原始文件。页面只是说明，真正的数据以这些地址为准。
+          {overview.resources.description}
         </p>
         <ul class="mt-3 space-y-2 text-sm leading-7 text-slate-600">
-          <li>
-            <a class="font-mono text-[12px] text-indigo-600 hover:underline" href="/newhot-skill/README.md">/newhot-skill/README.md</a>
-            <span class="ml-2 text-slate-500">安装说明，发给 Agent 的入口。</span>
-          </li>
-          <li>
-            <a class="font-mono text-[12px] text-indigo-600 hover:underline" href="/newhot-skill/SKILL.md">/newhot-skill/SKILL.md</a>
-            <span class="ml-2 text-slate-500">Skill 正文，安装时下载这一个文件。</span>
-          </li>
-          <li>
-            <a class="font-mono text-[12px] text-indigo-600 hover:underline" href="/openapi-v1.json">/openapi-v1.json</a>
-            <span class="ml-2 text-slate-500">OpenAPI 3.1 接口定义，可直接导入工具。</span>
-          </li>
-          <li>
-            <a class="font-mono text-[12px] text-indigo-600 hover:underline" href="/agent/skill/">/agent/skill/</a>
-            <span class="ml-2 text-slate-500">Skill 页面预览，适合人读。</span>
-          </li>
-          <li>
-            <a class="font-mono text-[12px] text-indigo-600 hover:underline" href="https://github.com/yacuo/newhot" target="_blank" rel="noreferrer">github.com/yacuo/newhot</a>
-            <span class="ml-2 text-slate-500">站点源码与更新记录。</span>
-          </li>
+          {overview.resources.items.map((item) => (
+            <li>
+              <a
+                class="font-mono text-[12px] text-indigo-600 hover:underline"
+                href={item.href}
+                target={item.href.startsWith("http") ? "_blank" : undefined}
+                rel={item.href.startsWith("http") ? "noreferrer" : undefined}
+              >{item.label}</a>
+              <span class="ml-2 text-slate-500">{item.note}</span>
+            </li>
+          ))}
         </ul>
       </section>
 
       <section class={pagePanelClass}>
-        <h2 class="text-lg font-semibold tracking-tight text-slate-950">规范依据</h2>
+        <h2 class="text-lg font-semibold tracking-tight text-slate-950">{overview.specs.title}</h2>
         <p class="mt-2 text-sm leading-7 text-slate-600">
-          接口按公开规范实现，行为有疑问时以规范原文为准。
+          {overview.specs.description}
         </p>
         <ul class="mt-3 space-y-2 text-sm leading-7 text-slate-600">
-          <li>
-            <a class="text-indigo-600 hover:underline" href="https://www.rssboard.org/rss-specification" target="_blank" rel="noreferrer">RSS 2.0 规范</a>
-            <span class="ml-2 text-slate-500">channel / item 结构与 pubDate 格式。</span>
-          </li>
-          <li>
-            <a class="text-indigo-600 hover:underline" href="https://spec.openapis.org/oas/v3.1.0" target="_blank" rel="noreferrer">OpenAPI 3.1</a>
-            <span class="ml-2 text-slate-500">/openapi-v1.json 的结构。</span>
-          </li>
-          <li>
-            <a class="text-indigo-600 hover:underline" href="https://modelcontextprotocol.io/specification/2025-06-18" target="_blank" rel="noreferrer">MCP 规范 2025-06-18</a>
-            <span class="ml-2 text-slate-500">Streamable HTTP 传输与 JSON-RPC 消息格式。</span>
-          </li>
-          <li>
-            <a class="text-indigo-600 hover:underline" href="https://www.rfc-editor.org/rfc/rfc9110.html" target="_blank" rel="noreferrer">RFC 9110</a>
-            <span class="ml-2 text-slate-500">GET / HEAD、ETag 与 304 条件请求语义。</span>
-          </li>
-          <li>
-            <a class="text-indigo-600 hover:underline" href="https://llmstxt.org/" target="_blank" rel="noreferrer">llms.txt</a>
-            <span class="ml-2 text-slate-500">/llms.txt 的写法约定。</span>
-          </li>
+          {overview.specs.items.map((item) => (
+            <li>
+              <a class="text-indigo-600 hover:underline" href={item.href} target="_blank" rel="noreferrer">{item.label}</a>
+              <span class="ml-2 text-slate-500">{item.note}</span>
+            </li>
+          ))}
         </ul>
       </section>
 
       <section class={pagePanelClass}>
-        <h2 class="text-lg font-semibold tracking-tight text-slate-950">没接上？</h2>
-        <p class="mt-2 text-sm leading-7 text-slate-600">按顺序排除，多数问题出在路径或客户端配置。</p>
+        <h2 class="text-lg font-semibold tracking-tight text-slate-950">{overview.troubleshooting.title}</h2>
+        <p class="mt-2 text-sm leading-7 text-slate-600">{overview.troubleshooting.description}</p>
         <ul class="mt-3 space-y-2 text-sm leading-7 text-slate-600">
-          <li><span class="font-medium text-slate-900">404</span>：确认带 <span class="font-mono text-[12px] text-slate-900">/api/v1/</span> 前缀，结尾不要加多余斜杠。</li>
-          <li><span class="font-medium text-slate-900">MCP 连不上</span>：地址是 <span class="font-mono text-[12px] text-slate-900">https://newhot.org/api/v1/mcp</span>，用 Streamable HTTP，不要填成页面地址。</li>
-          <li><span class="font-medium text-slate-900">RSS 空</span>：先试 <span class="font-mono text-[12px] text-slate-900">/feed.xml</span>，再换成频道地址 <span class="font-mono text-[12px] text-slate-900">/{`{channel}`}/feed.xml</span>。</li>
-          <li><span class="font-medium text-slate-900">中文乱码</span>：用 <span class="font-mono text-[12px] text-slate-900">curl --compressed</span>，并确认响应头带 <span class="font-mono text-[12px] text-slate-900">charset=utf-8</span>。</li>
-          <li><span class="font-medium text-slate-900">被限流</span>：按响应里的 <span class="font-mono text-[12px] text-slate-900">Retry-After</span> 等待，并缓存结果。</li>
+          {overview.troubleshooting.items.map((item) => (
+            <li>
+              <span class="font-medium text-slate-900">{item.label}</span>：<InlineText text={item.text} />
+            </li>
+          ))}
         </ul>
       </section>
     </AgentShell>

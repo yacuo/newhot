@@ -12,6 +12,7 @@ import {
   type ResolvedTutorialCatalog,
 } from "@/modules/tutorial";
 import { getSiteUrl, siteConfig } from "@/shared/site";
+import { sharedPage } from "@/modules/page-content/shared";
 import { formatDate } from "@/shared/utils";
 import { widePageContainerClass } from "@/shared/ui/classes";
 
@@ -31,6 +32,7 @@ if (!catalog) throw new Error(`教程系列不存在：${id}`);
 const faqs = catalog.faqs ?? [];
 const aboutItems = [{ title: "系列教程简介", description: catalog.description }, ...catalog.introBlocks];
 const audience = catalog.introBlocks.find((block) => block.title.includes("适合"))?.description;
+const guide = sharedPage.guide.tutorial.detail;
 const introIcons = ["BookOpen", "Compass", "Users", "Route"] as const;
 
 const metaRows = [
@@ -231,16 +233,14 @@ const faqJsonLd = faqs.length
 
           <PageGuide
             panel={false}
-            heading="这个系列适合谁读？"
-            description={`${audience ?? catalog.description} 教程内容由编辑与技术团队原创编写，参考官方文档并在真实环境中验证，发布前逐篇人工校对。`}
+            heading={guide.heading}
+            description={`${audience ?? catalog.description} ${guide.suffix}`}
             sources={TUTORIAL_SOURCES}
             points={[
               `共 ${catalog.sections.length} 个章节、${catalog.articleCount} 篇文章，按章节顺序编号。`,
-              "章节内的操作步骤均在真实环境验证过，涉及版本与配置的说明以官方文档为准。",
-              "内容为原创撰写，不翻译、不搬运官方文档，也不直接摘录二手教程。",
-              "系列教程与普通文章共用同一批内容，目录页负责组织阅读顺序与上下文。",
+              ...guide.points,
             ]}
-            quote={{ text: "为开发者提供的资源，由开发者共同维护。", label: "MDN Web Docs", href: "https://developer.mozilla.org/" }}
+            quote={guide.quote}
           />
         </article>
       </div>

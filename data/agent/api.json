@@ -1,0 +1,155 @@
+{
+  "seo": {
+    "title": "示例页面：REST API",
+    "description": "示例：这里写 REST API 页的 SEO 描述，说明筛选维度与返回字段范围，上线前请替换。",
+    "path": "/agent/api/"
+  },
+  "header": {
+    "title": "REST API",
+    "description": "示例：这里写一句页面导语，说明按哪些维度查询。"
+  },
+  "badges": [
+    { "label": "示例标签一", "tone": "emerald" },
+    { "label": "示例标签二", "tone": "sky" },
+    { "label": "示例标签三", "tone": "amber" }
+  ],
+  "intro": "示例：这里写 REST API 与其他方式的共同数据范围，上线前请替换为自己的说明。",
+  "convention": {
+    "title": "接口约定",
+    "badges": [
+      { "label": "API v1", "tone": "indigo" },
+      { "label": "示例额度", "tone": "sky" }
+    ],
+    "description": "示例：这里说明限流档位与超出后的行为。"
+  },
+  "quickstart": {
+    "title": "先跑一条命令",
+    "description": "示例：这里说明这条命令查什么。",
+    "codeLabel": "示例命令",
+    "code": "curl -s \"https://example.com/api/v1/articles?limit=5\""
+  },
+  "commonUrls": {
+    "title": "常用地址",
+    "description": "示例：这里说明每条地址能查什么。",
+    "items": [
+      ["全站最新", "/api/v1/articles?limit=20"],
+      ["示例筛选", "/api/v1/articles?channel=example&limit=20"]
+    ]
+  },
+  "themeCapsules": {
+    "title": "主题页的胶囊就是参数",
+    "description": "示例：这里说明页面胶囊与查询参数的对应关系。",
+    "columns": ["页面上的胶囊", "查询参数", "路径直达"],
+    "rows": [
+      ["示例胶囊", "/api/v1/articles?theme=example", "/api/v1/themes/example/articles"]
+    ]
+  },
+  "direct": {
+    "title": "页面直达地址",
+    "description": "示例：这里说明页面路径与接口路径的对应关系。",
+    "columns": ["页面", "接口地址"],
+    "rows": [
+      ["频道 `/example/`", "/api/v1/channels/example/articles"]
+    ],
+    "note": "示例：这里补充索引详情、编码方式与额度说明。"
+  },
+  "endpoints": {
+    "title": "接口一览",
+    "description": "示例：这里说明接口按用途分组。",
+    "columns": ["路径", "用来做什么", "多久取一次", "限流"],
+    "groups": [
+      {
+        "id": "articles",
+        "title": "文章",
+        "tone": "sky",
+        "description": "示例：这一组负责什么。",
+        "rows": [
+          ["/api/v1/articles", "示例：最近文章，多维筛选", "10 分钟一次", "1 次/10 分钟"]
+        ]
+      }
+    ],
+    "note": "示例：这里补充路径占位符与额度说明。"
+  },
+  "params": {
+    "title": "查询参数",
+    "description": "示例：这里说明筛选、时间、分页可以叠加。",
+    "columns": ["参数", "类型", "说明", "示例"],
+    "groups": [
+      {
+        "title": "筛选",
+        "description": "示例：多个参数同时生效。",
+        "rows": [
+          ["channel", "string", "示例：频道 id", "example"]
+        ]
+      }
+    ],
+    "notes": [
+      "示例：不传参数时的默认行为。"
+    ]
+  },
+  "fields": {
+    "title": "只返回核心字段",
+    "description": "示例：这里说明接口只做索引与摘要。",
+    "columns": ["字段", "类型", "说明", "示例"],
+    "rows": [
+      ["id", "string", "示例：文章唯一标识", "example/example-slug"]
+    ],
+    "excluded": {
+      "title": "不会返回",
+      "items": ["正文", "HTML"],
+      "note": "示例：需要全文就打开 `url`。"
+    },
+    "exampleLabel": "完整响应长这样",
+    "example": "{\n  \"apiVersion\": \"v1\",\n  \"items\": []\n}"
+  },
+  "scenarios": {
+    "title": "接上之后",
+    "description": "示例：这里说明按场景选一条路。",
+    "items": [
+      {
+        "step": "01",
+        "title": "先拿 id",
+        "description": "示例：先读索引，再拿 id 查文章。"
+      }
+    ],
+    "paginationLabel": "翻页怎么接",
+    "paginationCodeLabel": "翻页命令",
+    "paginationCode": "curl -s \"https://example.com/api/v1/articles?limit=20\"",
+    "note": "示例：这里说明引用与时间口径。"
+  },
+  "rateLimit": {
+    "title": "限流与响应头",
+    "description": "示例：这里说明限流窗口与计数方式。",
+    "tiers": {
+      "title": "四档额度",
+      "columns": ["档位", "包含哪些接口", "额度（每条请求）", "超出后"],
+      "rows": [
+        ["查询", "articles", "1 次 / 10 分钟", "429"]
+      ]
+    },
+    "headers": {
+      "title": "响应头",
+      "columns": ["响应头", "出现时机", "含义"],
+      "rows": [
+        ["ETag", "200", "示例：内容指纹。"]
+      ]
+    },
+    "notes": [
+      "示例：超出返回 `429`，按 `Retry-After` 等待。"
+    ],
+    "exampleLabel": "429 JSON",
+    "example": "{\n  \"error\": \"rate_limited\"\n}"
+  },
+  "specs": {
+    "title": "规范依据",
+    "items": [
+      { "label": "示例规范", "href": "https://example.com/spec", "note": "示例：这条规范约束了什么。" }
+    ]
+  },
+  "troubleshooting": {
+    "title": "没接上？",
+    "items": [
+      { "label": "404", "text": "示例：确认路径不带 `.json`。" }
+    ]
+  }
+}

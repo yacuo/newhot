@@ -2,121 +2,90 @@
 import Root from "@/layouts/Root.astro";
 import Shell from "@/layouts/Shell.astro";
 import AgentShell from "@/components/agent/AgentShell.astro";
+import Badge from "@/components/agent/Badge.astro";
 import CopyButton from "@/components/agent/CopyButton.astro";
 import CodeBlock from "@/components/agent/CodeBlock.astro";
 import McpClientTabs from "@/components/agent/McpClientTabs.astro";
+import InlineText from "@/components/ui/InlineText.astro";
 import { pagePanelClass, widePageContainerClass } from "@/shared/ui/classes";
 import { buildBreadcrumbJsonLd, buildTechArticleJsonLd } from "@/shared/seo/jsonld";
+import { agentPage } from "@/modules/page-content";
 
-const seoTitle = "MCP 接入：填一个地址，多出四个工具";
-const seoDescription =
-  "MCP 读的是和 Skill、RSS、API 同一份数据：精选、模型发布、价格与限制、服务状态、AI 编程、AI 办公、AI 创作、故障排查。填一个地址接入 Claude Code、Cursor 等客户端，四个只读工具。";
-
-const endpoint = "https://newhot.org/api/v1/mcp";
-
-const tools = [
-  {
-    name: "search_articles",
-    desc: "按关键词搜文章，可以只搜某个频道。",
-    args: "query · channel? · limit?",
-  },
-  {
-    name: "latest_articles",
-    desc: "按站内发布时间拿最新文章。",
-    args: "channel? · limit?",
-  },
-  {
-    name: "get_article",
-    desc: "按 id 取单篇，id 形如 subcategory/slug。",
-    args: "id",
-  },
-  {
-    name: "list_channels",
-    desc: "列出频道、二级分类和最新发布时间。",
-    args: "无",
-  },
-];
+const { mcp } = agentPage;
 
 const articleJsonLd = buildTechArticleJsonLd({
-  headline: seoTitle,
-  description: seoDescription,
-  path: "/agent/mcp/",
+  headline: mcp.seo.title,
+  description: mcp.seo.description,
+  path: mcp.seo.path,
   about: ["MCP", "Streamable HTTP", "JSON-RPC"],
 });
 
 const breadcrumbJsonLd = buildBreadcrumbJsonLd([
   { name: "首页", href: "/" },
   { name: "Agent 接入", href: "/agent/" },
-  { name: "MCP", href: "/agent/mcp/" },
+  { name: "MCP", href: mcp.seo.path },
 ]);
 ---
 
-<Root title={seoTitle} description={seoDescription} path="/agent/mcp/">
+<Root title={mcp.seo.title} description={mcp.seo.description} path={mcp.seo.path}>
   <Shell mainClassName={widePageContainerClass} selectedChannel="Agent 接入">
-    <AgentShell
-      title="MCP 接入"
-      description="填一个地址，Agent 就多出四个只读工具。能搜索、能拿最新、能看单篇，也能列频道。"
-    >
+    <AgentShell title={mcp.header.title} description={mcp.header.description}>
       <section class={pagePanelClass}>
         <div class="flex flex-wrap gap-2">
-          <span class="rounded-full bg-emerald-50 px-2.5 py-1 text-[11px] font-medium text-emerald-700">匿名 API</span>
-          <span class="rounded-full bg-sky-50 px-2.5 py-1 text-[11px] font-medium text-sky-700">不用注册</span>
-          <span class="rounded-full bg-violet-50 px-2.5 py-1 text-[11px] font-medium text-violet-700">无需 API Key</span>
-          <span class="rounded-full bg-teal-50 px-2.5 py-1 text-[11px] font-medium text-teal-700">免费</span>
-          <span class="rounded-full bg-amber-50 px-2.5 py-1 text-[11px] font-medium text-amber-700">仅最近 7 天</span>
+          {mcp.badges.map((badge) => <Badge label={badge.label} tone={badge.tone} />)}
         </div>
         <p class="mt-4 text-sm leading-7 text-slate-700">
-          MCP 是四种方式之一，和其他三种读的是同一份数据：精选、模型发布、价格与限制、服务状态、AI 编程、AI 办公、AI 创作、故障排查。在支持 MCP 的客户端里填 https://newhot.org/api/v1/mcp 就能用，不用写代码，不用注册，也不用 API Key。
+          <InlineText text={mcp.intro} />
         </p>
       </section>
 
       <section class={pagePanelClass}>
         <div class="flex flex-wrap items-center justify-between gap-3">
-          <h2 class="text-lg font-semibold tracking-tight text-slate-950">三步接上</h2>
+          <h2 class="text-lg font-semibold tracking-tight text-slate-950">{mcp.setup.title}</h2>
           <span class="rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-medium text-slate-500">
-            无状态 · 只读
+            {mcp.setup.badge}
           </span>
         </div>
 
         <ol class="mt-5 divide-y divide-slate-100">
           <li class="py-5 first:pt-0">
-            <h3 class="text-base font-semibold tracking-tight text-slate-950">第一步：填这个地址</h3>
+            <h3 class="text-base font-semibold tracking-tight text-slate-950">{mcp.setup.endpoint.title}</h3>
             <div class="mt-3">
-              <CodeBlock code={endpoint} label="Endpoint" />
+              <CodeBlock code={mcp.setup.endpoint.code} label="Endpoint" />
             </div>
             <p class="mt-2 text-[13px] leading-6 text-slate-500">
-              只接受 POST。用浏览器直接打开不是网页，线上返回 405、本地静态预览返回 404，都是正常的。
+              {mcp.setup.endpoint.note}
             </p>
           </li>
 
           <li class="py-5">
-            <h3 class="text-base font-semibold tracking-tight text-slate-950">第二步：按你的客户端填</h3>
+            <h3 class="text-base font-semibold tracking-tight text-slate-950">{mcp.setup.clients.title}</h3>
             <div class="mt-3">
               <McpClientTabs />
             </div>
           </li>
 
           <li class="py-5 last:pb-0">
-            <h3 class="text-base font-semibold tracking-tight text-slate-950">第三步：直接问一句</h3>
+            <h3 class="text-base font-semibold tracking-tight text-slate-950">{mcp.setup.prompt.title}</h3>
             <div class="mt-3 flex flex-wrap items-center gap-2 rounded-xl bg-slate-50 px-4 py-3">
-              <span class="text-[13px] text-slate-700">过去 24 小时 AI 大模型最重要的 5 件事是什么？</span>
-              <CopyButton text="过去 24 小时 AI 大模型最重要的 5 件事是什么？" />
+              <span class="text-[13px] text-slate-700">{mcp.setup.prompt.text}</span>
+              <CopyButton text={mcp.setup.prompt.text} />
             </div>
             <p class="mt-2 text-[13px] leading-6 text-slate-500">
-              回答能给出标题、时间、摘要，并链接回 NewHot，就是接上了。
+              {mcp.setup.prompt.note}
             </p>
           </li>
         </ol>
       </section>
 
       <section class={pagePanelClass}>
-        <h2 class="text-lg font-semibold tracking-tight text-slate-950">四个工具</h2>
-        <p class="mt-2 text-sm leading-7 text-slate-600">够用就好，不堆功能。全部只读，不需要登录；只查最近 7 天的文章，返回里会带 window。</p>
+        <h2 class="text-lg font-semibold tracking-tight text-slate-950">{mcp.tools.title}</h2>
+        <p class="mt-2 text-sm leading-7 text-slate-600">{mcp.tools.description}</p>
         <div class="mt-4 grid gap-3 sm:grid-cols-2">
-          {tools.map((tool) => (
+          {mcp.tools.items.map((tool) => (
             <div class="rounded-xl bg-slate-50 p-4">
               <p class="font-mono text-[12px] font-semibold text-slate-900">{tool.name}</p>
-              <p class="mt-1.5 text-[13px] leading-6 text-slate-600">{tool.desc}</p>
+              <p class="mt-1.5 text-[13px] leading-6 text-slate-600">{tool.description}</p>
               <p class="mt-2 font-mono text-[11px] text-slate-400">{tool.args}</p>
             </div>
           ))}
@@ -124,39 +93,36 @@ const breadcrumbJsonLd = buildBreadcrumbJsonLd([
       </section>
 
       <section class={pagePanelClass}>
-        <h2 class="text-lg font-semibold tracking-tight text-slate-950">工具返回什么</h2>
+        <h2 class="text-lg font-semibold tracking-tight text-slate-950">{mcp.returns.title}</h2>
         <p class="mt-2 text-sm leading-7 text-slate-600">
-          每篇只有 <span class="font-mono text-[12px] text-slate-900">id</span>、<span class="font-mono text-[12px] text-slate-900">title</span>、<span class="font-mono text-[12px] text-slate-900">description</span>、<span class="font-mono text-[12px] text-slate-900">url</span>、<span class="font-mono text-[12px] text-slate-900">channel</span>、<span class="font-mono text-[12px] text-slate-900">subcategory</span>、<span class="font-mono text-[12px] text-slate-900">publishedAt</span>。
-          不返回标签、公司、来源清单和正文；要读全文就打开 <span class="font-mono text-[12px] text-slate-900">url</span>。
+          <InlineText text={mcp.returns.description} />
         </p>
       </section>
 
       <section class={pagePanelClass}>
-        <h2 class="text-lg font-semibold tracking-tight text-slate-950">规范依据</h2>
+        <h2 class="text-lg font-semibold tracking-tight text-slate-950">{mcp.spec.title}</h2>
         <p class="mt-2 text-sm leading-7 text-slate-600">
-          按
-          <a class="text-indigo-600 hover:underline" href="https://modelcontextprotocol.io/specification/2025-06-18" target="_blank" rel="noreferrer">MCP 规范 2025-06-18</a>
-          的 Streamable HTTP 传输实现：无状态、不发会话 ID，只处理 JSON-RPC 的 initialize、tools/list、tools/call 与 ping。
+          <InlineText text={mcp.spec.description} />
         </p>
       </section>
 
       <section class={pagePanelClass}>
-        <h2 class="text-lg font-semibold tracking-tight text-slate-950">没接上？</h2>
+        <h2 class="text-lg font-semibold tracking-tight text-slate-950">{mcp.troubleshooting.title}</h2>
         <ul class="mt-3 space-y-2 text-sm leading-7 text-slate-600">
-          <li><span class="font-medium text-slate-900">先确认传输方式</span>：用 HTTP / Streamable HTTP，不要选 SSE。</li>
-          <li><span class="font-medium text-slate-900">地址填错了</span>：是 <span class="font-mono text-[12px] text-slate-900">/api/v1/mcp</span>，不是页面地址 <span class="font-mono text-[12px] text-slate-900">/agent/mcp/</span>。</li>
-          <li><span class="font-medium text-slate-900">客户端列表里没有工具</span>：断开重连一次，或重启客户端。</li>
-          <li><span class="font-medium text-slate-900">429</span>：MCP 按 IP 汇总，同一 IP 每 10 分钟最多 60 次调用，一次会话足够；按 <span class="font-mono text-[12px] text-slate-900">Retry-After</span> 等待。</li>
-          <li><span class="font-medium text-slate-900">还是不行</span>：先用 REST API 验证数据能否访问，再回来接 MCP。</li>
+          {mcp.troubleshooting.items.map((item) => (
+            <li>
+              <span class="font-medium text-slate-900">{item.label}</span>：<InlineText text={item.text} />
+            </li>
+          ))}
         </ul>
       </section>
 
       <section class={pagePanelClass}>
-        <h2 class="text-lg font-semibold tracking-tight text-slate-950">不接 MCP 也能用</h2>
+        <h2 class="text-lg font-semibold tracking-tight text-slate-950">{mcp.alternatives.title}</h2>
         <ul class="mt-3 space-y-2 text-sm leading-7 text-slate-600">
-          <li>REST API：<a class="font-mono text-[12px] text-indigo-600 hover:underline" href="/api/v1/articles">/api/v1/articles</a></li>
-          <li>RSS：<a class="font-mono text-[12px] text-indigo-600 hover:underline" href="/feed.xml">/feed.xml</a></li>
-          <li>Agent Skill：<a class="text-indigo-600 hover:underline" href="/agent/skill/">让 Agent 自己装</a></li>
+          {mcp.alternatives.items.map((item) => (
+            <li><InlineText text={item} /></li>
+          ))}
         </ul>
       </section>
     </AgentShell>

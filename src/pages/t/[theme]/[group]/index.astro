@@ -6,6 +6,7 @@ import CompanyRankRow from "@/components/vendor/CompanyRankRow.astro";
 import PageGuide from "@/components/channel/PageGuide.astro";
 import { buildThemeListing, getTheme, themeGroupHref, themeHref, themes } from "@/modules/vendor/themes";
 import { readFeedMeta } from "@/modules/content";
+import { sharedPage } from "@/modules/page-content/shared";
 import { formatMonthDay } from "@/shared/utils";
 import { widePageContainerClass, pagePanelClass } from "@/shared/ui/classes";
 
@@ -24,6 +25,7 @@ if (!theme) throw new Error(`主题不存在：${themeId}`);
 
 const meta = readFeedMeta();
 if (!meta) throw new Error("meta.json 未生成");
+const guide = sharedPage.guide.theme;
 
 const listing = buildThemeListing(theme, meta.companies);
 const section = listing.sections.find((entry) => entry.id === groupId);
@@ -61,7 +63,7 @@ const tabs = [
 ];
 ---
 <Root title={title} description={description} path={themeGroupHref(theme.id, section.id)}>
-  <Shell selectedChannel="主题" mainClassName={widePageContainerClass}>
+  <Shell selectedChannel={guide.panelTitle} mainClassName={widePageContainerClass}>
     <ChannelPanel
       title={`${theme.name} · ${section.label}`}
       eyebrow={theme.eyebrow}
@@ -89,8 +91,8 @@ const tabs = [
     </section>
 
     <PageGuide
-      heading="主题是怎么划分的？"
-      description="主题按方向聚合公司；主题下的公司与动态均来自厂商官方渠道，由编辑核对后归档，同一家公司可以出现在多个主题里。"
+      heading={guide.heading}
+      description={guide.description}
     />
   </Shell>
 </Root>

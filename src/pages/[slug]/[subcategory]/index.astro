@@ -17,6 +17,7 @@ import { topics, getTopicById, getSubcategory, getSubcategoryLabel, getTopicLabe
 import { getAllPosts, readFeedMeta, readListShard } from "@/modules/content";
 import { findTutorialArticle, getResolvedTutorialCatalogById, getTutorialStaticParams } from "@/modules/tutorial";
 import { LIST_INITIAL_SIZE } from "@/modules/content/list-shards";
+import { sharedPage } from "@/modules/page-content/shared";
 import { buildBreadcrumbJsonLd, buildCollectionJsonLd } from "@/shared/seo/jsonld";
 import { getSiteUrl, siteConfig } from "@/shared/site";
 import { formatMonthDay } from "@/shared/utils";
@@ -405,7 +406,7 @@ if (topic && sub) {
 
       <PageGuide
         heading={`${category.sub.label}分类写哪些内容？`}
-        description={category.topic.standards?.description ?? "内容由 NewHot 编辑部原创整理，只采用厂商官方渠道发布的信息，经人工审核后发布；同一条动态只保留一份记录，并按公司归档。"}
+        description={category.topic.standards?.description ?? sharedPage.guide.channel.description}
         points={category.topic.standards ? [`本分类写什么：${category.sub.description}`, ...category.topic.standards.points] : [category.sub.description]}
         sourcesHeading={category.topic.standards?.sourcesHeading}
         sourcesDescription={category.topic.standards?.sourcesDescription}

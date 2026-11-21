@@ -12,6 +12,7 @@ import { companies, getCompany } from "@/modules/vendor/model";
 import { getCompanySeo } from "@/modules/vendor/seo";
 import { readFeedMeta, readListShard } from "@/modules/content";
 import { LIST_INITIAL_SIZE } from "@/modules/content/list-shards";
+import { sharedPage } from "@/modules/page-content/shared";
 import { buildBreadcrumbJsonLd, buildCollectionJsonLd } from "@/shared/seo/jsonld";
 import { formatMonthDay } from "@/shared/utils";
 import { pagePanelClass, widePageContainerClass } from "@/shared/ui/classes";
@@ -110,7 +111,7 @@ const faqJsonLd = topic?.faqs.length
 
       <PageGuide
         heading={`${topic.label}频道的写作标准是什么？`}
-        description={topic.standards?.description ?? "内容由 NewHot 编辑部原创整理，只采用厂商官方渠道发布的信息，经人工审核后发布；同一条动态只保留一份记录，并按公司归档。"}
+        description={topic.standards?.description ?? sharedPage.guide.channel.description}
         points={topic.standards ? [topic.standards.scope, ...topic.standards.points] : undefined}
         sourcesHeading={topic.standards?.sourcesHeading}
         sourcesDescription={topic.standards?.sourcesDescription}

@@ -5,6 +5,7 @@ import ChannelPanel from "@/components/channel/ChannelPanel.astro";
 import PageGuide from "@/components/channel/PageGuide.astro";
 import { readFeedMeta } from "@/modules/content";
 import { themesPage } from "@/modules/page-content/themes";
+import { sharedPage } from "@/modules/page-content/shared";
 import { buildThemeListing, themeHref, themes } from "@/modules/vendor/themes";
 import { getSiteUrl, siteConfig } from "@/shared/site";
 import { formatMonthDay } from "@/shared/utils";
@@ -44,6 +45,7 @@ const blocks = themes.map((theme) => {
 });
 
 const description = themesPage.seo.description;
+const guide = sharedPage.guide.theme;
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -72,10 +74,10 @@ const jsonLd = {
   path={themesPage.seo.path}
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
-  <Shell selectedChannel="主题" mainClassName={widePageContainerClass}>
+  <Shell selectedChannel={guide.panelTitle} mainClassName={widePageContainerClass}>
     <ChannelPanel
-      title="主题"
-      eyebrow="THEMES"
+      title={guide.panelTitle}
+      eyebrow={guide.panelEyebrow}
       description={themesPage.seo.description}
     />
 
@@ -115,8 +117,8 @@ const jsonLd = {
     </div>
 
     <PageGuide
-      heading="主题是怎么划分的？"
-      description="主题按方向聚合公司；主题下的公司与动态均来自厂商官方渠道，由编辑核对后归档，同一家公司可以出现在多个主题里。"
+      heading={guide.heading}
+      description={guide.description}
     />
   </Shell>
 </Root>

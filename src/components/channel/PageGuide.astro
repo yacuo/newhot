@@ -1,6 +1,7 @@
 ---
 import { getChannelSources, type SourceLink } from "@/config/sources";
 import { pagePanelClass } from "@/shared/ui/classes";
+import { sharedPage } from "@/modules/page-content/shared";
 
 type Props = {
   heading: string;
@@ -15,27 +16,22 @@ type Props = {
   largeHeading?: boolean;
 };
 
+const defaults = sharedPage.guide.defaults;
+
 const {
   heading,
   description,
   topicId,
   points,
   sources,
-  quote = { text: "确保通用人工智能造福全人类。", label: "OpenAI 官方使命", href: "https://openai.com/about/" },
+  quote = defaults.quote,
   panel = true,
-  sourcesHeading = "这些内容从哪里来？",
-  sourcesDescription = "每条内容都标注原始来源；涉及能力、版本与价格的信息，以厂商官方原文为准。",
+  sourcesHeading = defaults.sourcesHeading,
+  sourcesDescription = defaults.sourcesDescription,
   largeHeading = false,
 } = Astro.props;
 
-const defaultPoints = [
-  "只采用厂商官方公告、版本说明与官方文档，每条内容都附原文链接与发布日期。",
-  "标题、摘要与解读由编辑团队原创撰写，不翻译、不搬运、不转述二手内容。",
-  "发布前由编辑逐条核对版本、价格与时间，确认准确后才上线。",
-  "内容有更正会同步修改，并在更新日志里留下记录，方便逐条回溯。",
-];
-
-const items = points ?? defaultPoints;
+const items = points ?? defaults.points;
 const links = sources ?? getChannelSources(topicId);
 const headingClass = largeHeading
   ? "text-xl font-semibold tracking-tight text-slate-950 md:text-2xl"

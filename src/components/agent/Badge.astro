@@ -1,0 +1,20 @@
+---
+type Props = {
+  label: string;
+  tone: "emerald" | "sky" | "violet" | "teal" | "amber" | "indigo" | "fuchsia";
+};
+
+const { label, tone } = Astro.props;
+
+const tones = {
+  emerald: "bg-emerald-50 text-emerald-700",
+  sky: "bg-sky-50 text-sky-700",
+  violet: "bg-violet-50 text-violet-700",
+  teal: "bg-teal-50 text-teal-700",
+  amber: "bg-amber-50 text-amber-700",
+  indigo: "bg-indigo-50 text-indigo-700",
+  fuchsia: "bg-fuchsia-50 text-fuchsia-700",
+} as const;
+---
+
+<span class={`rounded-full px-2.5 py-1 text-[11px] font-medium ${tones[tone]}`}>{label}</span>
