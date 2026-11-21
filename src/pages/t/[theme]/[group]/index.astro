@@ -47,9 +47,9 @@ let title = pickTitle(3);
 if (title.length > 50) title = pickTitle(2);
 if (title.length > 50) title = `${section.label}：${theme.name}下的 ${names.length} 家公司`;
 
-let description = `${theme.name}主题的${section.label}分类，收录${names.slice(0, 6).join("、")}${names.length > 6 ? ` 等 ${names.length}` : ""} 家公司，共 ${articleCount} 篇官方动态，记录产品能力、版本更新、价格与授权变化。`;
+let description = `${theme.name}主题的${section.label}分类，覆盖${names.slice(0, 6).join("、")}${names.length > 6 ? ` 等 ${names.length}` : ""} 家公司，共 ${articleCount} 篇官方动态，记录产品能力、版本更新、价格与授权变化。`;
 if (description.length > 160) {
-  description = `${theme.name}主题的${section.label}分类，收录${names.slice(0, 4).join("、")} 等 ${names.length} 家公司，共 ${articleCount} 篇官方动态，记录产品能力、版本更新、价格与授权变化。`;
+  description = `${theme.name}主题的${section.label}分类，覆盖${names.slice(0, 4).join("、")} 等 ${names.length} 家公司，共 ${articleCount} 篇官方动态，记录产品能力、版本更新、价格与授权变化。`;
 }
 
 const tabs = [
