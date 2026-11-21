@@ -3,22 +3,22 @@ import Root from "@/layouts/Root.astro";
 import Shell from "@/layouts/Shell.astro";
 import PageHeader from "@/components/ui/PageHeader.astro";
 import LegalSections from "@/components/ui/LegalSections.astro";
-import { doNotSellSections } from "@/modules/page-content/legal";
+import { legalPage } from "@/modules/page-content/legal";
 import { pagePanelClass, widePageContainerClass } from "@/shared/ui/classes";
 
-const description = "NewHot 不出售或共享个人信息：说明美国各州访客的退出权、当前做法，以及启用个性化广告后的处理方式。";
+const { seo, updated, sections } = legalPage.doNotSell;
 ---
-<Root title="不出售或共享个人信息" description={description} path="/do-not-sell/">
+<Root title={seo.title} description={seo.description} path={seo.path}>
   <Shell mainClassName={widePageContainerClass}>
     <div class="space-y-5">
       <PageHeader
         eyebrow="DO NOT SELL"
-        title="不出售或共享个人信息"
-        description="最后更新：2026 年 11 月 15 日"
+        title={seo.title}
+        description={`最后更新：${updated}`}
       />
 
       <article class={pagePanelClass}>
-        <LegalSections sections={doNotSellSections} />
+        <LegalSections sections={sections} />
       </article>
     </div>
   </Shell>

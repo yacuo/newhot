@@ -2,16 +2,15 @@
 import Root from "@/layouts/Root.astro";
 import Shell from "@/layouts/Shell.astro";
 import PageHeader from "@/components/ui/PageHeader.astro";
-import { cookieCurrentRows, cookieAdsRows } from "@/modules/page-content/legal";
+import { legalPage } from "@/modules/page-content/legal";
 import { pagePanelClass, widePageContainerClass } from "@/shared/ui/classes";
 
-const description =
-  "NewHot Cookie 政策：列出当前使用的 Cookie 与本地存储，以及启用 Google 广告后可能使用的 Cookie、同意管理与撤回方式。";
+const { seo, updated, rows } = legalPage.cookies;
 ---
-<Root title="Cookie 政策" description={description} path="/cookies/">
+<Root title={seo.title} description={seo.description} path={seo.path}>
   <Shell mainClassName={widePageContainerClass}>
     <div class="space-y-5">
-      <PageHeader eyebrow="COOKIES" title="Cookie 政策" description="最后更新：2026 年 11 月 15 日" />
+      <PageHeader eyebrow="COOKIES" title={seo.title} description={`最后更新：${updated}`} />
 
       <article class={pagePanelClass}>
         <div class="space-y-7">
@@ -35,7 +34,7 @@ const description =
                   </tr>
                 </thead>
                 <tbody>
-                  {cookieCurrentRows.map((row) => (
+                  {rows.current.map((row) => (
                     <tr class="border-b border-slate-100 align-top">
                       <td class="py-2 pr-4 font-medium text-slate-800">{row.name}</td>
                       <td class="py-2 pr-4 text-slate-600">{row.type}</td>
@@ -67,7 +66,7 @@ const description =
                   </tr>
                 </thead>
                 <tbody>
-                  {cookieAdsRows.map((row) => (
+                  {rows.ads.map((row) => (
                     <tr class="border-b border-slate-100 align-top">
                       <td class="py-2 pr-4 font-medium text-slate-800">{row.name}</td>
                       <td class="py-2 pr-4 text-slate-600">{row.type}</td>
