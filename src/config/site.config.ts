@@ -1,7 +1,7 @@
 export const siteConfig = {
   name: "NewHot",
   url: "https://newhot.org",
-  description: "按发布时间整理 AI 厂商官方更新：大模型、AI 编程、AI 办公、AI 创作、智能体与平台、开源与运行时、云平台与算力，以及故障排查，只收录官方公告与文档。",
+  description: "AI 大模型新闻与厂商动态，按发布时间整理官方公告与文档：模型发布、API 价格、AI 编程、AI 办公、AI 创作与故障排查。",
   ogImage: "/og/article-default.png",
   author: "NewHot",
   language: "zh-CN",

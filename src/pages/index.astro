@@ -98,7 +98,7 @@ const faqJsonLd = {
   ],
 };
 
-const description = "AI 厂商官方更新汇总：大模型发布与 API 价格、AI 编程工具更新、AI 办公软件版本、AI 绘画与视频工具价格、智能体框架与 MCP、本地部署与推理运行时、云平台模型计费，以及 AI 工具报错排查，覆盖 GPT、Claude Code、DeepSeek、GLM 等厂商的版本发布、Bug 修复与套餐调整。";
+const description = homePage.seo.description;
 ---
 <Root title={homePage.seo.title} description={homePage.seo.description} path={homePage.seo.path}>
   <script type="application/ld+json" set:html={JSON.stringify(collectionJsonLd)} />
