@@ -1,0 +1,41 @@
+---
+import { Code } from "astro:components";
+import CopyButton from "./CopyButton.astro";
+
+type Props = {
+  code: string;
+  lang?: "json" | "bash" | "xml" | "toml" | "plaintext";
+  label?: string;
+};
+
+const { code, lang = "plaintext", label } = Astro.props;
+
+const languageLabels = {
+  bash: "Bash",
+  json: "JSON",
+  xml: "XML",
+  toml: "TOML",
+  plaintext: "Text",
+} as const;
+
+const languageLabel = label ?? languageLabels[lang];
+---
+
+<div class="code-block overflow-hidden rounded-xl border border-slate-800 bg-[#282c34]">
+  <div class="flex items-center justify-between gap-3 border-b border-white/10 bg-white/[0.04] px-4 py-2">
+    <span class="font-mono text-[10px] font-medium tracking-wide text-slate-400">{languageLabel}</span>
+    <CopyButton text={code} tone="dark" />
+  </div>
+  <Code code={code} lang={lang} theme="one-dark-pro" wrap={null} />
+</div>
+
+<style>
+  .code-block :global(pre.astro-code) {
+    margin: 0;
+    padding: 1rem;
+    overflow-x: auto;
+    background-color: transparent !important;
+    font-size: 12px;
+    line-height: 1.5rem;
+  }
+</style>

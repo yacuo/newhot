@@ -1,0 +1,167 @@
+---
+import Root from "@/layouts/Root.astro";
+import Shell from "@/layouts/Shell.astro";
+import AgentShell from "@/components/agent/AgentShell.astro";
+import CopyButton from "@/components/agent/CopyButton.astro";
+import CodeBlock from "@/components/agent/CodeBlock.astro";
+import { pagePanelClass, widePageContainerClass } from "@/shared/ui/classes";
+import { buildBreadcrumbJsonLd, buildTechArticleJsonLd } from "@/shared/seo/jsonld";
+
+const seoTitle = "Agent Skill：装一次，直接用大白话问";
+const seoDescription =
+  "Agent Skill 读的是和 RSS、MCP、API 同一份数据：精选、模型发布、价格与限制、服务状态、AI 编程、AI 办公、AI 创作、故障排查。装一次，之后用大白话问就行。";
+
+const installPrompt = `请安装 NewHot Skill：https://newhot.org/newhot-skill/README.md
+装完请求一次 https://newhot.org/api/v1/articles?limit=1，确认能连上。
+装完告诉我是否需要开启新会话。`;
+
+const claudeInstall = `mkdir -p ~/.claude/skills/newhot
+curl -fsSL https://newhot.org/newhot-skill/SKILL.md \\
+  -o ~/.claude/skills/newhot/SKILL.md`;
+
+const agentsInstall = `mkdir -p ~/.agents/skills/newhot
+curl -fsSL https://newhot.org/newhot-skill/SKILL.md \\
+  -o ~/.agents/skills/newhot/SKILL.md`;
+
+const prompts = [
+  "过去 24 小时 AI 大模型最重要的 5 件事是什么？",
+  "OpenAI 最近发布了什么？",
+  "这周 AI 编程工具有哪些更新？",
+  "AI 办公最近有什么新功能？",
+  "Claude 或 Codex 最近出故障了吗？",
+  "按 AI 创作频道，最近有什么值得看的？",
+];
+
+const articleJsonLd = buildTechArticleJsonLd({
+  headline: seoTitle,
+  description: seoDescription,
+  path: "/agent/skill/",
+  about: ["Agent Skill", "SKILL.md"],
+});
+
+const breadcrumbJsonLd = buildBreadcrumbJsonLd([
+  { name: "首页", href: "/" },
+  { name: "Agent 接入", href: "/agent/" },
+  { name: "Agent Skill", href: "/agent/skill/" },
+]);
+---
+
+<Root title={seoTitle} description={seoDescription} path="/agent/skill/">
+  <Shell mainClassName={widePageContainerClass} selectedChannel="Agent 接入">
+    <AgentShell
+      title="Agent Skill"
+      description="不用记接口，也不用写代码。把一句话发给你的 Agent，装好后直接用大白话问 AI 圈发生了什么。"
+    >
+      <section class={pagePanelClass}>
+        <div class="flex flex-wrap gap-2">
+          <span class="rounded-full bg-emerald-50 px-2.5 py-1 text-[11px] font-medium text-emerald-700">匿名 API</span>
+          <span class="rounded-full bg-sky-50 px-2.5 py-1 text-[11px] font-medium text-sky-700">不用注册</span>
+          <span class="rounded-full bg-violet-50 px-2.5 py-1 text-[11px] font-medium text-violet-700">无需 API Key</span>
+          <span class="rounded-full bg-teal-50 px-2.5 py-1 text-[11px] font-medium text-teal-700">免费</span>
+          <span class="rounded-full bg-amber-50 px-2.5 py-1 text-[11px] font-medium text-amber-700">仅最近 7 天</span>
+        </div>
+        <p class="mt-4 text-sm leading-7 text-slate-700">
+          Agent Skill 是四种方式之一，和其他三种读的是同一份数据：精选、模型发布、价格与限制、服务状态、AI 编程、AI 办公、AI 创作、故障排查。装一次，之后用大白话问就行，不用记接口，不用注册，也不用 API Key。
+        </p>
+      </section>
+
+      <section class={pagePanelClass}>
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <h2 class="text-lg font-semibold tracking-tight text-slate-950">三步装好</h2>
+        </div>
+
+        <ol class="mt-5 divide-y divide-slate-100">
+          <li class="py-5 first:pt-0">
+            <h3 class="text-base font-semibold tracking-tight text-slate-950">第一步：复制这段话，发给你的 Agent</h3>
+            <p class="mt-2 text-[13px] leading-6 text-slate-500">
+              它会自己下载安装，不会动你装过的其他 Skill。如果发现以前装过旧版，会先停下来问你。
+            </p>
+            <div class="mt-3">
+              <CodeBlock code={installPrompt} label="发给 Agent" />
+            </div>
+          </li>
+
+          <li class="py-5">
+            <h3 class="text-base font-semibold tracking-tight text-slate-950">第二步：开一个新会话</h3>
+            <p class="mt-2 text-[13px] leading-6 text-slate-500">
+              多数 Agent 只在会话开始时读取 Skill，当前对话里不一定看得到。
+            </p>
+          </li>
+
+          <li class="py-5 last:pb-0">
+            <h3 class="text-base font-semibold tracking-tight text-slate-950">第三步：随便问一句</h3>
+            <div class="mt-3 flex flex-wrap items-center gap-2 rounded-xl bg-slate-50 px-4 py-3">
+              <span class="text-[13px] text-slate-700">过去 24 小时 AI 大模型最重要的 5 件事是什么？</span>
+              <CopyButton text="过去 24 小时 AI 大模型最重要的 5 件事是什么？" />
+            </div>
+            <p class="mt-2 text-[13px] leading-6 text-slate-500">
+              回答带时间范围、中文摘要，标题能点回 NewHot，就是装好了。
+            </p>
+          </li>
+        </ol>
+      </section>
+
+      <section class={pagePanelClass}>
+        <h2 class="text-lg font-semibold tracking-tight text-slate-950">装好后可以这样问</h2>
+        <p class="mt-2 text-sm leading-7 text-slate-600">
+          不用记参数，像平时聊天一样问就行。下面几句最适合先试。
+        </p>
+        <div class="mt-4 grid gap-2 sm:grid-cols-2">
+          {prompts.map((prompt) => (
+            <div class="flex items-center justify-between gap-3 rounded-xl bg-slate-50 px-4 py-3">
+              <span class="text-[13px] leading-6 text-slate-700">{prompt}</span>
+              <CopyButton text={prompt} />
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class={pagePanelClass}>
+        <h2 class="text-lg font-semibold tracking-tight text-slate-950">自己动手安装</h2>
+        <p class="mt-2 text-sm leading-7 text-slate-600">
+          不想让 Agent 自己装，就自己跑命令。整套 Skill 只有一个文件。
+        </p>
+        <p class="mt-4 text-[11px] font-semibold text-slate-500">Claude Code</p>
+        <div class="mt-2">
+          <CodeBlock code={claudeInstall} lang="bash" label="Claude Code 安装" />
+        </div>
+        <p class="mt-4 text-[11px] font-semibold text-slate-500">通用目录（Codex、Gemini CLI、OpenCode）</p>
+        <div class="mt-2">
+          <CodeBlock code={agentsInstall} lang="bash" label="通用目录安装" />
+        </div>
+        <p class="mt-3 text-xs leading-6 text-slate-500">
+          安装前想先看原文：
+          <a class="text-indigo-600 hover:underline" href="/newhot-skill/README.md">README.md</a>
+          或
+          <a class="text-indigo-600 hover:underline" href="/newhot-skill/SKILL.md">SKILL.md</a>。
+        </p>
+      </section>
+
+      <section class={pagePanelClass}>
+        <h2 class="text-lg font-semibold tracking-tight text-slate-950">没触发或连不上？</h2>
+        <ol class="mt-3 space-y-2.5 text-sm leading-7 text-slate-600">
+          <li><span class="font-medium text-slate-900">先新开会话。</span>多数 Agent 只在会话开始时读 Skill，旧对话里可能还没有。</li>
+          <li><span class="font-medium text-slate-900">确认装到了正确目录。</span>文件名必须是 <span class="font-mono text-[12px] text-slate-900">SKILL.md</span>，放在 Agent 实际读取的 skills 目录里。</li>
+          <li><span class="font-medium text-slate-900">报 Could not resolve host。</span>是执行命令的环境没联网，放行网络后重试，或改用 MCP。</li>
+          <li><span class="font-medium text-slate-900">还是不行。</span>直接接 <a class="text-indigo-600 hover:underline" href="/agent/mcp/">MCP</a>，或让 Agent 读 <a class="text-indigo-600 hover:underline" href="/api/v1/agent-skill">/api/v1/agent-skill</a>。</li>
+        </ol>
+      </section>
+
+      <section class={pagePanelClass}>
+        <h2 class="text-lg font-semibold tracking-tight text-slate-950">不装 Skill 也能用</h2>
+        <ul class="mt-3 space-y-2 text-sm leading-7 text-slate-600">
+          <li>远程 MCP：<a class="font-mono text-[12px] text-indigo-600 hover:underline" href="/agent/mcp/">/api/v1/mcp</a></li>
+          <li>REST API：<a class="font-mono text-[12px] text-indigo-600 hover:underline" href="/api/v1/articles">/api/v1/articles</a></li>
+          <li>RSS：<a class="font-mono text-[12px] text-indigo-600 hover:underline" href="/feed.xml">/feed.xml</a></li>
+        </ul>
+        <p class="mt-3 text-xs leading-6 text-slate-500">
+          说明文件按
+          <a class="text-indigo-600 hover:underline" href="https://llmstxt.org/" target="_blank" rel="noreferrer">llms.txt</a>
+          的约定提供：Agent 也可以直接读 <a class="text-indigo-600 hover:underline" href="/llms.txt">/llms.txt</a> 找到所有入口。
+        </p>
+      </section>
+    </AgentShell>
+  </Shell>
+  <script type="application/ld+json" set:html={JSON.stringify(articleJsonLd)} />
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbJsonLd)} />
+</Root>

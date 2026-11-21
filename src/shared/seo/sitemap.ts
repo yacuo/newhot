@@ -117,6 +117,11 @@ export function getCoreSitemapUrls(): SitemapUrl[] {
     // 厂商详情页统一放进 themes.xml，与主题一起聚合，不在 core.xml 里重复出现
     { loc: getSiteUrl("/open-source/"), lastmod: latest },
     { loc: getSiteUrl("/about/"), lastmod: latest },
+    { loc: getSiteUrl("/agent/"), lastmod: latest },
+    { loc: getSiteUrl("/agent/rss/"), lastmod: latest },
+    { loc: getSiteUrl("/agent/api/"), lastmod: latest },
+    { loc: getSiteUrl("/agent/mcp/"), lastmod: latest },
+    { loc: getSiteUrl("/agent/skill/"), lastmod: latest },
     { loc: getSiteUrl("/update-log/"), lastmod: logLatest },
     // 每条版本日志都是独立落地页，之前漏收录
     ...updateLogEntries.map((entry) => ({

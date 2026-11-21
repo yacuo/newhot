@@ -65,3 +65,41 @@ export function buildBreadcrumbJsonLd(items: Array<{ name: string; href: string 
     })),
   };
 }
+
+/** 说明型页面（Agent 接入这类文档）的 JSON-LD：TechArticle，便于被当成技术文档引用 */
+export function buildTechArticleJsonLd(options: {
+  headline: string;
+  description: string;
+  path: string;
+  section?: string;
+  about?: string[];
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    headline: options.headline,
+    description: options.description,
+    url: getSiteUrl(options.path),
+    mainEntityOfPage: { "@type": "WebPage", "@id": getSiteUrl(options.path) },
+    inLanguage: siteConfig.language,
+    articleSection: options.section ?? "Agent 接入",
+    ...(options.about?.length
+      ? { about: options.about.map((name) => ({ "@type": "Thing", name })) }
+      : {}),
+    author: {
+      "@type": "Organization",
+      name: `${siteConfig.name} 编辑部`,
+      url: getSiteUrl("/about/"),
+    },
+    publisher: {
+      "@type": "Organization",
+      name: siteConfig.name,
+      url: getSiteUrl("/"),
+    },
+    isPartOf: {
+      "@type": "WebSite",
+      name: siteConfig.name,
+      url: getSiteUrl("/"),
+    },
+  };
+}
