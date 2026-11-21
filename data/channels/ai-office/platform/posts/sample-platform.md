@@ -3,6 +3,7 @@ title: "示例数据：飞书 上线，文档内嵌任务并权限自动继承�
 slug: sample-platform
 description: "这是一篇用于演示站点结构的示例文章。飞书 上线：文档内嵌任务，同时改进权限自动继承。文中产品、版本与数字均为虚构，仅用于展示页面排版与结构化数据，可替换为自己的内容。该描述仅用于演示排版。该描述仅用于演示排版。该描述仅用于演示排版。该描述仅用于演示排版。"
 date: 2026-11-05
+publishedAt: "2026-11-05"
 category: ai-office
 subcategory: platform
 type: release

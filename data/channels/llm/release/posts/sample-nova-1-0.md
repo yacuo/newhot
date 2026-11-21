@@ -3,6 +3,7 @@ title: "示例数据：Mistral Nova 1.0 正式发布，面向长文档的轻量�
 slug: sample-nova-1-0
 description: "这是一篇用于演示站点结构的示例文章。示例模型 Mistral Nova 1.0 正式发布，主打长文档推理，官方称 20 万 Token 上下文下首字节延迟降低 40%，并开放轻量版权重供本地测试。文中产品、版本与数字均为虚构，仅用于展示页面排版与结构化数据。"
 date: 2026-11-10
+publishedAt: "2026-11-10"
 category: llm
 subcategory: release
 type: release

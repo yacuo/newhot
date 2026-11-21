@@ -3,6 +3,7 @@ title: "示例数据：Cursor 更新，多文件批量改写并项目级上下�
 slug: sample-ai-tools
 description: "这是一篇用于演示站点结构的示例文章。Cursor 更新：多文件批量改写，同时改进项目级上下文保留。文中产品、版本与数字均为虚构，仅用于展示页面排版与结构化数据，可替换为自己的内容。该描述仅用于演示排版。该描述仅用于演示排版。该描述仅用于演示排版。"
 date: 2026-11-01
+publishedAt: "2026-11-01"
 category: ai-coding
 subcategory: ai-tools
 type: release

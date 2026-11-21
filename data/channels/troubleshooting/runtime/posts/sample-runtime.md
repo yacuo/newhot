@@ -3,6 +3,7 @@ title: "示例数据：Claude Code 修复，401 报错并插件加载失败的�
 slug: sample-runtime
 description: "这是一篇用于演示站点结构的示例文章。Claude Code 修复：401 报错，同时改进插件加载失败。文中产品、版本与数字均为虚构，仅用于展示页面排版与结构化数据，可替换为自己的内容。该描述仅用于演示排版。该描述仅用于演示排版。该描述仅用于演示排版。"
 date: 2026-11-08
+publishedAt: "2026-11-08"
 category: troubleshooting
 subcategory: runtime
 type: release

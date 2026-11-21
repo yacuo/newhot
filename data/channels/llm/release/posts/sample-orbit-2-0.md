@@ -3,6 +3,7 @@ title: "示例数据：Mistral Orbit 2.0 正式上线，支持文本与图像混
 slug: sample-orbit-2-0
 description: "这是一篇用于演示站点结构的示例文章。示例模型 Mistral Orbit 2.0 正式上线，支持文本与图像混合输入，官方称单次请求最多携带 16 张图片，示例价格为每百万 Token 3 美元。文中产品、版本与数字均为虚构，仅用于展示页面排版与结构化数据。"
 date: 2026-11-12
+publishedAt: "2026-11-12"
 category: llm
 subcategory: release
 type: release

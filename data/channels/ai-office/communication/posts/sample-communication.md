@@ -3,6 +3,7 @@ title: "示例数据：Zoom 更新，会议转写纪要并字幕实时翻译的�
 slug: sample-communication
 description: "这是一篇用于演示站点结构的示例文章。Zoom 更新：会议转写纪要，同时改进字幕实时翻译。文中产品、版本与数字均为虚构，仅用于展示页面排版与结构化数据，可替换为自己的内容。该描述仅用于演示排版。该描述仅用于演示排版。该描述仅用于演示排版。该描述仅用于演示排版。"
 date: 2026-11-07
+publishedAt: "2026-11-07"
 category: ai-office
 subcategory: communication
 type: release

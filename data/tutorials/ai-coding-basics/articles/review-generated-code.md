@@ -3,6 +3,7 @@ title: "示例教程：审查并验证生成的代码"
 slug: review-generated-code
 description: "示例内容，用于演示系列教程的收尾章节：通过运行、边界检查和补充测试三步，判断 AI 生成的代码是否可以直接合并。"
 date: 2026-10-03
+publishedAt: "2026-10-03"
 author: "NewHot 编辑部"
 category: tutorial
 tags: ["示例教程", "代码审查", "测试"]

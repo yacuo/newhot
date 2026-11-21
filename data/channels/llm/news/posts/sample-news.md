@@ -3,6 +3,7 @@ title: "示例数据：OpenAI 宣布，企业合作计划并接口额度开放�
 slug: sample-news
 description: "这是一篇用于演示站点结构的示例文章。OpenAI 宣布：企业合作计划，同时改进接口额度开放。文中产品、版本与数字均为虚构，仅用于展示页面排版与结构化数据，可替换为自己的内容。该描述仅用于演示排版。该描述仅用于演示排版。该描述仅用于演示排版。"
 date: 2026-11-04
+publishedAt: "2026-11-04"
 category: llm
 subcategory: news
 type: release

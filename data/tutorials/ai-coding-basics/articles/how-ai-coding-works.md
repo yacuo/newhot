@@ -3,6 +3,7 @@ title: "示例教程：AI 编程助手是怎么工作的"
 slug: how-ai-coding-works
 description: "示例内容，用于演示系列教程的文章结构：从描述需求、生成代码到运行验证，拆解 AI 编程助手处理一次任务的完整过程。"
 date: 2026-10-01
+publishedAt: "2026-10-01"
 author: "NewHot 编辑部"
 category: tutorial
 tags: ["示例教程", "AI 编程", "工作流"]

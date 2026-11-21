@@ -3,6 +3,7 @@ title: "示例数据：FLUX 更新，文生图风格预设并局部重绘的示�
 slug: sample-image
 description: "这是一篇用于演示站点结构的示例文章。FLUX 更新：文生图风格预设，同时改进局部重绘。文中产品、版本与数字均为虚构，仅用于展示页面排版与结构化数据，可替换为自己的内容。该描述仅用于演示排版。该描述仅用于演示排版。该描述仅用于演示排版。该描述仅用于演示排版。"
 date: 2026-11-01
+publishedAt: "2026-11-01"
 category: ai-creation
 subcategory: image
 type: release

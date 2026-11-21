@@ -3,6 +3,7 @@ title: "示例数据：Ollama 修复，安装依赖冲突并显存占用异常�
 slug: sample-setup
 description: "这是一篇用于演示站点结构的示例文章。Ollama 修复：安装依赖冲突，同时改进显存占用异常。文中产品、版本与数字均为虚构，仅用于展示页面排版与结构化数据，可替换为自己的内容。该描述仅用于演示排版。该描述仅用于演示排版。该描述仅用于演示排版。"
 date: 2026-11-07
+publishedAt: "2026-11-07"
 category: troubleshooting
 subcategory: setup
 type: release

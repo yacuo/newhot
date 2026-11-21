@@ -3,6 +3,7 @@ title: "示例数据：Mistral Lumen 3.0 正式开源，八 GB 显存即可运�
 slug: sample-lumen-3-0
 description: "这是一篇用于演示站点结构的示例文章。示例模型 Mistral Lumen 3.0 正式开源，主打本地部署，官方称 8GB 显存即可运行 40 亿参数版本，并提供量化后的模型文件。文中产品、版本与数字均为虚构，仅用于展示开源类文章的页面结构。"
 date: 2026-11-14
+publishedAt: "2026-11-14"
 category: llm
 subcategory: release
 type: release

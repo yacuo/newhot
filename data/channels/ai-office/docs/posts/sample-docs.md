@@ -3,6 +3,7 @@ title: "示例数据：Notion 更新，数据库视图联动并全文检索提�
 slug: sample-docs
 description: "这是一篇用于演示站点结构的示例文章。Notion 更新：数据库视图联动，同时改进全文检索提速。文中产品、版本与数字均为虚构，仅用于展示页面排版与结构化数据，可替换为自己的内容。该描述仅用于演示排版。该描述仅用于演示排版。该描述仅用于演示排版。"
 date: 2026-11-06
+publishedAt: "2026-11-06"
 category: ai-office
 subcategory: docs
 type: release

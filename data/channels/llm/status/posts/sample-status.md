@@ -3,6 +3,7 @@ title: "示例数据：OpenAI 已恢复，API 错误率并故障复盘的示例�
 slug: sample-status
 description: "这是一篇用于演示站点结构的示例文章。OpenAI 已恢复：API 错误率，同时改进故障复盘。文中产品、版本与数字均为虚构，仅用于展示页面排版与结构化数据，可替换为自己的内容。该描述仅用于演示排版。该描述仅用于演示排版。该描述仅用于演示排版。"
 date: 2026-11-06
+publishedAt: "2026-11-06"
 category: llm
 subcategory: status
 type: release

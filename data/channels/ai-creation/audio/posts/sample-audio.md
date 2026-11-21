@@ -3,6 +3,7 @@ title: "示例数据：ElevenLabs 更新，音色克隆并多语言配音的示�
 slug: sample-audio
 description: "这是一篇用于演示站点结构的示例文章。ElevenLabs 更新：音色克隆，同时改进多语言配音。文中产品、版本与数字均为虚构，仅用于展示页面排版与结构化数据，可替换为自己的内容。该描述仅用于演示排版。该描述仅用于演示排版。该描述仅用于演示排版。"
 date: 2026-11-03
+publishedAt: "2026-11-03"
 category: ai-creation
 subcategory: audio
 type: release

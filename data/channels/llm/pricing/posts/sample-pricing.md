@@ -3,6 +3,7 @@ title: "示例数据：GPT 价格调整，每百万 Token 单价并限流额度�
 slug: sample-pricing
 description: "这是一篇用于演示站点结构的示例文章。GPT 价格调整：每百万 Token 单价，同时改进限流额度。文中产品、版本与数字均为虚构，仅用于展示页面排版与结构化数据，可替换为自己的内容。该描述仅用于演示排版。该描述仅用于演示排版。该描述仅用于演示排版。"
 date: 2026-11-05
+publishedAt: "2026-11-05"
 category: llm
 subcategory: pricing
 type: release
