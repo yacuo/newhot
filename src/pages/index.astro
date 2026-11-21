@@ -13,12 +13,6 @@ import { getSiteUrl, siteConfig } from "@/shared/site";
 import { formatMonthDay } from "@/shared/utils";
 import { pagePanelClass, widePageContainerClass } from "@/shared/ui/classes";
 
-const PRINCIPLES = [
-  { title: "官方来源", description: "只采用厂商官方公告、版本说明与官方文档，不采用传闻与二手转述。" },
-  { title: "原创整理", description: "标题、摘要与解读由编辑团队原创撰写，不翻译、不搬运。" },
-  { title: "人工审核", description: "每条内容发布前逐条核对版本、价格与时间，确认准确后才上线。" },
-];
-
 const formatFullDate = (date?: string | null) => {
   if (!date) return "—";
   const [year, month, day] = date.split("-");
@@ -56,46 +50,25 @@ const collectionJsonLd = {
   },
 };
 
-const tierMeta = [
-  { id: "all", label: "全部", description: "按发布时间倒序排列，覆盖模型发布、编程工具、AI 办公、AI 创作与故障排查等方向；点开任意一条查看完整内容与原始来源。" },
-  { id: "model", label: "大模型公司", description: "跟踪大模型公司的官方发布，覆盖新模型、参数与上下文、API 价格与限流、服务状态；按发布时间倒序排列。" },
-  { id: "tool", label: "工具与应用", description: "跟踪工具与应用类公司的更新，覆盖 AI 编程、AI 办公、AI 创作与智能体工具；按发布时间倒序排列。" },
-  { id: "infra", label: "开源与运行时", description: "跟踪开源与运行时相关动态，覆盖本地推理、模型服务、依赖与开发工具链；按发布时间倒序排列。" },
-] as const;
+const { intro, tiers, coverage, faq } = homePage;
+const tierMeta = tiers.items;
 
 const themeRows = themes.map((theme) => ({
   theme,
   companyCount: buildThemeStat(theme, meta.companies).companyCount,
 }));
+
 const faqJsonLd = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
-  mainEntity: [
-    {
-      "@type": "Question",
-      name: "NewHot 是什么？",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "NewHot 按发布时间整理 AI 厂商官方更新，覆盖大模型、AI 编程、AI 办公、AI 创作、智能体与平台、开源与运行时、云平台与算力，以及故障排查频道，只收录官方公告与文档。",
-      },
+  mainEntity: faq.items.map((item) => ({
+    "@type": "Question",
+    name: item.question,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: item.answer,
     },
-    {
-      "@type": "Question",
-      name: "动态从哪里来？",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "只收录厂商官方公告、版本说明与官方文档，不采用传闻与二手转述；每条动态标注原始来源、版本与生效时间，经人工核对后发布。",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "内容覆盖哪些方向？",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "按七个主题组织：大模型、AI 编程、AI 办公、AI 创作、智能体与平台、开源与运行时、云平台与算力；每个主题下是一批公司，公司页里才是具体的模型、工具与动态。",
-      },
-    },
-  ],
+  })),
 };
 
 const description = homePage.seo.description;
@@ -118,7 +91,7 @@ const description = homePage.seo.description;
         </p>
       </div>
       <p class="mt-2 text-sm leading-7 text-slate-500">
-        NewHot 是什么：按发布时间整理 AI 厂商官方更新，只收录官方公告与文档，并按主题归档到公司、产品与每次变化。
+        {intro.latestNote}
       </p>
 
       <ChannelTabs
@@ -143,13 +116,13 @@ const description = homePage.seo.description;
     </section>
 
     <section class={`mt-5 ${pagePanelClass}`}>
-      <h2 class="text-base font-semibold text-slate-900">NewHot 是什么？</h2>
+      <h2 class="text-base font-semibold text-slate-900">{intro.about.title}</h2>
       <p class="mt-3 text-sm leading-7 text-slate-600">
-        按主题归档公司、产品与每次变化：每条动态只保留一份记录，版本、价格与服务状态都能回溯到第一次发布。
+        {intro.about.description}
       </p>
 
       <ul class="mt-4 grid gap-3 md:grid-cols-3">
-        {PRINCIPLES.map((item) => (
+        {intro.principles.map((item) => (
           <li class="rounded-md bg-slate-50 p-4">
             <h3 class="text-sm font-semibold text-slate-900">{item.title}</h3>
             <p class="mt-1.5 text-xs leading-6 text-slate-500">{item.description}</p>
@@ -164,17 +137,17 @@ const description = homePage.seo.description;
       </div>
 
       <blockquote class="mt-4 border-l-2 border-indigo-300 pl-4 text-sm leading-7 text-slate-600">
-        「确保通用人工智能造福全人类。」
+        「{intro.quote.text}」
         <cite class="ml-2 not-italic text-slate-400">
-          —— <a href="https://openai.com/about/" target="_blank" rel="noreferrer" class="text-indigo-600 hover:underline">OpenAI 官方使命</a>
+          —— <a href={intro.quote.href} target="_blank" rel="noreferrer" class="text-indigo-600 hover:underline">{intro.quote.source}</a>
         </cite>
       </blockquote>
     </section>
 
     <section class={`mt-5 ${pagePanelClass}`}>
-      <h2 class="text-base font-semibold text-slate-900">内容覆盖哪些方向？</h2>
+      <h2 class="text-base font-semibold text-slate-900">{coverage.overview.title}</h2>
       <p class="mt-3 text-sm leading-7 text-slate-600">
-        目前按七个主题组织：每个主题下是一批公司，公司页里才是具体的模型、工具与动态，这样同一个产品不会被拆散在不同信息流里。
+        {coverage.overview.description}
       </p>
 
       <div class="mt-4 overflow-x-auto thin-scrollbar">
@@ -200,9 +173,9 @@ const description = homePage.seo.description;
         </table>
       </div>
 
-      <h2 class="mt-8 text-base font-semibold text-slate-900">动态从哪里来？</h2>
+      <h2 class="mt-8 text-base font-semibold text-slate-900">{coverage.sources.title}</h2>
       <p class="mt-3 text-sm leading-7 text-slate-600">
-        每条动态都标注原始来源，主要跟踪下面这些官方渠道；涉及能力、版本与价格的信息，以厂商原文为准，并由编辑核对后发布。
+        {coverage.sources.description}
       </p>
 
       <ul class="mt-4 flex flex-wrap gap-x-6 gap-y-2">
