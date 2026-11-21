@@ -16,7 +16,7 @@
       "不写使用心得、插件推荐与二手教程，也不把产品营销页当成版本发布。"
     ],
     "sourcesHeading": "编程工具的内容来自哪些渠道？",
-    "sourcesDescription": "以 GitHub Changelog、VS Code Updates、各工具官方文档与仓库 Release 为准。",
+    "sourcesDescription": "以 GitHub Changelog、VS Code Updates、各工具官方文档与仓库 Release 为准。版本号、适用平台与升级方式逐条对照原文，标题与摘要由编辑团队原创撰写，不翻译、不搬运，经人工审核后发布。",
     "quote": null
   },
   "order": 20
