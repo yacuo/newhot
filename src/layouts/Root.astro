@@ -23,7 +23,7 @@ const organizationJsonLd = {
   "@type": "Organization",
   name: siteConfig.name,
   url: getSiteUrl("/"),
-  logo: getSiteUrl("/favicon.svg"),
+  logo: getSiteUrl("/favicon-192.png"),
   description: siteConfig.description,
   sameAs: [siteConfig.repository],
 };
@@ -66,9 +66,12 @@ const websiteJsonLd = {
     <SiteAnalytics />
     {process.env.SITE_NOINDEX === "1" ? <meta name="robots" content="noindex, nofollow, nocache" /> : null}
     <meta name="newhot-build" content={import.meta.env.PUBLIC_BUILD_ID ?? "dev"} />
-    <link rel="icon" href="/favicon.svg" />
-    <link rel="shortcut icon" href="/favicon.svg" />
-    <link rel="apple-touch-icon" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <script type="application/ld+json" set:html={JSON.stringify(organizationJsonLd)} />
     <script type="application/ld+json" set:html={JSON.stringify(websiteJsonLd)} />
   </head>
