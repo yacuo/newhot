@@ -20,7 +20,7 @@ const [, month, day] = date.split("-");
       <span data-day-chevron class="flex h-4 w-4 shrink-0 items-center justify-center transition-transform duration-200 xl:hidden">
         <svg viewBox="0 0 24 24" aria-hidden="true" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
       </span>
-      <span>{weekday} · {count} 篇</span>
+      <span data-day-count>{weekday} · {count} 篇</span>
     </span>
 
     <span class="absolute left-[147.5px] top-1/2 hidden h-7 w-7 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-indigo-200 bg-indigo-50 text-indigo-600 transition-colors group-hover:border-indigo-300 group-hover:bg-indigo-100 group-hover:text-indigo-700 xl:flex">
