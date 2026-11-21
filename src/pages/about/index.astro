@@ -16,7 +16,7 @@ import { pagePanelClass, widePageContainerClass } from "@/shared/ui/classes";
 const meta = readFeedMeta();
 if (!meta) throw new Error("meta.json 未生成");
 
-const { intro, metrics, workflow, scope, taxonomy, architecture, contentEntry } = aboutPage;
+const { intro, metrics, workflow, scope, taxonomy, architecture, contentEntry, guide } = aboutPage;
 const subcategoryCount = topics.reduce((total, topic) => total + topic.subcategories.length, 0);
 const productCount = companies.reduce((total, company) => total + company.products.length, 0);
 
@@ -53,7 +53,7 @@ const aboutJsonLd = {
       <PageHeader eyebrow="ABOUT" title={intro.title} description={intro.description} />
 
       <section class={pagePanelClass}>
-        <h2 class="text-xl font-semibold tracking-tight text-slate-950 md:text-2xl">这是一个开源项目</h2>
+        <h2 class="text-xl font-semibold tracking-tight text-slate-950 md:text-2xl">NewHot 是一个开源项目</h2>
         <p class="mt-3 text-sm leading-7 text-slate-600">
           本站的源码以
           <a href="https://github.com/yacuo/newhot" target="_blank" rel="noopener" class="text-indigo-600 underline underline-offset-2 hover:text-indigo-700">GitHub 仓库</a>
@@ -225,22 +225,13 @@ const aboutJsonLd = {
 
       <PageGuide
         largeHeading
-        heading="我们的内容标准是什么？"
-        sourcesHeading="我们主要跟踪哪些官方渠道？"
-        sourcesDescription="以下是我们长期跟踪的官方发布渠道；涉及能力、版本与价格的信息，以厂商原文为准。"
-        description="NewHot 由一支专注 AI 大模型的内容与技术团队运营：只采用厂商官方渠道的信息，原创撰写标题与解读，发布前由编辑逐条人工审核。"
-        points={[
-          "所有信息都来自厂商官方公告、版本说明与官方文档，不采用传闻和二手转述。",
-          "标题、摘要与解读由编辑团队原创撰写，不翻译、不搬运。",
-          "每条内容发布前人工核对版本、价格与时间，确认准确后才上线。",
-          "内容有更正会同步修改，并在更新日志中留下记录。",
-        ]}
-        sources={[
-          { name: "OpenAI News", href: "https://openai.com/news/" },
-          { name: "Anthropic News", href: "https://www.anthropic.com/news" },
-          { name: "Google AI Blog", href: "https://blog.google/technology/ai/" },
-        ]}
-        quote={{ text: "确保通用人工智能造福全人类。", label: "OpenAI 官方使命", href: "https://openai.com/about/" }}
+        heading={guide.heading}
+        sourcesHeading={guide.sourcesHeading}
+        sourcesDescription={guide.sourcesDescription}
+        description={guide.description}
+        points={guide.points}
+        sources={guide.sources}
+        quote={guide.quote}
       />
     </div>
   </Shell>

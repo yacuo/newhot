@@ -1,6 +1,7 @@
 {
+  "latestTitle": "NewHot 最新动态",
   "defaults": {
-    "sourcesHeading": "这些内容从哪里来？",
+    "sourcesHeading": "NewHot 的内容从哪里来？",
     "sourcesDescription": "示例：这里说明内容来源与核对方式。",
     "points": [
       "示例：这里写一条内容来源规则。",
@@ -11,7 +12,7 @@
   "theme": {
     "panelTitle": "主题",
     "panelEyebrow": "THEMES",
-    "heading": "主题是怎么划分的？",
+    "heading": "NewHot 的主题是怎么划分的？",
     "description": "示例：这里说明主题与公司之间的聚合关系。"
   },
   "channel": {
@@ -19,7 +20,8 @@
   },
   "tutorial": {
     "index": {
-      "heading": "系列教程适合怎么读？",
+      "directoryTitle": "NewHot 系列教程目录",
+      "heading": "NewHot 的系列教程适合怎么读？",
       "description": "示例：这里说明系列教程的编写与校对方式。",
       "points": [
         "示例：这里写一条阅读建议。"
@@ -27,7 +29,7 @@
       "quote": { "text": "示例引文。", "label": "示例来源", "href": "https://example.com/" }
     },
     "detail": {
-      "heading": "这个系列适合谁读？",
+      "heading": "NewHot 系列教程适合谁读？",
       "suffix": "示例：这里说明教程的编写与校对方式。",
       "points": [
         "示例：这里写一条阅读建议。"

@@ -1,0 +1,18 @@
+{
+  "heading": "NewHot 的内容标准是什么？",
+  "sourcesHeading": "NewHot 主要跟踪哪些官方渠道？",
+  "sourcesDescription": "以下是我们长期跟踪的官方发布渠道；涉及能力、版本与价格的信息，以厂商原文为准。",
+  "description": "NewHot 由一支专注 AI 大模型的内容与技术团队运营：只参考厂商官方渠道的信息，用自己的话整理标题与解读，发布前由编辑逐条人工审核。",
+  "points": [
+    "所有信息都参考厂商官方公告、版本说明与官方文档，传闻和二手转述不作为依据。",
+    "标题、摘要与解读由编辑团队用自己的话整理，不翻译、不搬运。",
+    "每条内容发布前人工核对版本、价格与时间，确认准确后才上线。",
+    "内容有更正会同步修改，并在更新日志中留下记录。"
+  ],
+  "sources": [
+    { "name": "OpenAI News", "href": "https://openai.com/news/" },
+    { "name": "Anthropic News", "href": "https://www.anthropic.com/news" },
+    { "name": "Google AI Blog", "href": "https://blog.google/technology/ai/" }
+  ],
+  "quote": { "text": "确保通用人工智能造福全人类。", "label": "OpenAI 官方使命", "href": "https://openai.com/about/" }
+}

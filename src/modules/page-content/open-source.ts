@@ -31,6 +31,10 @@ export const openSourcePage = loadPageData("open-source", {
     }),
   ),
   projects: z.array(projectSchema).min(1, "projects 至少需要一个项目"),
+  projectsSection: z.object({
+    title: z.string().min(1, "projectsSection.title 不能为空"),
+    description: z.string().min(1, "projectsSection.description 不能为空"),
+  }),
   contribution: z.object({
     title: z.string().min(1, "contribution.title 不能为空"),
     description: z.string().min(1, "contribution.description 不能为空"),

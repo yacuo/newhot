@@ -10,6 +10,7 @@ const quoteSchema = z.object({
 /** 频道、主题与教程页反复出现的同一段说明，集中到内容仓库维护 */
 export const sharedPage = loadPageData("shared", {
   guide: z.object({
+    latestTitle: z.string().min(1, "latestTitle 不能为空"),
     defaults: z.object({
       sourcesHeading: z.string().min(1, "defaults.sourcesHeading 不能为空"),
       sourcesDescription: z.string().min(1, "defaults.sourcesDescription 不能为空"),
@@ -27,6 +28,7 @@ export const sharedPage = loadPageData("shared", {
     }),
     tutorial: z.object({
       index: z.object({
+        directoryTitle: z.string().min(1, "tutorial.index.directoryTitle 不能为空"),
         heading: z.string().min(1, "tutorial.index.heading 不能为空"),
         description: z.string().min(1, "tutorial.index.description 不能为空"),
         points: z.array(z.string().min(1)).min(1, "tutorial.index.points 至少一条"),

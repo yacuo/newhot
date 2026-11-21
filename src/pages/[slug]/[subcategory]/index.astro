@@ -379,7 +379,7 @@ if (topic && sub) {
 
       <section class={`mt-5 ${pagePanelClass}`}>
         <div class="flex items-baseline justify-between gap-4">
-          <h2 class="text-base font-semibold text-slate-900">最新动态</h2>
+          <h2 class="text-base font-semibold text-slate-900">{sharedPage.guide.latestTitle}</h2>
           {category.stat ? (
             <p class="shrink-0 font-mono text-[11px] tracking-[0.04em] text-slate-400">
               {`${category.total} 篇文章 · 更新至 ${formatMonthDay(category.stat.latestPublished)}`}
@@ -405,7 +405,7 @@ if (topic && sub) {
       </section>
 
       <PageGuide
-        heading={`${category.sub.label}分类写哪些内容？`}
+        heading={`NewHot 的${category.sub.label}分类写哪些内容？`}
         description={category.topic.standards?.description ?? sharedPage.guide.channel.description}
         points={category.topic.standards ? [`本分类写什么：${category.sub.description}`, ...category.topic.standards.points] : [category.sub.description]}
         sourcesHeading={category.topic.standards?.sourcesHeading}

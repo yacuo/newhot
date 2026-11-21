@@ -7,6 +7,7 @@ import ArticleList from "@/components/channel/ArticleList.astro";
 import { DEFAULT_SOURCES } from "@/config/sources";
 import { readHomeFeed, readFeedMeta } from "@/modules/content";
 import { homePage } from "@/modules/page-content/home";
+import { sharedPage } from "@/modules/page-content/shared";
 import { HOME_TIERS } from "@/modules/content/list-shards";
 import { buildThemeStat, themeHref, themes } from "@/modules/vendor/themes";
 import { getSiteUrl, siteConfig } from "@/shared/site";
@@ -85,7 +86,7 @@ const description = homePage.seo.description;
 
     <section class={`mt-5 ${pagePanelClass}`}>
       <div class="flex items-baseline justify-between gap-4">
-        <h2 class="text-base font-semibold text-slate-900">最新动态</h2>
+        <h2 class="text-base font-semibold text-slate-900">{sharedPage.guide.latestTitle}</h2>
         <p class="shrink-0 font-mono text-[11px] tracking-[0.04em] text-slate-400">
           {`${meta.total} 篇文章${meta.latestPublished ? ` · 更新至 ${formatMonthDay(meta.latestPublished)}` : ""}`}
         </p>

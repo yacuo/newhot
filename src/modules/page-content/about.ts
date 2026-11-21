@@ -56,6 +56,26 @@ export const aboutPage = loadPageData("about", {
     description: z.string().min(1, "contentEntry.description 不能为空"),
     action: actionSchema,
   }),
+  guide: z.object({
+    heading: z.string().min(1, "guide.heading 不能为空"),
+    sourcesHeading: z.string().min(1, "guide.sourcesHeading 不能为空"),
+    sourcesDescription: z.string().min(1, "guide.sourcesDescription 不能为空"),
+    description: z.string().min(1, "guide.description 不能为空"),
+    points: z.array(z.string().min(1)).min(1, "guide.points 至少一条"),
+    sources: z
+      .array(
+        z.object({
+          name: z.string().min(1, "guide.sources.name 不能为空"),
+          href: z.string().min(1, "guide.sources.href 不能为空"),
+        }),
+      )
+      .min(1, "guide.sources 至少一个"),
+    quote: z.object({
+      text: z.string().min(1, "guide.quote.text 不能为空"),
+      label: z.string().min(1, "guide.quote.label 不能为空"),
+      href: z.string().min(1, "guide.quote.href 不能为空"),
+    }),
+  }),
 });
 
 export type AboutPage = typeof aboutPage;
