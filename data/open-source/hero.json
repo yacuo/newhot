@@ -1,7 +1,7 @@
 {
   "badge": "Open Source Lab",
   "title": "开源",
-  "description": "这里整理目前持续维护的开源项目，覆盖 AI 插件市场、Claude 账号风险检测和 Markdown 内容排版。代码、文档和使用经验都会持续沉淀。",
+  "description": "NewHot 在这里整理目前持续维护的开源项目，覆盖 AI 插件市场、Claude 账号风险检测和 Markdown 内容排版。代码、文档和使用经验都会持续沉淀。",
   "actions": [
     { "label": "查看 GitHub", "href": "https://github.com/yacuo", "external": true }
   ]

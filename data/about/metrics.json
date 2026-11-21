@@ -1,7 +1,7 @@
 {
   "eyebrow": "核心指标",
   "title": "NewHot 现在写了多少内容？",
-  "description": "下面是站点当前的原创内容规模，数字随编辑部的更新进度变化。",
+  "description": "下面是 NewHot 当前的原创内容规模，数字随编辑部的更新进度变化。",
   "items": [
     {
       "key": "total",
