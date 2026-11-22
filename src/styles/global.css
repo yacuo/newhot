@@ -1125,7 +1125,7 @@ html[data-theme="dark"] .brand-wordmark {
 }
 
 /*
- * 实心主题色块的前景统一走 --accent-on：电蓝/玫红/焰橙/墨黑是白字，
+ * 实心主题色块的前景统一走 --accent-on：电蓝/玫红/焰橙/电紫是白字，
  * 青绿这种高明度底色则换成深字，保证颜色鲜艳的同时字还看得清。
  * 用无 layer 规则压过 Tailwind utilities 里写死的 text-white。
  */

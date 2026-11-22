@@ -17,8 +17,8 @@
 @import "./rose.css";
 @import "./orange.css";
 @import "./teal.css";
-@import "./ink.css";
+@import "./violet.css";
 
 :root {
-  --accent-list: "electric,rose,orange,teal,ink";
+  --accent-list: "electric,rose,orange,teal,violet";
 }

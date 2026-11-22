@@ -1,0 +1,25 @@
+/*
+ * 电紫：高明度电光紫，和玫红/焰橙同属高饱和系；600 压到白字站得住的档位，
+ * 500/400 留给圆点、渐变与 hover 强调。
+ */
+html[data-accent="violet"] {
+  --accent-label: "电紫";
+  --accent-swatch: #7c3aed;
+  --accent-on: #ffffff;
+
+  --color-indigo-50: #f5f3ff;
+  --color-indigo-100: #ede9fe;
+  --color-indigo-200: #ddd6fe;
+  --color-indigo-300: #c4b5fd;
+  --color-indigo-400: #a78bfa;
+  --color-indigo-500: #8b5cf6;
+  --color-indigo-600: #7c3aed;
+  --color-indigo-700: #6d28d9;
+  --color-indigo-800: #5b21b6;
+
+  --color-violet-50: #f5f3ff;
+  --color-violet-100: #ede9fe;
+  --color-violet-200: #ddd6fe;
+  --color-violet-500: #8b5cf6;
+  --color-violet-700: #6d28d9;
+}
