@@ -35,7 +35,7 @@ const channelChips = summary.channels.slice(0, 3).map((id) => ({
       {summary.company.logo ? (
         <img
           src={summary.company.logo}
-          alt=""
+          alt={`${summary.company.name} 标志`}
           aria-hidden="true"
           loading="lazy"
           decoding="async"

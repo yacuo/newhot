@@ -58,7 +58,7 @@ export function rowMarkup(
   const authorBlock = authorLabel
     ? `<span class="inline-flex items-center gap-1.5 pr-1 text-slate-600">${
         item.companyLogo
-          ? `<img src="${escapeHtml(item.companyLogo)}" alt="" aria-hidden="true" loading="lazy" decoding="async" class="h-4 w-4 shrink-0 rounded-full bg-white object-contain" />`
+          ? `<img src="${escapeHtml(item.companyLogo)}" alt="${escapeHtml(authorLabel)} 标志" aria-hidden="true" loading="lazy" decoding="async" class="h-4 w-4 shrink-0 rounded-full bg-white object-contain" />`
           : `<span class="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-slate-100 text-[9px] font-medium leading-none text-slate-500">${escapeHtml(authorLabel.slice(0, 1))}</span>`
       }${escapeHtml(authorLabel)}</span>`
     : "";

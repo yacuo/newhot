@@ -42,7 +42,12 @@ const aboutJsonLd = {
     name: siteConfig.name,
     url: getSiteUrl("/"),
     description: siteConfig.description,
-    logo: getSiteUrl("/favicon-192.png"),
+    logo: {
+      "@type": "ImageObject",
+      url: getSiteUrl(siteConfig.logo),
+      width: 512,
+      height: 512,
+    },
   },
 };
 ---

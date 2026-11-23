@@ -80,7 +80,7 @@ const breadcrumbJsonLd = buildBreadcrumbJsonLd([
       <div class="flex items-start gap-4">
         <span class="flex h-12 w-12 flex-none items-center justify-center rounded-xl bg-white shadow-[0_2px_10px_rgba(15,23,42,0.08)]">
           {company.logo ? (
-            <img src={company.logo} alt="" aria-hidden="true" class="h-7 w-7 object-contain" />
+            <img src={company.logo} alt={`${company.name} 标志`} aria-hidden="true" class="h-7 w-7 object-contain" />
           ) : (
             <span class={`text-base font-bold ${accent.text}`}>{getCompanyInitials(company.name)}</span>
           )}
