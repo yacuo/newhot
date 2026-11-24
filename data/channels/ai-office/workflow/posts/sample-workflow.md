@@ -8,7 +8,7 @@ category: ai-office
 subcategory: workflow
 type: release
 company: airtable
-author: "NewHot 编辑部"
+author: "示例站 编辑部"
 tags: ["Airtable","示例数据","workflow"]
 sources:
   - title: "示例来源信息"

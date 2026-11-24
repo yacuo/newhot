@@ -79,14 +79,14 @@ scope 用受影响的模块或目录，如 `themes`、`tutorial`、`content`、`
 
 - 2 空格缩进、LF 换行，遵循 `.editorconfig`
 - TypeScript strict，不写 `any`
-- 样式只用 `src/styles/global.css` 的 token，不新增任意色值和字号
-- 交互脚本放在 `src/scripts/`，通过 `data-*` 属性取数据
+- 样式只用 `src/app/styles/global.css` 的 token，不新增任意色值和字号
+- 交互脚本放在 `src/features/` 或 `src/app/scripts/`，通过 `data-*` 属性取数据
 
 ## 改内容前
 
 - 文章放在 `data/channels/<channel>/<subcategory>/posts/`
 - 频道与分类配置在同级的 `channel.json`、`subcategory.json`
-- 新增频道或分类时，按内容规范里的 SOP 同步 `content-types.json`
+- 新增频道或分类时，按内容规范里的 SOP 同步 `config/global/content-types.json`
 - 示例内容请保留“示例”标注，方便使用模板的人区分
 
 ## 提交前自检

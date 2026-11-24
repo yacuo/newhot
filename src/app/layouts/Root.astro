@@ -1,0 +1,87 @@
+---
+import "@/app/styles/global.css";
+import SiteAnalytics from "@/app/analytics/SiteAnalytics.astro";
+import SeoHead from "@/shared/ui/SeoHead.astro";
+import { readFeedMeta } from "@/entities/article/model";
+import { getSiteUrl, siteConfig } from "@/shared/config/site";
+
+type Props = {
+  title?: string;
+  description?: string;
+  path?: string;
+  type?: "website" | "article";
+  post?: { publishedAt: string; updated?: string };
+  authors?: string[];
+  section?: string;
+  absoluteTitle?: boolean;
+};
+
+const meta = readFeedMeta();
+
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: siteConfig.name,
+  url: getSiteUrl("/"),
+  logo: {
+    "@type": "ImageObject",
+    url: getSiteUrl(siteConfig.logo),
+    width: 512,
+    height: 512,
+  },
+  description: siteConfig.description,
+  sameAs: [siteConfig.repository],
+};
+
+const websiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: siteConfig.name,
+  url: getSiteUrl("/"),
+  description: siteConfig.description,
+  inLanguage: siteConfig.language,
+  author: {
+    "@type": "Organization",
+    name: `${siteConfig.name} 编辑部`,
+    url: getSiteUrl("/about/"),
+  },
+  publisher: {
+    "@type": "Organization",
+    name: siteConfig.name,
+    url: getSiteUrl("/"),
+  },
+  dateModified: meta?.latestPublished ?? meta?.latest ?? undefined,
+};
+---
+<!doctype html>
+<html lang={siteConfig.language}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script is:inline>
+      (function(){try{var a=localStorage.getItem('newhot-accent');if(a){document.documentElement.setAttribute('data-accent',a);}var t=localStorage.getItem('newhot-theme');if(t==='dark'){document.documentElement.setAttribute('data-theme','dark');}}catch(e){}})();
+    </script>
+    <script is:inline>
+      (function(){try{if('scrollRestoration' in history){history.scrollRestoration='manual';}window.scrollTo(0,0);}catch(e){}})();
+    </script>
+    <script is:inline>
+      (function(){try{var desktop=window.matchMedia('(min-width:1024px)').matches;if(desktop){document.documentElement.style.setProperty('--site-header-height','0px');}var stored=localStorage.getItem('newhot:sidebar-collapsed');var narrow=window.matchMedia('(min-width:1024px) and (max-width:1279px)').matches;if(narrow&&stored!=='0'){document.documentElement.setAttribute('data-sidebar-collapsed','');}}catch(e){}})();
+    </script>
+    <SeoHead {...Astro.props} />
+    <SiteAnalytics />
+    {process.env.SITE_NOINDEX === "1" ? <meta name="robots" content="noindex, nofollow, nocache" /> : null}
+    <meta name="newhot-build" content={import.meta.env.PUBLIC_BUILD_ID ?? "dev"} />
+    {siteConfig.icons.ico ? <link rel="icon" href={siteConfig.icons.ico} sizes="any" /> : null}
+    {siteConfig.icons.png48 ? <link rel="icon" type="image/png" sizes="48x48" href={siteConfig.icons.png48} /> : null}
+    {siteConfig.icons.png96 ? <link rel="icon" type="image/png" sizes="96x96" href={siteConfig.icons.png96} /> : null}
+    {siteConfig.icons.png192 ? <link rel="icon" type="image/png" sizes="192x192" href={siteConfig.icons.png192} /> : null}
+    {siteConfig.icons.svg ? <link rel="icon" type="image/svg+xml" href={siteConfig.icons.svg} /> : null}
+    {siteConfig.icons.appleTouch ? <link rel="apple-touch-icon" sizes="180x180" href={siteConfig.icons.appleTouch} /> : null}
+    <script type="application/ld+json" set:html={JSON.stringify(organizationJsonLd)} />
+    <script type="application/ld+json" set:html={JSON.stringify(websiteJsonLd)} />
+  </head>
+  <body>
+    <slot />
+    <slot name="scripts" />
+  </body>
+</html>

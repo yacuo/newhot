@@ -1,0 +1,25 @@
+{
+  "name": "示例站",
+  "wordmark": [
+    "示例",
+    "站"
+  ],
+  "url": "https://example.com",
+  "description": "示例：这里写站点描述，用于 SEO 与分享卡片。",
+  "ogImage": "/og/article-default.png",
+  "logo": "/logo.png",
+  "icons": {
+    "ico": "/favicon.ico",
+    "svg": "/favicon.svg",
+    "png48": "/favicon-48.png",
+    "png96": "/favicon-96.png",
+    "png192": "/favicon-192.png",
+    "appleTouch": "/apple-touch-icon.png"
+  },
+  "author": "示例站",
+  "language": "zh-CN",
+  "repository": "https://github.com/yacuo/newhot",
+  "copyright": "Copyright © 示例站. All rights reserved.",
+  "apiBaseUrl": "https://api.example.com",
+  "skillName": "demo"
+}

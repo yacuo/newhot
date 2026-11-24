@@ -1,0 +1,12 @@
+{
+  "badge": "Open Source Lab",
+  "title": "开源",
+  "description": "示例：这里写这个页面或区块的简介。",
+  "actions": [
+    {
+      "label": "查看 GitHub",
+      "href": "https://example.com",
+      "external": true
+    }
+  ]
+}

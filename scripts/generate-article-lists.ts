@@ -1,8 +1,8 @@
 import fs from "node:fs";
 import path from "node:path";
-import { HOME_TIERS, LIST_SHARD_SIZE } from "@/modules/content/list-shards";
-import type { ArticleListItem, ListManifest } from "@/modules/content/schema";
-import { getCompany } from "@/modules/vendor/model";
+import { HOME_TIERS, LIST_SHARD_SIZE } from "@/entities/article/model/list-shards";
+import type { ArticleListItem, ListManifest } from "@/entities/article/model/schema";
+import { getCompany } from "@/entities/vendor/model/model";
 import { readArticleItems } from "./lib/article-items";
 
 /** 子公司文章同时进入母公司列表：字节跳动页面要能看到 TRAE 的动态 */

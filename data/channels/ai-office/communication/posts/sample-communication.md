@@ -8,7 +8,7 @@ category: ai-office
 subcategory: communication
 type: release
 company: zoom
-author: "NewHot 编辑部"
+author: "示例站 编辑部"
 tags: ["Zoom","示例数据","communication"]
 sources:
   - title: "示例来源信息"

@@ -1,0 +1,50 @@
+---
+import ChannelTabs from "./ChannelTabs.astro";
+import SearchTrigger from "@/features/search/ui/SearchTrigger.astro";
+import { siteConfig } from "@/shared/config/site";
+
+type Tab = { id: string; label: string; href: string; active?: boolean };
+type Props = {
+  title: string;
+  eyebrow: string;
+  description?: string;
+  tabs?: Tab[];
+  stats?: string;
+  meta?: string;
+};
+
+const { title, eyebrow, description, tabs, stats, meta } = Astro.props;
+---
+<section class="panel-glow relative overflow-hidden rounded-2xl bg-surface px-5 py-5 md:px-6 md:py-6">
+  <div class="relative">
+    <div class="flex items-start justify-between gap-5">
+      <div class="min-w-0 flex-1">
+        <p class="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400">
+          {siteConfig.name} <span class="mx-1.5 text-slate-300">/</span><span class="text-slate-500">{eyebrow}</span>
+        </p>
+
+        <h1 class="mt-2 text-[23px] font-extrabold leading-none tracking-[-0.025em] text-slate-950 md:text-[28px]">
+          {title}
+        </h1>
+
+        {description ? <p class="mt-2 text-sm leading-6 text-slate-600">{description}</p> : null}
+      </div>
+
+      <div class="hidden shrink-0 lg:block">
+        <SearchTrigger />
+      </div>
+    </div>
+
+    {tabs?.length ? (
+      <ChannelTabs tabs={tabs} class="mt-5" meta={meta} />
+    ) : meta ? (
+      <p class="mt-3 text-right font-mono text-[11px] tracking-[0.04em] text-slate-500">{meta}</p>
+    ) : null}
+
+    {stats ? (
+      <p class="mt-3 flex flex-wrap items-center justify-end gap-x-2 gap-y-1 font-mono text-[11px] tracking-[0.04em] text-slate-500">
+        {stats}
+      </p>
+    ) : null}
+  </div>
+</section>

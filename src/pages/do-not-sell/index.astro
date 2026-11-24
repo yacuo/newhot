@@ -1,25 +1,5 @@
 ---
-import Root from "@/layouts/Root.astro";
-import Shell from "@/layouts/Shell.astro";
-import PageHeader from "@/components/ui/PageHeader.astro";
-import LegalSections from "@/components/ui/LegalSections.astro";
-import { legalPage } from "@/modules/page-content/legal";
-import { pagePanelClass, widePageContainerClass } from "@/shared/ui/classes";
-
-const { seo, updated, sections } = legalPage.doNotSell;
+import View from "@/views/do-not-sell/index.astro";
 ---
-<Root title={seo.title} description={seo.description} path={seo.path}>
-  <Shell mainClassName={widePageContainerClass}>
-    <div class="space-y-5">
-      <PageHeader
-        eyebrow="DO NOT SELL"
-        title={seo.title}
-        description={`最后更新：${updated}`}
-      />
 
-      <article class={pagePanelClass}>
-        <LegalSections sections={sections} />
-      </article>
-    </div>
-  </Shell>
-</Root>
+<View />

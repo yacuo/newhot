@@ -8,7 +8,7 @@
  */
 import fs from "node:fs";
 import path from "node:path";
-import { iconPaths } from "../src/components/ui/icon-data";
+import { iconPaths } from "../src/shared/ui/icon-data";
 
 const ROOT = path.resolve(import.meta.dirname, "..");
 const OUT = path.join(ROOT, "public/icons.svg");
@@ -25,7 +25,7 @@ const brandIcons: Record<string, { viewBox: string; body: string }> = {
   github: {
     viewBox: "0 0 1024 1024",
     body: fs
-      .readFileSync(path.join(ROOT, "src/components/ui/github-path.txt"), "utf8")
+      .readFileSync(path.join(ROOT, "src/shared/ui/github-path.txt"), "utf8")
       .trim(),
   },
 };

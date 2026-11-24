@@ -1,0 +1,31 @@
+{
+  "heading": "示例：这里写区块标题",
+  "sourcesHeading": "示例：这里写来源区块标题",
+  "sourcesDescription": "示例：这里写来源区块说明",
+  "description": "示例：这里写这个页面或区块的简介。",
+  "points": [
+    "示例：这里写一条具体说明。",
+    "示例：这里写一条具体说明。",
+    "示例：这里写一条具体说明。",
+    "示例：这里写一条具体说明。"
+  ],
+  "sources": [
+    {
+      "name": "OpenAI News",
+      "href": "https://openai.com/news/"
+    },
+    {
+      "name": "Anthropic News",
+      "href": "https://www.anthropic.com/news"
+    },
+    {
+      "name": "Google AI Blog",
+      "href": "https://blog.google/technology/ai/"
+    }
+  ],
+  "quote": {
+    "text": "示例：这里写说明文案",
+    "label": "示例：这里写引用来源",
+    "href": "https://openai.com/about/"
+  }
+}

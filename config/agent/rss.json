@@ -1,0 +1,64 @@
+{
+  "seo": {
+    "title": "示例：这里写页面 SEO 标题",
+    "description": "示例：这里写页面 SEO 描述，概括页面内容与关键词",
+    "path": "/agent/rss/"
+  },
+  "header": {
+    "title": "RSS 订阅",
+    "description": "示例：这里写这个页面或区块的简介。"
+  },
+  "badges": [
+    {
+      "label": "示例标签一",
+      "tone": "emerald"
+    },
+    {
+      "label": "示例标签二",
+      "tone": "sky"
+    },
+    {
+      "label": "示例标签三",
+      "tone": "amber"
+    }
+  ],
+  "intro": "示例：这里写 RSS 与其他方式的共同数据范围，以及订阅地址，上线前请替换为自己的说明。",
+  "feeds": {
+    "title": "复制地址就能订阅",
+    "description": "示例：这里写这个页面或区块的简介。",
+    "items": [
+      {
+        "label": "全站",
+        "path": "/feed.xml",
+        "description": "示例：这里写这个页面或区块的简介。"
+      },
+      {
+        "label": "示例频道",
+        "path": "/example/feed.xml",
+        "description": "示例：这里写这个页面或区块的简介。"
+      }
+    ],
+    "note": "示例：这里写补充说明"
+  },
+  "itemFields": {
+    "title": "每条包含什么",
+    "items": [
+      {
+        "name": "title",
+        "description": "示例：这里写这个页面或区块的简介。"
+      },
+      {
+        "name": "link",
+        "description": "示例：这里写这个页面或区块的简介。"
+      }
+    ],
+    "sample": "<item>\n  <title>示例标题</title>\n  <link>https://example.com/example/</link>\n</item>"
+  },
+  "updates": {
+    "title": "更新与去重",
+    "items": [
+      "示例：按 `guid` 或 `link` 去重。",
+      "示例：轮询间隔建议 15 分钟以上。"
+    ]
+  }
+}

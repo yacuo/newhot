@@ -5,7 +5,7 @@
       "id": "llm",
       "name": "大模型",
       "eyebrow": "FOUNDATION MODELS",
-      "description": "通用大模型与多模态基础模型厂商，按语言、图像、语音、视频四条线看模型发布与产品更新。",
+      "description": "示例主题描述：仅用于演示主题与公司聚合结构，不包含真实站点的运营内容或关键词。",
       "groups": [
         {
           "id": "global",
@@ -27,7 +27,7 @@
       "id": "ai-coding",
       "name": "AI 编程",
       "eyebrow": "AI CODING",
-      "description": "从编辑器到终端再到代码评审，覆盖 AI 编程工具、IDE 与代码智能体。",
+      "description": "示例主题描述：仅用于演示主题与公司聚合结构，不包含真实站点的运营内容或关键词。",
       "groups": [
         {
           "id": "agents",
@@ -46,7 +46,7 @@
       "id": "ai-office",
       "name": "AI 办公",
       "eyebrow": "AI WORK",
-      "description": "办公套件、团队协作、知识检索与自动化流程里的 AI。",
+      "description": "示例主题描述：仅用于演示主题与公司聚合结构，不包含真实站点的运营内容或关键词。",
       "groups": [
         {
           "id": "suite",
@@ -70,7 +70,7 @@
       "id": "ai-creation",
       "name": "AI 创作",
       "eyebrow": "AI CREATION",
-      "description": "图像、视频、语音与文案的生成式创作工具和模型厂商。",
+      "description": "示例主题描述：仅用于演示主题与公司聚合结构，不包含真实站点的运营内容或关键词。",
       "groups": [
         {
           "id": "labs",
@@ -94,7 +94,7 @@
       "id": "agents",
       "name": "智能体与平台",
       "eyebrow": "AGENTS & PLATFORM",
-      "description": "把模型接进业务流程的智能体框架、协议与自托管平台。",
+      "description": "示例主题描述：仅用于演示主题与公司聚合结构，不包含真实站点的运营内容或关键词。",
       "groups": [
         {
           "id": "protocol",
@@ -109,7 +109,7 @@
       "id": "opensource",
       "name": "开源与运行时",
       "eyebrow": "OPEN SOURCE",
-      "description": "本地推理、模型服务与编程语言运行时，开源生态的基础设施。",
+      "description": "示例主题描述：仅用于演示主题与公司聚合结构，不包含真实站点的运营内容或关键词。",
       "groups": [
         {
           "id": "inference",
@@ -131,7 +131,7 @@
       "id": "cloud",
       "name": "云平台与算力",
       "eyebrow": "CLOUD & COMPUTE",
-      "description": "提供模型托管、推理与训练算力的大厂云平台。",
+      "description": "示例主题描述：仅用于演示主题与公司聚合结构，不包含真实站点的运营内容或关键词。",
       "groups": [
         {
           "id": "global",

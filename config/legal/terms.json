@@ -1,0 +1,16 @@
+{
+  "seo": {
+    "title": "示例：这里写页面 SEO 标题",
+    "description": "示例：这里写页面 SEO 描述，概括页面内容与关键词",
+    "path": "/terms/"
+  },
+  "updated": "2026 年 1 月 1 日",
+  "sections": [
+    {
+      "title": "一、示例条款",
+      "paragraphs": [
+        "示例：这里写一条具体说明。"
+      ]
+    }
+  ]
+}

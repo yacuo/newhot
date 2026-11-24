@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-import { topics, type Topic } from "@/modules/channel";
+import { topics, type Topic } from "@/entities/channel/model";
 import { rssResponse } from "@/shared/seo/rss";
 import { buildChannelFeed } from "@/shared/seo/rss-feeds";
 

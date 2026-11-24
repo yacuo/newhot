@@ -1,7 +1,7 @@
-import { getAllPosts } from "@/modules/content";
-import { getTopicLabel, type Topic } from "@/modules/channel";
+import { getAllPosts } from "@/entities/article/model";
+import { getTopicLabel, type Topic } from "@/entities/channel/model";
 import { buildRssFeed, rssFeedTitle } from "./rss";
-import { siteConfig } from "../site";
+import { siteConfig } from "../config/site";
 
 const WINDOW_DAYS = 7;
 const DAY_MS = 24 * 60 * 60 * 1000;

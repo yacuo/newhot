@@ -8,7 +8,7 @@ category: ai-creation
 subcategory: writing
 type: release
 company: jasper
-author: "NewHot 编辑部"
+author: "示例站 编辑部"
 tags: ["Jasper","示例数据","writing"]
 sources:
   - title: "示例来源信息"

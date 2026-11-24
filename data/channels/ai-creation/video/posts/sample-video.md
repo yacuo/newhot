@@ -8,7 +8,7 @@ category: ai-creation
 subcategory: video
 type: release
 company: runway
-author: "NewHot 编辑部"
+author: "示例站 编辑部"
 tags: ["Runway","示例数据","video"]
 sources:
   - title: "示例来源信息"

@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-import { getSiteUrl } from "@/shared/site";
+import { getSiteUrl } from "@/shared/config/site";
 
 export const GET: APIRoute = () => {
   const body =

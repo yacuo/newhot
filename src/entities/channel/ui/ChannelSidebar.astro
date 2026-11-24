@@ -1,0 +1,182 @@
+---
+import Icon from "@/shared/ui/Icon.astro";
+import GithubIcon from "@/shared/ui/GithubIcon.astro";
+import ThemeToggle from "@/app/shell/ThemeToggle.astro";
+import ThemeAccentPicker from "@/app/shell/ThemeAccentPicker.astro";
+import type { IconName } from "@/shared/ui/icon-data";
+import type { Channel } from "@/entities/channel/model/model";
+import { siteConfig } from "@/shared/config/site";
+
+type Props = {
+  topics: Channel[];
+  selectedLabel?: string;
+  frameless?: boolean;
+};
+
+const { topics, selectedLabel, frameless = false } = Astro.props;
+
+const pathname = Astro.url.pathname.replace(/\/+$/, "") || "/";
+const latest = pathname === "/";
+const tutorials = pathname === "/tutorials" || pathname.startsWith("/tutorials/");
+const updateLogActive = pathname === "/update-log" || pathname.startsWith("/update-log/");
+const aboutActive = pathname === "/about";
+const agentActive = pathname === "/agent" || pathname.startsWith("/agent/");
+const themesActive =
+  pathname === "/themes" ||
+  pathname.startsWith("/themes/") ||
+  pathname === "/t" ||
+  pathname.startsWith("/t/") ||
+  pathname === "/companies" ||
+  pathname.startsWith("/companies/") ||
+  selectedLabel === "主题";
+
+const topicIconMap: Record<string, IconName> = {
+  llm: "BrainCircuit",
+  "ai-office": "NotebookPen",
+  "ai-coding": "CodeXml",
+  "ai-creation": "WandSparkles",
+  troubleshooting: "Activity",
+};
+
+const NAV_ICON = "text-slate-600";
+const NAV_ICON_ACTIVE = "text-indigo-700";
+const NAV_ITEM_IDLE = "text-slate-600 hover:bg-slate-50 hover:text-slate-950";
+const NAV_ITEM_ACTIVE = "bg-indigo-50 font-semibold text-slate-950";
+---
+<aside class="flex min-h-0 flex-1 flex-col">
+  <div class={`min-h-0 flex-1 overflow-y-auto thin-scrollbar ${frameless ? "" : "p-2"}`}>
+    <div class="flex h-[34px] items-center px-3">
+      <p data-sidebar-section-label class="w-full text-[11px] font-semibold tracking-[0.16em] text-slate-400">内容</p>
+    </div>
+
+    <nav aria-label="内容目录" class="space-y-1">
+      <a
+        href="/"
+        data-sidebar-item
+        data-nav-link
+        title="精选"
+        aria-label="精选"
+        class={`group flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors ${latest ? NAV_ITEM_ACTIVE : NAV_ITEM_IDLE}`}
+      >
+        <span class="flex h-8 w-8 flex-none items-center justify-center">
+          <Icon name="Newspaper" size={20} strokeWidth={1.9} class={latest ? NAV_ICON_ACTIVE : NAV_ICON} />
+        </span>
+        <span data-sidebar-label>精选</span>
+      </a>
+
+      <a
+        href="/themes/"
+        data-sidebar-item
+        data-nav-link
+        title="主题"
+        aria-label="主题"
+        class={`group flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors ${themesActive ? NAV_ITEM_ACTIVE : NAV_ITEM_IDLE}`}
+      >
+        <span class="flex h-8 w-8 flex-none items-center justify-center">
+          <Icon name="Layers" size={20} strokeWidth={1.9} class={themesActive ? NAV_ICON_ACTIVE : NAV_ICON} />
+        </span>
+        <span data-sidebar-label class="truncate">主题</span>
+      </a>
+
+      <div aria-hidden="true" class="mx-3 my-2 border-t border-slate-200/70"></div>
+
+      {topics.map((topic) => {
+        const active = pathname.startsWith(`/${topic.id}`) || topic.label === selectedLabel;
+        return (
+          <a
+            href={`/${topic.id}/`}
+            data-sidebar-item
+            data-nav-link
+            title={topic.label}
+            aria-label={topic.label}
+            class={`group flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors ${active ? NAV_ITEM_ACTIVE : NAV_ITEM_IDLE}`}
+          >
+            <span class="flex h-8 w-8 flex-none items-center justify-center">
+              <Icon name={topicIconMap[topic.id] ?? "FileText"} size={20} strokeWidth={1.9} class={active ? NAV_ICON_ACTIVE : NAV_ICON} />
+            </span>
+            <span data-sidebar-label class="truncate">{topic.label}</span>
+          </a>
+        );
+      })}
+
+      <a
+        href="/tutorials/"
+        data-sidebar-item
+        data-nav-link
+        title="系列教程"
+        aria-label="系列教程"
+        class={`group flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors ${tutorials ? NAV_ITEM_ACTIVE : NAV_ITEM_IDLE}`}
+      >
+        <span class="flex h-8 w-8 flex-none items-center justify-center">
+          <Icon name="FileText" size={20} strokeWidth={1.9} class={tutorials ? NAV_ICON_ACTIVE : NAV_ICON} />
+        </span>
+        <span data-sidebar-label class="truncate">系列教程</span>
+      </a>
+
+      <div aria-hidden="true" class="mx-3 my-2 border-t border-slate-200/70"></div>
+
+      <a
+        href="/agent/"
+        data-sidebar-item
+        data-nav-link
+        title="Agent 接入"
+        aria-label="Agent 接入"
+        class={`group flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors ${agentActive ? NAV_ITEM_ACTIVE : NAV_ITEM_IDLE}`}
+      >
+        <span class="flex h-8 w-8 flex-none items-center justify-center">
+          <Icon name="Route" size={20} strokeWidth={1.9} class={agentActive ? NAV_ICON_ACTIVE : NAV_ICON} />
+        </span>
+        <span data-sidebar-label class="truncate">Agent 接入</span>
+      </a>
+
+      <a
+        href="/update-log/"
+        data-sidebar-item
+        data-nav-link
+        title="更新日志"
+        aria-label="更新日志"
+        class={`group flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors ${updateLogActive ? NAV_ITEM_ACTIVE : NAV_ITEM_IDLE}`}
+      >
+        <span class="flex h-8 w-8 flex-none items-center justify-center">
+          <Icon name="History" size={20} strokeWidth={1.9} class={updateLogActive ? NAV_ICON_ACTIVE : NAV_ICON} />
+        </span>
+        <span data-sidebar-label class="truncate">更新日志</span>
+      </a>
+
+      <a
+        href="/about/"
+        data-sidebar-item
+        data-nav-link
+        title="关于我们"
+        aria-label="关于我们"
+        class={`group flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors ${aboutActive ? NAV_ITEM_ACTIVE : NAV_ITEM_IDLE}`}
+      >
+        <span class="flex h-8 w-8 flex-none items-center justify-center">
+          <Icon name="Info" size={20} strokeWidth={1.9} class={aboutActive ? NAV_ICON_ACTIVE : NAV_ICON} />
+        </span>
+        <span data-sidebar-label class="truncate">关于我们</span>
+      </a>
+    </nav>
+  </div>
+
+  <div data-sidebar-extra class={`flex-none bg-surface ${frameless ? "" : "p-2"}`}>
+    <div aria-hidden="true" class="mx-2 mb-2 border-t border-slate-200/70"></div>
+
+    <a
+      href={siteConfig.repository}
+      target="_blank"
+      rel="noreferrer"
+      title="GitHub 开源"
+      aria-label="GitHub 开源"
+      class="flex h-9 items-center justify-center gap-2 rounded-lg border border-slate-200 bg-slate-50 text-[13px] font-medium text-slate-600 transition-colors hover:border-slate-300 hover:bg-slate-100 hover:text-slate-900"
+    >
+      <GithubIcon class="h-4 w-4" />
+      GitHub 开源
+    </a>
+
+    <div aria-label="外观设置" class="mt-2 flex items-center justify-center gap-2">
+      <ThemeToggle />
+      <ThemeAccentPicker />
+    </div>
+  </div>
+</aside>

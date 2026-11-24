@@ -1,0 +1,18 @@
+[
+  {
+    "title": "示例渠道一",
+    "description": "示例：这里写这个页面或区块的简介。",
+    "action": {
+      "label": "在 GitHub 查看",
+      "href": "repository"
+    }
+  },
+  {
+    "title": "示例渠道二",
+    "description": "示例：这里写这个页面或区块的简介。",
+    "action": {
+      "label": "查看说明",
+      "href": "/contribute/"
+    }
+  }
+]

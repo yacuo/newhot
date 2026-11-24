@@ -1,0 +1,64 @@
+{
+  "types": [
+    {
+      "id": "release",
+      "label": "发布",
+      "description": "示例：这里写这个页面或区块的简介。"
+    },
+    {
+      "id": "update",
+      "label": "更新",
+      "description": "示例：这里写这个页面或区块的简介。"
+    },
+    {
+      "id": "preview",
+      "label": "预告",
+      "description": "示例：这里写这个页面或区块的简介。"
+    },
+    {
+      "id": "incident",
+      "label": "故障",
+      "description": "示例：这里写这个页面或区块的简介。"
+    },
+    {
+      "id": "fix",
+      "label": "修复",
+      "description": "示例：这里写这个页面或区块的简介。"
+    },
+    {
+      "id": "tutorial",
+      "label": "教程",
+      "description": "示例：这里写这个页面或区块的简介。"
+    },
+    {
+      "id": "compare",
+      "label": "对比",
+      "description": "示例：这里写这个页面或区块的简介。"
+    },
+    {
+      "id": "benchmark",
+      "label": "实测",
+      "description": "示例：这里写这个页面或区块的简介。"
+    }
+  ],
+  "defaults": {
+    "llm/release": "release",
+    "llm/news": "update",
+    "llm/pricing": "update",
+    "llm/status": "incident",
+    "ai-coding/ai-tools": "update",
+    "ai-coding/ecosystem": "update",
+    "ai-coding/dev-tools": "update",
+    "ai-coding/runtime-env": "update",
+    "ai-office/platform": "update",
+    "ai-office/docs": "update",
+    "ai-office/communication": "update",
+    "ai-office/workflow": "update",
+    "ai-creation/writing": "update",
+    "ai-creation/image": "update",
+    "ai-creation/video": "update",
+    "ai-creation/audio": "update",
+    "troubleshooting/setup": "fix",
+    "troubleshooting/runtime": "fix"
+  }
+}

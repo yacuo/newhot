@@ -1,0 +1,24 @@
+{
+  "items": [
+    {
+      "id": "all",
+      "label": "全部",
+      "description": "示例：这里写这个页面或区块的简介。"
+    },
+    {
+      "id": "model",
+      "label": "示例分类一",
+      "description": "示例：这里写这个页面或区块的简介。"
+    },
+    {
+      "id": "tool",
+      "label": "示例分类二",
+      "description": "示例：这里写这个页面或区块的简介。"
+    },
+    {
+      "id": "infra",
+      "label": "示例分类三",
+      "description": "示例：这里写这个页面或区块的简介。"
+    }
+  ]
+}

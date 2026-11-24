@@ -1,0 +1,437 @@
+---
+import Root from "@/app/layouts/Root.astro";
+import Shell from "@/app/layouts/Shell.astro";
+import AgentShell from "@/entities/agent/ui/AgentShell.astro";
+import Badge from "@/entities/agent/ui/Badge.astro";
+import CopyButton from "@/entities/agent/ui/CopyButton.astro";
+import CodeBlock from "@/entities/agent/ui/CodeBlock.astro";
+import InlineText from "@/shared/ui/InlineText.astro";
+import { pagePanelClass, widePageContainerClass } from "@/shared/ui/classes";
+import { buildBreadcrumbJsonLd, buildTechArticleJsonLd } from "@/shared/seo/jsonld";
+import { getApiUrl } from "@/shared/config/site";
+import { agentPage } from "@/entities/page-content/model";
+
+const { api } = agentPage;
+
+const groupTones = {
+  sky: { head: "bg-sky-50/70", dot: "bg-sky-500", badge: "text-sky-700 ring-sky-200" },
+  indigo: { head: "bg-indigo-50/70", dot: "bg-indigo-500", badge: "text-indigo-700 ring-indigo-200" },
+  violet: { head: "bg-violet-50/70", dot: "bg-violet-500", badge: "text-violet-700 ring-violet-200" },
+  emerald: { head: "bg-emerald-50/70", dot: "bg-emerald-500", badge: "text-emerald-700 ring-emerald-200" },
+  amber: { head: "bg-amber-50/70", dot: "bg-amber-500", badge: "text-amber-700 ring-amber-200" },
+} as const;
+
+const tierTones = [
+  "bg-sky-50 text-sky-700",
+  "bg-violet-50 text-violet-700",
+  "bg-amber-50 text-amber-700",
+  "bg-fuchsia-50 text-fuchsia-700",
+];
+
+const endpointCount = api.endpoints.groups.reduce((total, group) => total + group.rows.length, 0);
+
+const articleJsonLd = buildTechArticleJsonLd({
+  headline: api.seo.title,
+  description: api.seo.description,
+  path: api.seo.path,
+  about: ["REST API", "OpenAPI", "JSON"],
+});
+
+const breadcrumbJsonLd = buildBreadcrumbJsonLd([
+  { name: "首页", href: "/" },
+  { name: "Agent 接入", href: "/agent/" },
+  { name: "REST API", href: api.seo.path },
+]);
+---
+
+<Root title={api.seo.title} description={api.seo.description} path={api.seo.path}>
+  <Shell mainClassName={widePageContainerClass} selectedChannel="Agent 接入">
+    <AgentShell title={api.header.title} description={api.header.description}>
+      <section class={pagePanelClass}>
+        <div class="flex flex-wrap gap-2">
+          {api.badges.map((badge) => <Badge label={badge.label} tone={badge.tone} />)}
+        </div>
+        <p class="mt-4 text-sm leading-7 text-slate-700">
+          <InlineText text={api.intro} />
+        </p>
+      </section>
+
+      <section class={pagePanelClass}>
+        <h2 class="text-lg font-semibold tracking-tight text-slate-950">{api.convention.title}</h2>
+        <div class="mt-3 flex flex-wrap gap-2">
+          {api.convention.badges.map((badge) => <Badge label={badge.label} tone={badge.tone} />)}
+        </div>
+        <p class="mt-3 text-sm leading-7 text-slate-600">
+          <InlineText text={api.convention.description} />
+        </p>
+      </section>
+
+      <section class={pagePanelClass}>
+        <h2 class="text-lg font-semibold tracking-tight text-slate-950">{api.quickstart.title}</h2>
+        <p class="mt-2 text-sm leading-7 text-slate-600">
+          <InlineText text={api.quickstart.description} />
+        </p>
+        <div class="mt-4">
+          <CodeBlock code={api.quickstart.code} lang="bash" label={api.quickstart.codeLabel} />
+        </div>
+      </section>
+
+      <section class={pagePanelClass}>
+        <h2 class="text-lg font-semibold tracking-tight text-slate-950">{api.commonUrls.title}</h2>
+        <p class="mt-2 text-sm leading-7 text-slate-600">
+          {api.commonUrls.description}
+        </p>
+        <div class="mt-4 grid gap-2 sm:grid-cols-2">
+          {api.commonUrls.items.map(([label, path]) => (
+            <div class="flex items-center justify-between gap-3 rounded-xl bg-slate-50 px-4 py-3">
+              <div class="min-w-0">
+                <p class="text-[13px] font-semibold text-slate-950">{label}</p>
+                <a
+                  class="mt-0.5 block truncate font-mono text-[11px] text-indigo-600 hover:underline"
+                  href={getApiUrl(path)}
+                >{getApiUrl(path)}</a>
+              </div>
+              <CopyButton text={getApiUrl(path)} />
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class={pagePanelClass}>
+        <h2 class="text-lg font-semibold tracking-tight text-slate-950">{api.themeCapsules.title}</h2>
+        <p class="mt-2 text-sm leading-7 text-slate-600">
+          <InlineText text={api.themeCapsules.description} />
+        </p>
+        <div class="mt-4 overflow-x-auto">
+          <table class="w-full min-w-[760px] text-left text-sm">
+            <thead class="border-b border-slate-200 text-xs text-slate-400">
+              <tr>
+                {api.themeCapsules.columns.map((column) => (
+                  <th class="py-2 pr-4 font-medium">{column}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 text-slate-600">
+              {api.themeCapsules.rows.map(([capsule, query, direct]) => (
+                <tr>
+                  <td class="py-2.5 pr-4">{capsule}</td>
+                  <td class="py-2.5 pr-4 font-mono text-[12px] text-slate-900">{query}</td>
+                  <td class="py-2.5 font-mono text-[12px] text-slate-900">{direct}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class={pagePanelClass}>
+        <h2 class="text-lg font-semibold tracking-tight text-slate-950">{api.direct.title}</h2>
+        <p class="mt-2 text-sm leading-7 text-slate-600">
+          {api.direct.description}
+        </p>
+        <div class="mt-4 overflow-x-auto">
+          <table class="w-full min-w-[720px] text-left text-sm">
+            <thead class="border-b border-slate-200 text-xs text-slate-400">
+              <tr>
+                {api.direct.columns.map((column) => (
+                  <th class="py-2 pr-4 font-medium">{column}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 text-slate-600">
+              {api.direct.rows.map(([page, path]) => (
+                <tr>
+                  <td class="py-2.5 pr-4"><InlineText text={page} /></td>
+                  <td class="py-2.5 font-mono text-[12px] text-slate-900">{path}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p class="mt-3 text-xs leading-6 text-slate-500">
+          <InlineText text={api.direct.note} />
+        </p>
+      </section>
+
+      <section class={pagePanelClass}>
+        <div class="flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <h2 class="text-lg font-semibold tracking-tight text-slate-950">{api.endpoints.title}</h2>
+            <p class="mt-2 text-sm leading-7 text-slate-600">
+              {api.endpoints.description}
+            </p>
+          </div>
+          <span class="rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-medium text-slate-500">
+            {endpointCount} 个入口
+          </span>
+        </div>
+
+        <div class="mt-4 flex flex-wrap gap-2">
+          {api.endpoints.groups.map((group) => (
+            <a
+              href={`#api-${group.id}`}
+              class="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 text-[12px] font-medium text-slate-600 ring-1 ring-slate-900/[0.08] transition hover:text-slate-900 hover:ring-slate-900/20"
+            >
+              <span class={`h-1.5 w-1.5 rounded-full ${groupTones[group.tone].dot}`}></span>
+              {group.title}
+              <span class="font-mono text-[10px] text-slate-400">{group.rows.length}</span>
+            </a>
+          ))}
+        </div>
+
+        <div class="mt-4 space-y-4">
+          {api.endpoints.groups.map((group) => (
+            <section
+              id={`api-${group.id}`}
+              class="scroll-mt-24 overflow-hidden rounded-xl ring-1 ring-slate-900/[0.07]"
+            >
+              <div class={`flex flex-wrap items-center justify-between gap-2 px-4 py-3 ${groupTones[group.tone].head}`}>
+                <div class="flex min-w-0 items-center gap-2">
+                  <span class={`h-2 w-2 shrink-0 rounded-full ${groupTones[group.tone].dot}`}></span>
+                  <p class="text-sm font-semibold text-slate-900">{group.title}</p>
+                  <span class="hidden text-[11px] text-slate-500 sm:inline">{group.description}</span>
+                </div>
+                <span
+                  class={`rounded-full bg-white px-2 py-0.5 text-[10px] font-medium ring-1 ${groupTones[group.tone].badge}`}
+                >
+                  {group.rows.length} 个接口
+                </span>
+              </div>
+              <div class="overflow-x-auto">
+                <table class="w-full min-w-[720px] text-left text-sm">
+                  <thead class="border-b border-slate-100 text-xs text-slate-400">
+                    <tr>
+                      {api.endpoints.columns.map((column, index) => (
+                        <th class={`py-2 pr-4 font-medium ${index === 0 ? "pl-4" : ""}`}>{column}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-100 text-slate-600">
+                    {group.rows.map(([path, desc, frequency, limit]) => (
+                      <tr>
+                        <td class="py-2.5 pl-4 pr-4 font-mono text-[12px] text-slate-900">{path}</td>
+                        <td class="py-2.5 pr-4">{desc}</td>
+                        <td class="py-2.5 pr-4 text-slate-500">{frequency}</td>
+                        <td class="py-2.5 pr-4 text-slate-500">{limit}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          ))}
+        </div>
+
+        <p class="mt-3 text-xs leading-6 text-slate-500">
+          <InlineText text={api.endpoints.note} />
+        </p>
+      </section>
+
+      <section class={pagePanelClass}>
+        <h2 class="text-lg font-semibold tracking-tight text-slate-950">{api.params.title}</h2>
+        <p class="mt-2 text-sm leading-7 text-slate-600">
+          {api.params.description}
+        </p>
+        <div class="mt-4 space-y-4">
+          {api.params.groups.map((group) => (
+            <div class="overflow-hidden rounded-xl ring-1 ring-slate-900/[0.07]">
+              <div class="flex flex-wrap items-baseline justify-between gap-2 bg-slate-50 px-4 py-2.5">
+                <p class="text-sm font-semibold text-slate-900">{group.title}</p>
+                <p class="text-[11px] text-slate-500">{group.description}</p>
+              </div>
+              <div class="overflow-x-auto">
+                <table class="w-full min-w-[680px] text-left text-sm">
+                  <thead class="border-b border-slate-100 text-xs text-slate-400">
+                    <tr>
+                      {api.params.columns.map((column, index) => (
+                        <th class={`py-2 pr-4 font-medium ${index === 0 ? "pl-4" : ""}`}>{column}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-100 text-slate-600">
+                    {group.rows.map(([name, type, desc, example]) => (
+                      <tr>
+                        <td class="py-2.5 pl-4 pr-4 font-mono text-[12px] text-slate-900">{name}</td>
+                        <td class="py-2.5 pr-4">
+                          <span class="rounded bg-slate-100 px-1.5 py-0.5 font-mono text-[10px] text-slate-500">{type}</span>
+                        </td>
+                        <td class="py-2.5 pr-4">{desc}</td>
+                        <td class="py-2.5 pr-4 font-mono text-[11px] text-slate-500">{example}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div class="mt-4 space-y-1.5 text-xs leading-6 text-slate-500">
+          {api.params.notes.map((note) => (
+            <p><InlineText text={note} /></p>
+          ))}
+        </div>
+      </section>
+
+      <section class={pagePanelClass}>
+        <h2 class="text-lg font-semibold tracking-tight text-slate-950">{api.fields.title}</h2>
+        <p class="mt-2 text-sm leading-7 text-slate-600">
+          <InlineText text={api.fields.description} />
+        </p>
+        <div class="mt-4 overflow-x-auto">
+          <table class="w-full min-w-[760px] text-left text-sm">
+            <thead class="border-b border-slate-200 text-xs text-slate-400">
+              <tr>
+                {api.fields.columns.map((column) => (
+                  <th class="py-2 pr-4 font-medium">{column}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 text-slate-600">
+              {api.fields.rows.map(([name, type, desc, example]) => (
+                <tr>
+                  <td class="py-2.5 pr-4 font-mono text-[12px] text-slate-900">{name}</td>
+                  <td class="py-2.5 pr-4">
+                    <span class="rounded bg-slate-100 px-1.5 py-0.5 font-mono text-[10px] text-slate-500">{type}</span>
+                  </td>
+                  <td class="py-2.5 pr-4">{desc}</td>
+                  <td class="py-2.5 font-mono text-[11px] text-slate-500">{example}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <div class="mt-4 rounded-xl bg-rose-50/60 p-4 ring-1 ring-rose-100">
+          <p class="text-[11px] font-semibold uppercase tracking-[0.12em] text-rose-500">{api.fields.excluded.title}</p>
+          <div class="mt-2 flex flex-wrap gap-1.5">
+            {api.fields.excluded.items.map((item) => (
+              <span class="rounded-full bg-white px-2.5 py-1 text-[11px] text-rose-600 ring-1 ring-rose-100">{item}</span>
+            ))}
+          </div>
+          <p class="mt-3 text-[12px] leading-6 text-slate-600">
+            <InlineText text={api.fields.excluded.note} />
+          </p>
+        </div>
+
+        <p class="mt-4 text-[11px] font-semibold text-slate-500">{api.fields.exampleLabel}</p>
+        <div class="mt-2">
+          <CodeBlock code={api.fields.example} lang="json" label="JSON" />
+        </div>
+      </section>
+
+      <section class={pagePanelClass}>
+        <h2 class="text-lg font-semibold tracking-tight text-slate-950">{api.scenarios.title}</h2>
+        <p class="mt-2 text-sm leading-7 text-slate-600">
+          {api.scenarios.description}
+        </p>
+        <div class="mt-4 grid gap-3 sm:grid-cols-2">
+          {api.scenarios.items.map((scenario) => (
+            <div class="rounded-xl bg-slate-50 p-4">
+              <p class="font-mono text-[10px] font-semibold tracking-[0.12em] text-slate-400">{scenario.step}</p>
+              <p class="mt-1 text-sm font-semibold text-slate-900">{scenario.title}</p>
+              <p class="mt-2 text-[13px] leading-6 text-slate-600">{scenario.description}</p>
+            </div>
+          ))}
+        </div>
+
+        <p class="mt-5 text-[11px] font-semibold text-slate-500">{api.scenarios.paginationLabel}</p>
+        <div class="mt-2">
+          <CodeBlock code={api.scenarios.paginationCode} lang="bash" label={api.scenarios.paginationCodeLabel} />
+        </div>
+
+        <div class="mt-4 rounded-xl bg-slate-50 p-4 text-[13px] leading-6 text-slate-600">
+          <InlineText text={api.scenarios.note} />
+        </div>
+      </section>
+
+      <section class={pagePanelClass}>
+        <h2 class="text-lg font-semibold tracking-tight text-slate-950">{api.rateLimit.title}</h2>
+        <p class="mt-2 text-sm leading-7 text-slate-600">
+          <InlineText text={api.rateLimit.description} />
+        </p>
+
+        <p class="mt-5 text-[11px] font-semibold text-slate-500">{api.rateLimit.tiers.title}</p>
+        <div class="mt-2 overflow-x-auto">
+          <table class="w-full min-w-[760px] text-left text-sm">
+            <thead class="border-b border-slate-200 text-xs text-slate-400">
+              <tr>
+                {api.rateLimit.tiers.columns.map((column) => (
+                  <th class="py-2 pr-4 font-medium">{column}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 text-slate-600">
+              {api.rateLimit.tiers.rows.map(([tier, scope, quota, over], index) => (
+                <tr>
+                  <td class="py-2.5 pr-4">
+                    <span class={`rounded-full px-2 py-0.5 text-[11px] font-medium ${tierTones[index % tierTones.length]}`}>{tier}</span>
+                  </td>
+                  <td class="py-2.5 pr-4">{scope}</td>
+                  <td class="py-2.5 pr-4">{quota}</td>
+                  <td class="py-2.5">{over}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <p class="mt-5 text-[11px] font-semibold text-slate-500">{api.rateLimit.headers.title}</p>
+        <div class="mt-2 overflow-x-auto">
+          <table class="w-full min-w-[680px] text-left text-sm">
+            <thead class="border-b border-slate-200 text-xs text-slate-400">
+              <tr>
+                {api.rateLimit.headers.columns.map((column) => (
+                  <th class="py-2 pr-4 font-medium">{column}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 text-slate-600">
+              {api.rateLimit.headers.rows.map(([name, when, meaning]) => (
+                <tr>
+                  <td class="py-2.5 pr-4 font-mono text-[12px] text-slate-900">{name}</td>
+                  <td class="py-2.5 pr-4 text-slate-500">{when}</td>
+                  <td class="py-2.5">{meaning}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <div class="mt-4">
+          <CodeBlock code={api.rateLimit.example} lang="json" label={api.rateLimit.exampleLabel} />
+        </div>
+
+        <ul class="mt-4 space-y-2 text-sm leading-7 text-slate-600">
+          {api.rateLimit.notes.map((note) => (
+            <li><InlineText text={note} /></li>
+          ))}
+        </ul>
+      </section>
+
+      <section class={pagePanelClass}>
+        <h2 class="text-lg font-semibold tracking-tight text-slate-950">{api.specs.title}</h2>
+        <ul class="mt-3 space-y-2 text-sm leading-7 text-slate-600">
+          {api.specs.items.map((item) => (
+            <li>
+              <a class="text-indigo-600 hover:underline" href={item.href} target="_blank" rel="noreferrer">{item.label}</a>
+              <span class="ml-2 text-slate-500">{item.note}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section class={pagePanelClass}>
+        <h2 class="text-lg font-semibold tracking-tight text-slate-950">{api.troubleshooting.title}</h2>
+        <ul class="mt-3 space-y-2 text-sm leading-7 text-slate-600">
+          {api.troubleshooting.items.map((item) => (
+            <li>
+              <span class="font-medium text-slate-900">{item.label}</span>：<InlineText text={item.text} />
+            </li>
+          ))}
+        </ul>
+      </section>
+    </AgentShell>
+  </Shell>
+  <script type="application/ld+json" set:html={JSON.stringify(articleJsonLd)} />
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbJsonLd)} />
+</Root>

@@ -20,8 +20,8 @@
 | --- | --- |
 | 频道配置 | `data/channels/<channel>/channel.json` |
 | 分类配置（label/description/seo/order） | `data/channels/<channel>/<subcategory>/subcategory.json` |
-| 内容类型与默认值 | `src/schema/content-types.json` |
-| frontmatter 字段 | `src/modules/content/schema.ts` |
+| 内容类型与默认值 | `config/global/content-types.json` |
+| frontmatter 字段 | `src/entities/article/model/schema.ts` |
 | 公司实体与产品别名 | `data/vendors/companies.json` |
 | 主题、分组与公司归属 | `data/vendors/themes.json` |
 | 公司发展史节点 | `data/vendors/history/<companyId>.json` |

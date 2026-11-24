@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-import { getAllPosts } from "@/modules/content";
+import { getAllPosts } from "@/entities/article/model";
 import { buildSitemapIndex, getSitemapIndexEntries } from "@/shared/seo/sitemap";
 
 export const GET: APIRoute = async () => {

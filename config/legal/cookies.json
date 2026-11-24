@@ -1,0 +1,26 @@
+{
+  "seo": {
+    "title": "示例：这里写页面 SEO 标题",
+    "description": "示例：这里写页面 SEO 描述，概括页面内容与关键词",
+    "path": "/cookies/"
+  },
+  "updated": "2026 年 1 月 1 日",
+  "rows": {
+    "current": [
+      {
+        "name": "示例名称",
+        "type": "示例类型",
+        "purpose": "示例用途，上线前请替换。",
+        "duration": "示例期限"
+      }
+    ],
+    "ads": [
+      {
+        "name": "示例名称",
+        "type": "示例类型",
+        "purpose": "示例用途，上线前请替换。",
+        "duration": "示例期限"
+      }
+    ]
+  }
+}

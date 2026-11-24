@@ -1,4 +1,5 @@
 import type { APIRoute } from "astro";
+import { getApiBaseUrl, siteConfig } from "@/shared/config/site";
 
 const pathParam = (name: string) => ({
   name,
@@ -63,12 +64,11 @@ const indexDetail = (summary: string, description: string, name: string, schema:
 const spec = {
   openapi: "3.1.0",
   info: {
-    title: "NewHot API",
+    title: `${siteConfig.name} API`,
     version: "1.2.0",
-    description:
-      "NewHot 的只读内容接口：AI 大模型新闻、厂商动态、频道、主题、标签与文章元数据。所有接口匿名访问，只返回元数据与摘要；不管查询、单篇、快照还是 MCP，都不返回正文。文章数据只覆盖最近 7 天，响应里的 window 会写明窗口起止。频道、主题、主题分组、厂商、标签、类型都有页面直达地址，返回结构与 /api/v1/articles 一致。所有响应带 X-API-Version: v1，JSON 外层带 apiVersion: v1。限流分四档：文章查询、列表索引、全量快照都是同一条请求 1 次/10 分钟（按 IP + 完整请求计数，换条件不占额度）；MCP 按 IP 汇总 60 次/10 分钟；RSS 不限流。超出返回 429，按 Retry-After 等待（最长 600 秒）。",
+    description: `${siteConfig.name} 的只读内容接口：AI 大模型新闻、厂商动态、频道、主题、标签与文章元数据。所有接口匿名访问，只返回元数据与摘要；不管查询、单篇、快照还是 MCP，都不返回正文。文章数据只覆盖最近 7 天，响应里的 window 会写明窗口起止。频道、主题、主题分组、厂商、标签、类型都有页面直达地址，返回结构与 /api/v1/articles 一致。所有响应带 X-API-Version: v1，JSON 外层带 apiVersion: v1。限流分四档：文章查询、列表索引、全量快照都是同一条请求 1 次/10 分钟（按 IP + 完整请求计数，换条件不占额度）；MCP 按 IP 汇总 60 次/10 分钟；RSS 不限流。超出返回 429，按 Retry-After 等待（最长 600 秒）。`,
   },
-  servers: [{ url: "https://newhot.org" }],
+  servers: [{ url: getApiBaseUrl() }],
   paths: {
     "/api/v1/articles": {
       get: {

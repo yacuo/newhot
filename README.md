@@ -17,22 +17,86 @@
 ## 目录结构
 
 ```text
-src/pages/       路由
-src/layouts/     页面骨架
-src/components/  展示组件
-src/modules/     业务模块：content、channel、vendor、tutorial、page-content
-src/shared/      跨模块能力：seo、ui、site、utils
-src/config/      界面与站点配置
-src/schema/      内容类型枚举
-src/scripts/     客户端脚本
-src/styles/      样式
-data/            内容源：页面 JSON、频道文章、教程
+src/app/         应用骨架：布局、站点外壳、全局脚本、样式、统计
+src/views/       页面级组合，路由文件只做薄包装
+src/features/    交互功能：搜索、列表加载、目录、时间线、标签页、Mermaid
+src/entities/    领域模型与 UI：article、channel、vendor、tutorial、release、page-content、agent
+src/shared/      跨层能力：config、content、lib、seo、ui
+src/pages/       Astro 路由（薄包装）
+config/          站点配置：品牌、频道/分类、页面文案、来源、搜索
+data/            内容：频道文章、教程文章、更新日志、厂商数据
 scripts/         构建期数据生成与预算检查
 ops/             本地启停脚本
 public/data/     构建期生成的数据
 ```
 
-仓库内的 `data/` 带有虚构的示例文章与示例教程，clone 后 `npm run dev` 就能看到完整页面。想用自己的内容时，通过 `CONTENT_DIR` 指向自己的内容目录。
+仓库内的 `config/` 与 `data/` 是示例内容，clone 后 `npm run dev` 就能看到完整页面。想用自己的内容时，通过 `CONTENT_DIR` 指向自己的内容项目：根目录下同样放 `config/` 与 `data/`，整体替换即可。
+
+## 内容项目覆盖
+
+站点代码与内容完全分离。一个内容项目就是一个包含 `config/` 与 `data/` 的目录：
+
+```text
+my-content/
+├── config/
+│   ├── global/
+│   │   ├── site.json            品牌、域名、仓库、API 地址、Skill 名称
+│   │   ├── content-types.json   内容类型与各分类默认类型
+│   │   ├── sources.json         默认官方来源与频道来源
+│   │   └── search.json          搜索推荐位
+│   ├── channels/            每个频道一个 JSON，内含二级分类
+│   ├── home/ about/ agent/ contact/ contribute/ legal/ open-source/ themes/
+│   ├── shared/              通用文案与 404
+│   ├── tutorials/           教程页配置与 catalogs/
+│   └── update-log/          更新日志页配置
+└── data/
+    ├── channels/            频道文章：<channel>/<subcategory>/posts/*.md
+    ├── tutorials/           教程文章
+    ├── update-log/posts/    更新日志文章
+    └── vendors/             公司、主题、发展史
+```
+
+```bash
+CONTENT_DIR=../my-content npm run dev
+```
+
+`config/` 里的文件按需覆盖：内容项目没有的文件会回退到站点自带的示例配置。`CONTENT_DIR` 也可以直接指向 `data/` 目录，站点会自动识别上一级作为内容项目根目录。
+
+## 示例配置与真实配置
+
+**这个开源仓库里的 `config/` 和 `data/` 全部是示例内容**，不包含真实站点的 SEO 标题、关键词、页面文案、运营数据或内部项目信息。真实配置放在私有内容项目里，通过 `CONTENT_DIR` 覆盖，不要把正式 SEO 配置提交到这个仓库。
+
+## 站点品牌与 API 地址
+
+站点名称、域名、仓库、署名、Agent Skill 名称和 API 地址都在内容项目的 `config/global/site.json`，换站只改内容，不用改代码：
+
+```json
+{
+  "name": "示例站",
+  "wordmark": ["示例", "站"],
+  "url": "https://example.com",
+  "logo": "/logo.png",
+  "ogImage": "/og/article-default.png",
+  "icons": {
+    "ico": "/favicon.ico",
+    "svg": "/favicon.svg",
+    "png48": "/favicon-48.png",
+    "png96": "/favicon-96.png",
+    "png192": "/favicon-192.png",
+    "appleTouch": "/apple-touch-icon.png"
+  },
+  "repository": "https://github.com/yacuo/newhot",
+  "apiBaseUrl": "https://api.example.com",
+  "skillName": "demo"
+}
+```
+
+- `url`：站点自身地址，影响 canonical、sitemap 与 OG；`SITE_URL` 优先。
+- `apiBaseUrl`：Agent API、MCP、Agent Skill 文档里指向的服务地址；`API_BASE_URL` 优先。没有独立 API 服务时保持与站点地址一致即可。
+- `wordmark`：Logo 的拆分写法，数组每一项渲染成一个 `<span>`。
+- `logo` / `ogImage` / `icons`：品牌图片。可以直接替换 `public/` 下的同名文件，也可以填自己的绝对 URL；`icons` 里某项留空则不输出对应的 `<link>`。
+
+站点只负责展示与静态产物；`/api/v1/*` 等动态接口由自己的 API 服务提供，接入时把 `apiBaseUrl` 指向该服务。
 
 ## 快速开始
 
@@ -42,11 +106,12 @@ public/data/     构建期生成的数据
 npm install
 npm run dev        # 生成数据 + Astro 开发服务
 npm run build      # 生成数据 + 静态输出到 dist/
-npm run check      # Astro 类型检查
+npm run check      # 配置校验 + Astro 类型检查
+npm run check:config  # 只校验 config/ 下的配置
 npm run check:budget  # 检查 HTML/CSS/JS 体积预算
 ```
 
-仓库内 `data/` 可直接运行。需要读取外部内容目录时：
+仓库内 `config/` + `data/` 可直接运行。需要读取外部内容项目时：
 
 ```bash
 CONTENT_DIR=../my-content npm run dev

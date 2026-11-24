@@ -3,33 +3,23 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@site-content/config/*": ["config/*"]
     },
     "resolveJsonModule": true,
     "noImplicitAny": true,
+    "jsx": "react-jsx",
     "skipLibCheck": true,
-    // TypeScript 6 不再自动纳入 @types/node，显式声明后 node:fs / process 才有类型
+    "noEmit": true,
     "types": ["node"]
   },
   "include": [
-    "src/pages/**/*",
-    "src/layouts/**/*",
-    "src/components/**/*",
-    "src/scripts/**/*",
-    "src/modules/**/*.ts",
-    "src/shared/**/*.ts",
-    "src/config/**/*",
-    "src/schema/**/*",
+    ".astro/types.d.ts",
+    "src/**/*",
     "scripts/**/*.ts",
     "astro.config.mjs"
   ],
   "exclude": [
-    "src/app",
-    "src/modules/**/*.tsx",
-    "src/shared/ui/**/*.tsx",
-    "src/shared/seo/index.ts",
-    "src/shared/seo/seo.ts",
-    "src/shared/ui/index.ts",
     "node_modules",
     "out",
     "dist",

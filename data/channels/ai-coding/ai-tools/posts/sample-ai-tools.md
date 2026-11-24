@@ -8,7 +8,7 @@ category: ai-coding
 subcategory: ai-tools
 type: release
 company: cursor
-author: "NewHot 编辑部"
+author: "示例站 编辑部"
 tags: ["Cursor","示例数据","ai-tools"]
 sources:
   - title: "示例来源信息"

@@ -1,0 +1,77 @@
+{
+  "seo": {
+    "title": "示例：这里写页面 SEO 标题",
+    "description": "示例：这里写页面 SEO 描述，概括页面内容与关键词",
+    "path": "/agent/mcp/"
+  },
+  "header": {
+    "title": "MCP 接入",
+    "description": "示例：这里写这个页面或区块的简介。"
+  },
+  "badges": [
+    {
+      "label": "示例标签一",
+      "tone": "emerald"
+    },
+    {
+      "label": "示例标签二",
+      "tone": "sky"
+    },
+    {
+      "label": "示例标签三",
+      "tone": "amber"
+    }
+  ],
+  "intro": "示例：这里写 MCP 与其他方式的共同数据范围，以及接入地址，上线前请替换为自己的说明。",
+  "setup": {
+    "title": "三步接上",
+    "badge": "示例状态",
+    "endpoint": {
+      "title": "第一步：填这个地址",
+      "code": "https://example.com/api/v1/mcp",
+      "note": "示例：这里写补充说明"
+    },
+    "clients": {
+      "title": "第二步：按你的客户端填"
+    },
+    "prompt": {
+      "title": "第三步：直接问一句",
+      "text": "示例：这里写说明文案",
+      "note": "示例：这里写补充说明"
+    }
+  },
+  "tools": {
+    "title": "可用工具",
+    "description": "示例：这里写这个页面或区块的简介。",
+    "items": [
+      {
+        "name": "example_tool",
+        "description": "示例：这里写这个页面或区块的简介。",
+        "args": "query · limit?"
+      }
+    ]
+  },
+  "returns": {
+    "title": "工具返回什么",
+    "description": "示例：这里写这个页面或区块的简介。"
+  },
+  "spec": {
+    "title": "规范依据",
+    "description": "示例：这里写这个页面或区块的简介。"
+  },
+  "troubleshooting": {
+    "title": "没接上？",
+    "items": [
+      {
+        "label": "先确认传输方式",
+        "text": "示例：这里写说明文案"
+      }
+    ]
+  },
+  "alternatives": {
+    "title": "不接 MCP 也能用",
+    "items": [
+      "示例方式：[`/api/v1/articles`](/api/v1/articles)"
+    ]
+  }
+}

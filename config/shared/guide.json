@@ -1,0 +1,52 @@
+{
+  "latestTitle": "示例站 最新动态",
+  "defaults": {
+    "sourcesHeading": "示例：这里写来源区块标题",
+    "sourcesDescription": "示例：这里写来源区块说明",
+    "points": [
+      "示例：这里写一条具体说明。",
+      "示例：这里写一条具体说明。"
+    ],
+    "quote": {
+      "text": "示例：这里写说明文案",
+      "label": "示例：这里写引用来源",
+      "href": "https://example.com/"
+    }
+  },
+  "theme": {
+    "panelTitle": "主题",
+    "panelEyebrow": "THEMES",
+    "heading": "示例：这里写区块标题",
+    "description": "示例：这里写这个页面或区块的简介。"
+  },
+  "channel": {
+    "description": "示例：这里写这个页面或区块的简介。"
+  },
+  "tutorial": {
+    "index": {
+      "directoryTitle": "示例站 系列教程目录",
+      "heading": "示例：这里写区块标题",
+      "description": "示例：这里写这个页面或区块的简介。",
+      "points": [
+        "示例：这里写一条具体说明。"
+      ],
+      "quote": {
+        "text": "示例：这里写说明文案",
+        "label": "示例：这里写引用来源",
+        "href": "https://example.com/"
+      }
+    },
+    "detail": {
+      "heading": "示例：这里写区块标题",
+      "suffix": "示例：这里写补充说明",
+      "points": [
+        "示例：这里写一条具体说明。"
+      ],
+      "quote": {
+        "text": "示例：这里写说明文案",
+        "label": "示例：这里写引用来源",
+        "href": "https://example.com/"
+      }
+    }
+  }
+}

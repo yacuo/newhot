@@ -1,0 +1,78 @@
+{
+  "seo": {
+    "title": "示例：这里写页面 SEO 标题",
+    "description": "示例：这里写页面 SEO 描述，概括页面内容与关键词",
+    "path": "/agent/"
+  },
+  "header": {
+    "title": "Agent 接入",
+    "description": "示例：这里写这个页面或区块的简介。"
+  },
+  "badges": [
+    {
+      "label": "示例标签一",
+      "tone": "emerald"
+    },
+    {
+      "label": "示例标签二",
+      "tone": "sky"
+    },
+    {
+      "label": "示例标签三",
+      "tone": "amber"
+    }
+  ],
+  "intro": "示例：这里写一段接入方式的总述，说明数据范围与使用限制，上线前请替换为自己的说明。",
+  "choicesTitle": "挑一个就行",
+  "choices": [
+    {
+      "name": "方式一",
+      "href": "/agent/rss/",
+      "description": "示例：这里写这个页面或区块的简介。"
+    },
+    {
+      "name": "方式二",
+      "href": "/agent/api/",
+      "description": "示例：这里写这个页面或区块的简介。"
+    }
+  ],
+  "gettingStarted": {
+    "title": "第一次接，按这个顺序",
+    "items": [
+      "示例：先验证数据是否符合预期。",
+      "示例：需要时再接第二种方式。"
+    ]
+  },
+  "resources": {
+    "title": "接入资源",
+    "description": "示例：这里写这个页面或区块的简介。",
+    "items": [
+      {
+        "label": "/example/README.md",
+        "href": "/example/README.md",
+        "note": "示例：这里写补充说明"
+      }
+    ]
+  },
+  "specs": {
+    "title": "规范依据",
+    "description": "示例：这里写这个页面或区块的简介。",
+    "items": [
+      {
+        "label": "示例规范",
+        "href": "https://example.com/spec",
+        "note": "示例：这里写补充说明"
+      }
+    ]
+  },
+  "troubleshooting": {
+    "title": "没接上？",
+    "description": "示例：这里写这个页面或区块的简介。",
+    "items": [
+      {
+        "label": "404",
+        "text": "示例：这里写说明文案"
+      }
+    ]
+  }
+}

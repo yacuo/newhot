@@ -1,0 +1,70 @@
+{
+  "order": 1,
+  "title": "AI 编程入门（示例系列）",
+  "description": "示例：这里写这个页面或区块的简介。",
+  "type": "ai",
+  "author": "示例站 编辑部",
+  "source": "MDN Web Docs",
+  "publishedAt": "2026-10-01",
+  "updatedAt": "2026-10-03",
+  "icon": "code",
+  "gradient": {
+    "from": "#6366f1",
+    "to": "#8b5cf6"
+  },
+  "introBlocks": [
+    {
+      "title": "这个系列讲什么",
+      "description": "示例：这里写这个页面或区块的简介。"
+    },
+    {
+      "title": "适合谁读",
+      "description": "示例：这里写这个页面或区块的简介。"
+    }
+  ],
+  "sections": [
+    {
+      "title": "第一章：理解基础",
+      "description": "示例：这里写这个页面或区块的简介。",
+      "icon": "book",
+      "articles": [
+        {
+          "href": "how-ai-coding-works",
+          "sidebarTitle": "助手是怎么工作的"
+        }
+      ]
+    },
+    {
+      "title": "第二章：写好需求",
+      "description": "示例：这里写这个页面或区块的简介。",
+      "icon": "spark",
+      "articles": [
+        {
+          "href": "write-better-prompts",
+          "sidebarTitle": "写出可执行的提示词"
+        }
+      ]
+    },
+    {
+      "title": "第三章：验证结果",
+      "description": "示例：这里写这个页面或区块的简介。",
+      "icon": "route",
+      "articles": [
+        {
+          "href": "review-generated-code",
+          "sidebarTitle": "审查并验证生成代码"
+        }
+      ]
+    }
+  ],
+  "faqs": [
+    {
+      "question": "示例：这里写常见问题？",
+      "answer": "示例：这里写问题答案"
+    },
+    {
+      "question": "示例：这里写常见问题？",
+      "answer": "示例：这里写问题答案"
+    }
+  ]
+}

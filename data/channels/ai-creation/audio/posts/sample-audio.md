@@ -8,7 +8,7 @@ category: ai-creation
 subcategory: audio
 type: release
 company: elevenlabs
-author: "NewHot 编辑部"
+author: "示例站 编辑部"
 tags: ["ElevenLabs","示例数据","audio"]
 sources:
   - title: "示例来源信息"

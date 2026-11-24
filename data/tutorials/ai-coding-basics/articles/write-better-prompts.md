@@ -4,7 +4,7 @@ slug: write-better-prompts
 description: "示例内容，用于演示系列教程的写作格式：用目标、约束和验收方式三部分描述需求，让 AI 生成结果更接近可以直接使用的代码。"
 date: 2026-10-02
 publishedAt: "2026-10-02"
-author: "NewHot 编辑部"
+author: "示例站 编辑部"
 category: tutorial
 tags: ["示例教程", "提示词", "AI 编程"]
 faqs:

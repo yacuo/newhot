@@ -1,0 +1,99 @@
+---
+import CodeBlock from "./CodeBlock.astro";
+import { getApiUrl, siteConfig } from "@/shared/config/site";
+
+const mcpUrl = getApiUrl("/api/v1/mcp");
+const skillName = siteConfig.skillName;
+
+const clients = [
+  {
+    id: "claude",
+    label: "Claude Code",
+    note: "在终端执行",
+    lang: "bash",
+    type: "安装命令",
+    code: `claude mcp add --transport http ${skillName} ${mcpUrl}`,
+  },
+  {
+    id: "codex",
+    label: "Codex",
+    note: "~/.codex/config.toml",
+    lang: "toml",
+    type: "TOML",
+    code: `[mcp_servers.${skillName}]
+url = "${mcpUrl}"`,
+  },
+  {
+    id: "cursor",
+    label: "Cursor",
+    note: "~/.cursor/mcp.json",
+    lang: "json",
+    type: "JSON",
+    code: `{
+  "mcpServers": {
+    "${skillName}": {
+      "url": "${mcpUrl}"
+    }
+  }
+}`,
+  },
+  {
+    id: "trae",
+    label: "Trae",
+    note: "设置 → MCP → 添加，粘贴下面的 JSON",
+    lang: "json",
+    type: "JSON",
+    code: `{
+  "mcpServers": {
+    "${skillName}": {
+      "url": "${mcpUrl}"
+    }
+  }
+}`,
+  },
+] as const;
+---
+
+<div data-mcp-tabs>
+  <div class="flex flex-wrap gap-1.5" role="tablist" aria-label="MCP 客户端">
+    {clients.map((client, index) => (
+      <button
+        type="button"
+        role="tab"
+        data-mcp-tab={client.id}
+        aria-selected={index === 0 ? "true" : "false"}
+        class="rounded-full px-3 py-1.5 text-[12px] font-medium text-slate-500 transition hover:text-slate-900 aria-selected:bg-slate-900 aria-selected:text-white"
+      >{client.label}</button>
+    ))}
+  </div>
+
+  <div class="mt-3">
+    {clients.map((client, index) => (
+      <div role="tabpanel" data-mcp-panel={client.id} hidden={index !== 0}>
+        <p class="mb-2 text-[11px] font-semibold text-slate-500">{client.note}</p>
+        <CodeBlock code={client.code} lang={client.lang} label={client.type} />
+      </div>
+    ))}
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-mcp-tabs]").forEach((group) => {
+    const tabs = Array.from(group.querySelectorAll<HTMLElement>("[data-mcp-tab]"));
+    const panels = Array.from(group.querySelectorAll<HTMLElement>("[data-mcp-panel]"));
+
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        const id = tab.dataset.mcpTab;
+
+        tabs.forEach((item) => {
+          item.setAttribute("aria-selected", String(item === tab));
+        });
+
+        panels.forEach((panel) => {
+          panel.hidden = panel.dataset.mcpPanel !== id;
+        });
+      });
+    });
+  });
+</script>

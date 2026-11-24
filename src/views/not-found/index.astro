@@ -1,0 +1,20 @@
+---
+import Root from "@/app/layouts/Root.astro";
+import Shell from "@/app/layouts/Shell.astro";
+import { sharedPage } from "@/entities/page-content/model/shared";
+
+const { notFound } = sharedPage;
+---
+
+<Root title={notFound.title} description={notFound.description} path={notFound.path}>
+  <Shell>
+    <div class="rounded-2xl bg-surface panel-glow p-8 text-center">
+      <p class="text-[11px] font-semibold tracking-[0.16em] text-slate-400">{notFound.code}</p>
+      <h1 class="mt-2 text-2xl font-bold tracking-tight text-slate-950">{notFound.heading}</h1>
+      <p class="mt-2 text-sm text-slate-600">{notFound.message}</p>
+      <a href={notFound.action.href} class="mt-5 inline-flex rounded-full bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-indigo-700">
+        {notFound.action.label}
+      </a>
+    </div>
+  </Shell>
+</Root>

@@ -1,0 +1,103 @@
+---
+import DayGroup from "./DayGroup.astro";
+import type { ArticleListItem } from "@/entities/article/model/schema";
+
+type Props = {
+  items: ArticleListItem[];
+  showTopic?: boolean;
+  showSubcategory?: boolean;
+  empty?: boolean;
+  companyId?: string;
+  productMap?: Map<string, string>;
+};
+const { items, showTopic = true, showSubcategory = true, empty = true, companyId, productMap } = Astro.props;
+
+const productKeyOf = (item: ArticleListItem) =>
+  productMap?.get(item.href) ??
+  (companyId && item.productId ? `${item.company ?? companyId}:${item.productId}` : item.productId ?? "");
+
+const getWeekday = (date: string) =>
+  new Intl.DateTimeFormat("zh-CN", { weekday: "short", timeZone: "Asia/Shanghai" }).format(
+    new Date(`${date}T00:00:00+08:00`),
+  );
+
+const groups: { date: string; items: ArticleListItem[] }[] = [];
+for (const item of items) {
+  const day = item.publishedAt;
+  const last = groups[groups.length - 1];
+  if (last && last.date === day) last.items.push(item);
+  else groups.push({ date: day, items: [item] });
+}
+---
+{items.length === 0 ? (
+  empty ? <p data-empty-state class="py-12 text-center text-sm text-slate-500">这里还没有内容。</p> : null
+) : (
+  <div data-timeline>
+    {groups.map((group) => (
+      <DayGroup date={group.date} weekday={getWeekday(group.date)} count={group.items.length}>
+        {group.items.map((item) => {
+          const subcategory = item.subcategory ? item.subcategoryLabel ?? item.subcategory : null;
+          const primaryLabel = showTopic
+            ? subcategory ?? item.categoryLabel ?? item.category
+            : showSubcategory
+              ? subcategory
+              : null;
+          // 厂商 · 作者；没有作者就只显示厂商，作者已包含厂商名时不重复
+          const company = item.companyName?.trim() || null;
+          const author = item.author?.trim() || null;
+          const normalize = (value: string) => value.toLowerCase().replace(/[\s._-]+/g, "");
+          const authorLabel =
+            company && author
+              ? normalize(author).includes(normalize(company))
+                ? author
+                : `${company} · ${author}`
+              : author ?? company;
+          const entityLabel = item.product ?? null;
+
+          return (
+            <li data-article-item data-category={item.category} data-product={productKeyOf(item)} class="xl:grid xl:grid-cols-[148px_minmax(0,1fr)] xl:gap-x-8">
+              <div class="relative hidden border-r border-slate-200 pr-5 pt-4 text-right xl:block">
+                {item.author ? (
+                  <p class="mt-[22px] truncate text-[13px] leading-6 text-slate-900" title={item.author}>{item.author}</p>
+                ) : item.time ? (
+                  <p class="mt-[22px] font-mono text-sm leading-6 text-slate-900">{item.time}</p>
+                ) : null}
+                <span class="absolute -right-[4.5px] top-[46px] h-2 w-2 rounded-full bg-slate-950 ring-2 ring-surface"></span>
+              </div>
+
+              <a href={item.href} class="group block border-t border-slate-100 py-4">
+                <div class="flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs leading-5">
+                  {authorLabel ? (
+                    <span class="inline-flex items-center gap-1.5 pr-1 text-slate-600">
+                      {item.companyLogo ? (
+                        <img
+                          src={item.companyLogo}
+                          alt={`${authorLabel} 标志`}
+                          aria-hidden="true"
+                          loading="lazy"
+                          decoding="async"
+                          class="h-4 w-4 shrink-0 rounded-full bg-white object-contain"
+                        />
+                      ) : (
+                        <span class="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-slate-100 text-[9px] font-medium leading-none text-slate-500">
+                          {authorLabel.slice(0, 1)}
+                        </span>
+                      )}
+                      {authorLabel}
+                    </span>
+                  ) : null}
+                  {primaryLabel ? <span class="badge badge-accent">{primaryLabel}</span> : null}
+                  {entityLabel ? <span class="badge badge-muted">{entityLabel}</span> : null}
+                </div>
+                <h3 class="mt-1.5 truncate text-[15px] font-medium leading-6 text-slate-900 transition-colors group-hover:text-slate-600">
+                  {item.title}
+                </h3>
+                <p class="mt-1 truncate text-sm leading-6 text-slate-500">{item.description}</p>
+              </a>
+            </li>
+          );
+        })}
+      </DayGroup>
+    ))}
+  </div>
+)}

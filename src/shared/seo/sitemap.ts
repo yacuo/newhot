@@ -1,10 +1,10 @@
-import { getResolvedTutorialCatalogs } from "@/modules/tutorial";
-import { readFeedMeta, type Post } from "@/modules/content";
-import { updateLogEntries } from "@/modules/page-content/update-log";
-import { getSiteUrl } from "../site";
-import { topics } from "@/modules/channel";
-import { companies, companyHref } from "@/modules/vendor/model";
-import { getThemeCompanyIds, themes, themeGroupHref, themeHref } from "@/modules/vendor/themes";
+import { getResolvedTutorialCatalogs } from "@/entities/tutorial/model";
+import { readFeedMeta, type Post } from "@/entities/article/model";
+import { updateLogEntries } from "@/entities/page-content/model/update-log";
+import { getSiteUrl } from "../config/site";
+import { topics } from "@/entities/channel/model";
+import { companies, companyHref } from "@/entities/vendor/model/model";
+import { getThemeCompanyIds, themes, themeGroupHref, themeHref } from "@/entities/vendor/model/themes";
 
 export type SitemapUrl = {
   loc: string;

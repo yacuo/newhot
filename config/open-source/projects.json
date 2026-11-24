@@ -1,0 +1,50 @@
+[
+  {
+    "name": "Sample Notes",
+    "repo": "example/sample-notes",
+    "description": "示例：这里写这个页面或区块的简介。",
+    "category": "示例分类",
+    "status": "示例状态",
+    "stars": 12,
+    "stack": [
+      "TypeScript",
+      "示例"
+    ],
+    "links": {
+      "github": "https://example.com/sample-notes",
+      "demo": "https://example.com/sample-notes-demo"
+    }
+  },
+  {
+    "name": "Sample CLI",
+    "repo": "example/sample-cli",
+    "description": "示例：这里写这个页面或区块的简介。",
+    "category": "示例分类",
+    "status": "示例状态",
+    "stars": 8,
+    "stack": [
+      "Node.js",
+      "示例"
+    ],
+    "links": {
+      "github": "https://example.com/sample-cli",
+      "demo": "https://example.com/sample-cli-demo"
+    }
+  },
+  {
+    "name": "Sample UI",
+    "repo": "example/sample-ui",
+    "description": "示例：这里写这个页面或区块的简介。",
+    "category": "示例分类",
+    "status": "示例状态",
+    "stars": 5,
+    "stack": [
+      "TypeScript",
+      "示例"
+    ],
+    "links": {
+      "github": "https://example.com/sample-ui",
+      "demo": "https://example.com/sample-ui-demo"
+    }
+  }
+]

@@ -8,7 +8,7 @@ category: llm
 subcategory: release
 type: release
 company: openai
-author: "NewHot 编辑部"
+author: "示例站 编辑部"
 tags: ["Mistral", "示例数据", "长文档", "Nova 1.0"]
 sources:
   - title: "示例官方发布页"

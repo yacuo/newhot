@@ -1,0 +1,196 @@
+---
+import Root from "@/app/layouts/Root.astro";
+import Shell from "@/app/layouts/Shell.astro";
+import ChannelPanel from "@/entities/channel/ui/ChannelPanel.astro";
+import ChannelTabs from "@/entities/channel/ui/ChannelTabs.astro";
+import ArticleList from "@/entities/channel/ui/ArticleList.astro";
+import { DEFAULT_SOURCES } from "@/shared/config/sources";
+import { readHomeFeed, readFeedMeta } from "@/entities/article/model";
+import { homePage } from "@/entities/page-content/model/home";
+import { sharedPage } from "@/entities/page-content/model/shared";
+import { HOME_TIERS } from "@/entities/article/model/list-shards";
+import { buildThemeStat, themeHref, themes } from "@/entities/vendor/model/themes";
+import { getSiteUrl, siteConfig } from "@/shared/config/site";
+import { formatMonthDay } from "@/shared/lib/utils";
+import { pagePanelClass, widePageContainerClass } from "@/shared/ui/classes";
+
+const formatFullDate = (date?: string | null) => {
+  if (!date) return "—";
+  const [year, month, day] = date.split("-");
+  return `${year}年${Number(month)}月${Number(day)}日`;
+};
+
+const feed = readHomeFeed();
+const meta = readFeedMeta();
+if (!feed || !meta) throw new Error("首页数据未生成");
+
+const collectionJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: `${siteConfig.name} 精选`,
+  url: getSiteUrl("/"),
+  description: siteConfig.description,
+  inLanguage: siteConfig.language,
+  dateModified: meta.latestPublished ?? undefined,
+  author: { "@type": "Organization", name: `${siteConfig.name} 编辑部`, url: getSiteUrl("/about/") },
+  publisher: { "@type": "Organization", name: siteConfig.name, url: getSiteUrl("/") },
+  mainEntity: {
+    "@type": "ItemList",
+    numberOfItems: feed.tiers.all.initial.length,
+    itemListElement: feed.tiers.all.initial.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      item: {
+        "@type": "Article",
+        headline: item.title,
+        url: getSiteUrl(item.href),
+        datePublished: item.publishedAt,
+        author: { "@type": "Organization", name: item.author ?? `${siteConfig.name} 编辑部` },
+      },
+    })),
+  },
+};
+
+const { intro, tiers, coverage, faq } = homePage;
+const tierMeta = tiers.items;
+
+const themeRows = themes.map((theme) => ({
+  theme,
+  companyCount: buildThemeStat(theme, meta.companies).companyCount,
+}));
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faq.items.map((item) => ({
+    "@type": "Question",
+    name: item.question,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: item.answer,
+    },
+  })),
+};
+
+const description = homePage.seo.description;
+---
+<Root title={homePage.seo.title} description={homePage.seo.description} path={homePage.seo.path}>
+  <script type="application/ld+json" set:html={JSON.stringify(collectionJsonLd)} />
+  <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
+  <Shell selectedChannel="精选" mainClassName={widePageContainerClass}>
+    <ChannelPanel
+      title="精选"
+      eyebrow="PICKED"
+      description={description}
+    />
+
+    <section class={`mt-5 ${pagePanelClass}`}>
+      <div class="flex items-baseline justify-between gap-4">
+        <h2 class="text-base font-semibold text-slate-900">{sharedPage.guide.latestTitle}</h2>
+        <p class="shrink-0 font-mono text-[11px] tracking-[0.04em] text-slate-400">
+          {`${meta.total} 篇文章${meta.latestPublished ? ` · 更新至 ${formatMonthDay(meta.latestPublished)}` : ""}`}
+        </p>
+      </div>
+      <p class="mt-2 text-sm leading-7 text-slate-500">
+        {intro.latestNote}
+      </p>
+
+      <ChannelTabs
+        tabs={tierMeta.map((tier) => ({ id: tier.id, label: tier.label, href: `#${tier.id}` }))}
+        activeTabId="all"
+        interactive
+        class="mt-3"
+      />
+
+      <div class="mt-3">
+        {HOME_TIERS.map((id) => {
+          const tier = feed.tiers[id];
+          const info = tierMeta.find((entry) => entry.id === id)!;
+          return (
+            <section data-tab-panel={id} hidden={id !== "all"}>
+              <p class="mt-3 text-sm leading-6 text-slate-500">{info.description}</p>
+              <ArticleList class="mt-3" scope={`_latest/${id}`} total={tier.total} initialItems={tier.initial} showTopic showSubcategory={false} />
+            </section>
+          );
+        })}
+      </div>
+    </section>
+
+    <section class={`mt-5 ${pagePanelClass}`}>
+      <h2 class="text-base font-semibold text-slate-900">{intro.about.title}</h2>
+      <p class="mt-3 text-sm leading-7 text-slate-600">
+        {intro.about.description}
+      </p>
+
+      <ul class="mt-4 grid gap-3 md:grid-cols-3">
+        {intro.principles.map((item) => (
+          <li class="rounded-md bg-slate-50 p-4">
+            <h3 class="text-sm font-semibold text-slate-900">{item.title}</h3>
+            <p class="mt-1.5 text-xs leading-6 text-slate-500">{item.description}</p>
+          </li>
+        ))}
+      </ul>
+
+      <div class="mt-4 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-slate-500">
+        <span>编辑：<a href="/about/" class="font-medium text-indigo-600 hover:underline">{siteConfig.name} 编辑部</a></span>
+        <span aria-hidden="true" class="text-slate-300">·</span>
+        <span>更新于 <time datetime={meta.latestPublished ?? undefined}>{formatFullDate(meta.latestPublished)}</time></span>
+      </div>
+
+      <blockquote class="mt-4 border-l-2 border-indigo-300 pl-4 text-sm leading-7 text-slate-600">
+        「{intro.quote.text}」
+        <cite class="ml-2 not-italic text-slate-400">
+          —— <a href={intro.quote.href} target="_blank" rel="noreferrer" class="text-indigo-600 hover:underline">{intro.quote.source}</a>
+        </cite>
+      </blockquote>
+    </section>
+
+    <section class={`mt-5 ${pagePanelClass}`}>
+      <h2 class="text-base font-semibold text-slate-900">{coverage.overview.title}</h2>
+      <p class="mt-3 text-sm leading-7 text-slate-600">
+        {coverage.overview.description}
+      </p>
+
+      <div class="mt-4 overflow-x-auto thin-scrollbar">
+        <table class="w-full min-w-[36rem] border-collapse text-left text-sm">
+          <thead>
+            <tr class="border-b border-slate-200 text-xs uppercase tracking-[0.08em] text-slate-400">
+              <th scope="col" class="py-2 pr-4 font-semibold">主题</th>
+              <th scope="col" class="py-2 pr-4 font-semibold">覆盖内容</th>
+              <th scope="col" class="py-2 font-semibold">覆盖公司</th>
+            </tr>
+          </thead>
+          <tbody>
+            {themeRows.map(({ theme, companyCount }) => (
+              <tr class="border-b border-slate-100 align-top last:border-0">
+                <th scope="row" class="py-3 pr-4 font-medium text-slate-900">
+                  <a href={themeHref(theme.id)} class="hover:text-indigo-600">{theme.name}</a>
+                </th>
+                <td class="py-3 pr-4 text-xs leading-6 text-slate-500">{theme.description}</td>
+                <td class="py-3 font-mono text-xs text-slate-600">{companyCount} 家</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <h2 class="mt-8 text-base font-semibold text-slate-900">{coverage.sources.title}</h2>
+      <p class="mt-3 text-sm leading-7 text-slate-600">
+        {coverage.sources.description}
+      </p>
+
+      <ul class="mt-4 flex flex-wrap gap-x-6 gap-y-2">
+        {DEFAULT_SOURCES.map((source) => (
+          <li>
+            <a href={source.href} target="_blank" rel="noreferrer" class="text-sm font-medium text-indigo-600 hover:underline">{source.name}</a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  </Shell>
+</Root>
+
+<script>
+  import "@/features/tabs/model/tabs";
+  import "@/features/article-list/model/list";
+</script>

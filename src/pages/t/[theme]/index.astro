@@ -1,85 +1,10 @@
 ---
-import Root from "@/layouts/Root.astro";
-import Shell from "@/layouts/Shell.astro";
-import ChannelPanel from "@/components/channel/ChannelPanel.astro";
-import CompanyRankRow from "@/components/vendor/CompanyRankRow.astro";
-import PageGuide from "@/components/channel/PageGuide.astro";
-import { buildThemeListing, getTheme, getThemeSeo, themeGroupHref, themeHref, themes } from "@/modules/vendor/themes";
-import { readFeedMeta } from "@/modules/content";
-import { sharedPage } from "@/modules/page-content/shared";
-import { formatMonthDay } from "@/shared/utils";
-import { widePageContainerClass, pagePanelClass } from "@/shared/ui/classes";
+import View from "@/views/theme/index.astro";
+import { themes } from "@/entities/vendor/model/themes";
 
 export function getStaticPaths() {
   return themes.map((theme) => ({ params: { theme: theme.id }, props: { id: theme.id } }));
 }
-
-const { id } = Astro.props;
-const theme = getTheme(id);
-if (!theme) throw new Error(`主题不存在：${id}`);
-
-const seo = getThemeSeo(theme);
-const guide = sharedPage.guide.theme;
-const meta = readFeedMeta();
-if (!meta) throw new Error("meta.json 未生成");
-
-const listing = buildThemeListing(theme, meta.companies);
-const articleCount = listing.summaries.reduce((total, summary) => total + summary.articleCount, 0);
-const latest = listing.summaries.reduce<string | null>(
-  (value, summary) => (summary.lastUpdated && (!value || summary.lastUpdated > value) ? summary.lastUpdated : value),
-  null,
-);
-
-const tabs = [
-  { id: "all", label: "全部", href: themeHref(theme.id), active: true },
-  ...listing.sections.map((section) => ({
-    id: section.id,
-    label: section.label,
-    href: themeGroupHref(theme.id, section.id),
-  })),
-];
 ---
-<Root title={seo.title} description={seo.description} path={themeHref(theme.id)}>
-  <Shell selectedChannel={guide.panelTitle} mainClassName={widePageContainerClass}>
-    <ChannelPanel
-      title={theme.name}
-      eyebrow={theme.eyebrow}
-      description={seo.description}
-      tabs={tabs}
-    />
 
-    <section class={`mt-5 ${pagePanelClass}`}>
-      <div class="flex items-baseline justify-between gap-4">
-        <h2 class="text-base font-semibold text-slate-900">全部公司</h2>
-        <p class="shrink-0 font-mono text-[11px] tracking-[0.04em] text-slate-400">
-          {`${listing.summaries.length} 家公司 · ${articleCount} 篇动态${latest ? ` · 更新至 ${formatMonthDay(latest)}` : ""}`}
-        </p>
-      </div>
-
-      <div class="mt-5 space-y-5">
-        {listing.sections.map((section) => (
-          <section data-theme-section={section.id}>
-            <div class="mb-3 flex items-baseline gap-2">
-              <h3 class="text-[13px] font-semibold tracking-[-0.01em] text-slate-700">{section.label}</h3>
-              <span class="font-mono text-[11px] tabular-nums text-slate-400">{section.summaries.length}</span>
-            </div>
-            <ul class="divide-y divide-slate-100">
-              {section.summaries.map((summary, index) => (
-                <CompanyRankRow
-                  summary={summary}
-                  rank={index + 1}
-                  maxCount={Math.max(...section.summaries.map((item) => item.articleCount), 1)}
-                />
-              ))}
-            </ul>
-          </section>
-        ))}
-      </div>
-    </section>
-
-    <PageGuide
-      heading={guide.heading}
-      description={guide.description}
-    />
-  </Shell>
-</Root>
+<View {...Astro.props} />

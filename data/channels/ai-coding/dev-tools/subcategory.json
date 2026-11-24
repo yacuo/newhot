@@ -1,9 +1,0 @@
-{
-  "label": "传统开发工具",
-  "description": "VS Code、IntelliJ IDEA、Xcode、Android Studio 等 IDE 与编辑器，以及 Open VSX 等扩展市场的版本发布与重要变更。不包含运行时、包管理器与 AI 编程工具的能力更新。",
-  "seo": {
-    "title": "示例分类：传统开发工具",
-    "description": "传统开发工具的示例分类描述，仅用于演示分类页 SEO 配置，请替换为自己的关键词与介绍。"
-  },
-  "order": 30
-}

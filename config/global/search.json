@@ -1,0 +1,13 @@
+{
+  "promotions": [
+    {
+      "title": "示例搜索推荐",
+      "description": "示例：这里写搜索推荐位说明。",
+      "href": "/",
+      "alwaysShow": true,
+      "keywords": [
+        "示例"
+      ]
+    }
+  ]
+}

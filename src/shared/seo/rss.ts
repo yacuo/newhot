@@ -1,4 +1,4 @@
-import { getSiteUrl, siteConfig } from "../site";
+import { getSiteUrl, siteConfig } from "../config/site";
 
 export type RssItem = {
   title: string;

@@ -1,0 +1,50 @@
+{
+  "eyebrow": "核心指标",
+  "title": "示例：这里写区块标题",
+  "description": "示例：这里写这个页面或区块的简介。",
+  "items": [
+    {
+      "key": "total",
+      "label": "原创动态",
+      "unit": "条",
+      "description": "示例：这里写这个页面或区块的简介。"
+    },
+    {
+      "key": "channels",
+      "label": "一级频道",
+      "unit": "个",
+      "description": "示例：这里写这个页面或区块的简介。"
+    },
+    {
+      "key": "subcategories",
+      "label": "二级分类",
+      "unit": "个",
+      "description": "示例：这里写这个页面或区块的简介。"
+    },
+    {
+      "key": "themes",
+      "label": "主题",
+      "unit": "个",
+      "description": "示例：这里写这个页面或区块的简介。"
+    },
+    {
+      "key": "companies",
+      "label": "覆盖公司",
+      "unit": "家",
+      "description": "示例：这里写这个页面或区块的简介。"
+    },
+    {
+      "key": "products",
+      "label": "覆盖产品",
+      "unit": "个",
+      "description": "示例：这里写这个页面或区块的简介。"
+    },
+    {
+      "key": "latest",
+      "label": "最近更新",
+      "unit": "",
+      "description": "示例：这里写这个页面或区块的简介。"
+    }
+  ],
+  "note": "示例：这里写补充说明"
+}

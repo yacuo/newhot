@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
-import { getAllPosts } from "@/modules/content";
-import { topics } from "@/modules/channel";
+import { getAllPosts } from "@/entities/article/model";
+import { topics } from "@/entities/channel/model";
 import { buildUrlSet, getChannelSitemapUrls } from "@/shared/seo/sitemap";
 
 export function getStaticPaths() {

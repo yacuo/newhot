@@ -1,0 +1,105 @@
+{
+  "cards": [
+    {
+      "name": "RSS",
+      "href": "/agent/rss/",
+      "icon": "Radio",
+      "tone": "orange",
+      "short": "阅读器与抓取",
+      "description": "示例：这里写这个页面或区块的简介。",
+      "meta": "/feed.xml"
+    },
+    {
+      "name": "REST API",
+      "href": "/agent/api/",
+      "icon": "CodeXml",
+      "tone": "sky",
+      "short": "脚本与看板",
+      "description": "示例：这里写这个页面或区块的简介。",
+      "meta": "/api/v1/articles"
+    },
+    {
+      "name": "MCP",
+      "href": "/agent/mcp/",
+      "icon": "Route",
+      "tone": "violet",
+      "short": "Agent 客户端",
+      "description": "示例：这里写这个页面或区块的简介。",
+      "meta": "/api/v1/mcp"
+    },
+    {
+      "name": "Agent Skill",
+      "href": "/agent/skill/",
+      "icon": "WandSparkles",
+      "tone": "emerald",
+      "short": "装一次就能用",
+      "description": "示例：这里写这个页面或区块的简介。",
+      "meta": "/newhot-skill/README.md"
+    }
+  ],
+  "groups": [
+    {
+      "title": "机器接口",
+      "description": "示例：这里写这个页面或区块的简介。",
+      "showOverview": true,
+      "entries": [
+        {
+          "label": "RSS",
+          "href": "/feed.xml",
+          "note": "示例：这里写补充说明"
+        },
+        {
+          "label": "REST API",
+          "href": "/api/v1/articles",
+          "note": "示例：这里写补充说明"
+        },
+        {
+          "label": "MCP",
+          "href": "/agent/mcp/",
+          "note": "示例：这里写补充说明"
+        },
+        {
+          "label": "OpenAPI",
+          "href": "/openapi-v1.json",
+          "note": "示例：这里写补充说明"
+        }
+      ]
+    },
+    {
+      "title": "Agent Skill",
+      "description": "示例：这里写这个页面或区块的简介。",
+      "entries": [
+        {
+          "label": "Skill 页面",
+          "href": "/agent/skill/",
+          "note": "示例：这里写补充说明"
+        },
+        {
+          "label": "安装说明",
+          "href": "/newhot-skill/README.md",
+          "note": "示例：这里写补充说明"
+        },
+        {
+          "label": "Skill 源文件",
+          "href": "/newhot-skill/SKILL.md",
+          "note": "示例：这里写补充说明"
+        }
+      ]
+    }
+  ],
+  "conventions": {
+    "title": "共同约定",
+    "items": [
+      "只读，不提供写入或登录。",
+      "只返回元数据与摘要，不返回正文。",
+      "时间以 `publishedAt` 为准。",
+      "引用时链接 canonical 页面。",
+      "只提供最近 7 天的文章，不返回历史全量。",
+      "同一条请求 1 次/10 分钟（查询、索引、快照三档），MCP 每 IP 60 次/10 分钟，RSS 不限流，超出返回 429。"
+    ]
+  },
+  "fallback": {
+    "meta": "匿名只读 · 无需 Key",
+    "description": "示例：这里写这个页面或区块的简介。"
+  }
+}

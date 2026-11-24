@@ -1,0 +1,65 @@
+{
+  "label": "AI 创作",
+  "labelEn": "AI CREATION",
+  "description": "示例：这里写这个页面或区块的简介。",
+  "seo": {
+    "title": "示例：这里写页面 SEO 标题",
+    "description": "示例：这里写页面 SEO 描述，概括页面内容与关键词"
+  },
+  "faqs": [],
+  "standards": {
+    "description": "示例：这里写这个页面或区块的简介。",
+    "scope": "示例：这里写收录范围",
+    "points": [
+      "示例：这里写一条具体说明。",
+      "示例：这里写一条具体说明。",
+      "示例：这里写一条具体说明。"
+    ],
+    "sourcesHeading": "示例：这里写来源区块标题",
+    "sourcesDescription": "示例：这里写来源区块说明",
+    "quote": null
+  },
+  "order": 40,
+  "subcategories": [
+    {
+      "id": "writing",
+      "label": "写作与翻译",
+      "description": "示例：这里写这个页面或区块的简介。",
+      "seo": {
+        "title": "示例：这里写页面 SEO 标题",
+        "description": "示例：这里写页面 SEO 描述，概括页面内容与关键词"
+      },
+      "order": 10
+    },
+    {
+      "id": "image",
+      "label": "图像与设计",
+      "description": "示例：这里写这个页面或区块的简介。",
+      "seo": {
+        "title": "示例：这里写页面 SEO 标题",
+        "description": "示例：这里写页面 SEO 描述，概括页面内容与关键词"
+      },
+      "order": 20
+    },
+    {
+      "id": "video",
+      "label": "视频生成",
+      "description": "示例：这里写这个页面或区块的简介。",
+      "seo": {
+        "title": "示例：这里写页面 SEO 标题",
+        "description": "示例：这里写页面 SEO 描述，概括页面内容与关键词"
+      },
+      "order": 30
+    },
+    {
+      "id": "audio",
+      "label": "音频与配音",
+      "description": "示例：这里写这个页面或区块的简介。",
+      "seo": {
+        "title": "示例：这里写页面 SEO 标题",
+        "description": "示例：这里写页面 SEO 描述，概括页面内容与关键词"
+      },
+      "order": 40
+    }
+  ]
+}

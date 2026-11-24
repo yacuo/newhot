@@ -1,0 +1,93 @@
+---
+import Root from "@/app/layouts/Root.astro";
+import Shell from "@/app/layouts/Shell.astro";
+import AgentShell from "@/entities/agent/ui/AgentShell.astro";
+import Badge from "@/entities/agent/ui/Badge.astro";
+import CopyButton from "@/entities/agent/ui/CopyButton.astro";
+import CodeBlock from "@/entities/agent/ui/CodeBlock.astro";
+import InlineText from "@/shared/ui/InlineText.astro";
+import { pagePanelClass, widePageContainerClass } from "@/shared/ui/classes";
+import { getSiteUrl } from "@/shared/config/site";
+import { buildBreadcrumbJsonLd, buildTechArticleJsonLd } from "@/shared/seo/jsonld";
+import { agentPage } from "@/entities/page-content/model";
+
+const { rss } = agentPage;
+
+const articleJsonLd = buildTechArticleJsonLd({
+  headline: rss.seo.title,
+  description: rss.seo.description,
+  path: rss.seo.path,
+  about: ["RSS", "RSS 2.0", "feed"],
+});
+
+const breadcrumbJsonLd = buildBreadcrumbJsonLd([
+  { name: "首页", href: "/" },
+  { name: "Agent 接入", href: "/agent/" },
+  { name: "RSS", href: rss.seo.path },
+]);
+---
+
+<Root title={rss.seo.title} description={rss.seo.description} path={rss.seo.path}>
+  <Shell mainClassName={widePageContainerClass} selectedChannel="Agent 接入">
+    <AgentShell title={rss.header.title} description={rss.header.description}>
+      <section class={pagePanelClass}>
+        <div class="flex flex-wrap gap-2">
+          {rss.badges.map((badge) => <Badge label={badge.label} tone={badge.tone} />)}
+        </div>
+        <p class="mt-4 text-sm leading-7 text-slate-700">
+          <InlineText text={rss.intro} />
+        </p>
+      </section>
+
+      <section class={pagePanelClass}>
+        <h2 class="text-lg font-semibold tracking-tight text-slate-950">{rss.feeds.title}</h2>
+        <p class="mt-2 text-sm leading-7 text-slate-600">
+          {rss.feeds.description}
+        </p>
+        <div class="mt-4 grid gap-3 sm:grid-cols-2">
+          {rss.feeds.items.map((feed) => (
+            <div class="flex items-start justify-between gap-3 rounded-xl bg-slate-50 p-4">
+              <div class="min-w-0">
+                <p class="text-sm font-semibold text-slate-950">{feed.label}</p>
+                <a
+                  class="mt-1 block break-all font-mono text-[12px] text-indigo-600 hover:underline"
+                  href={feed.path}
+                >{feed.path}</a>
+                <p class="mt-1 text-[11px] text-slate-400">{feed.description}</p>
+              </div>
+              <CopyButton text={getSiteUrl(feed.path)} />
+            </div>
+          ))}
+        </div>
+        <p class="mt-3 text-xs leading-6 text-slate-500">
+          {rss.feeds.note}
+        </p>
+      </section>
+
+      <section class={pagePanelClass}>
+        <h2 class="text-lg font-semibold tracking-tight text-slate-950">{rss.itemFields.title}</h2>
+        <ul class="mt-3 space-y-2 text-sm leading-7 text-slate-600">
+          {rss.itemFields.items.map((item) => (
+            <li>
+              <span class="font-mono text-[12px] text-slate-900">{item.name}</span>：<InlineText text={item.description} />
+            </li>
+          ))}
+        </ul>
+        <div class="mt-4">
+          <CodeBlock code={rss.itemFields.sample} lang="xml" label="RSS" />
+        </div>
+      </section>
+
+      <section class={pagePanelClass}>
+        <h2 class="text-lg font-semibold tracking-tight text-slate-950">{rss.updates.title}</h2>
+        <ul class="mt-3 space-y-2 text-sm leading-7 text-slate-600">
+          {rss.updates.items.map((item) => (
+            <li><InlineText text={item} /></li>
+          ))}
+        </ul>
+      </section>
+    </AgentShell>
+  </Shell>
+  <script type="application/ld+json" set:html={JSON.stringify(articleJsonLd)} />
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbJsonLd)} />
+</Root>

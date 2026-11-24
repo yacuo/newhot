@@ -1,0 +1,15 @@
+---
+import Icon from "@/shared/ui/Icon.astro";
+---
+<button
+  type="button"
+  data-theme-toggle
+  aria-label="切换到夜间模式"
+  aria-pressed="false"
+  title="切换到夜间模式"
+  class="inline-flex h-7 items-center gap-1.5 rounded px-1.5 text-[11px] text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900"
+>
+  <span data-theme-icon="light"><Icon name="Sun" size={13} strokeWidth={1.9} /></span>
+  <span data-theme-icon="dark" hidden><Icon name="Moon" size={13} strokeWidth={1.9} /></span>
+  <span data-theme-label>日间</span>
+</button>

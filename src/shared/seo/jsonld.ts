@@ -1,4 +1,4 @@
-import { getSiteUrl, siteConfig } from "../site";
+import { getSiteUrl, siteConfig } from "../config/site";
 
 type ListItem = {
   title: string;

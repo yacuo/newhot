@@ -1,0 +1,69 @@
+{
+  "label": "模型与产品",
+  "labelEn": "MODEL & PRODUCT",
+  "description": "示例：这里写这个页面或区块的简介。",
+  "seo": {
+    "title": "示例：这里写页面 SEO 标题",
+    "description": "示例：这里写页面 SEO 描述，概括页面内容与关键词"
+  },
+  "faqs": [],
+  "standards": {
+    "description": "示例：这里写这个页面或区块的简介。",
+    "scope": "示例：这里写收录范围",
+    "points": [
+      "示例：这里写一条具体说明。",
+      "示例：这里写一条具体说明。",
+      "示例：这里写一条具体说明。"
+    ],
+    "sourcesHeading": "示例：这里写来源区块标题",
+    "sourcesDescription": "示例：这里写来源区块说明",
+    "quote": {
+      "text": "示例：这里写说明文案",
+      "label": "示例：这里写引用来源",
+      "href": "https://openai.com/about/"
+    }
+  },
+  "order": 10,
+  "subcategories": [
+    {
+      "id": "release",
+      "label": "新模型发布",
+      "description": "示例：这里写这个页面或区块的简介。",
+      "seo": {
+        "title": "示例：这里写页面 SEO 标题",
+        "description": "示例：这里写页面 SEO 描述，概括页面内容与关键词"
+      },
+      "order": 10
+    },
+    {
+      "id": "news",
+      "label": "官方新闻",
+      "description": "示例：这里写这个页面或区块的简介。",
+      "seo": {
+        "title": "示例：这里写页面 SEO 标题",
+        "description": "示例：这里写页面 SEO 描述，概括页面内容与关键词"
+      },
+      "order": 20
+    },
+    {
+      "id": "pricing",
+      "label": "价格与限制",
+      "description": "示例：这里写这个页面或区块的简介。",
+      "seo": {
+        "title": "示例：这里写页面 SEO 标题",
+        "description": "示例：这里写页面 SEO 描述，概括页面内容与关键词"
+      },
+      "order": 30
+    },
+    {
+      "id": "status",
+      "label": "服务状态",
+      "description": "示例：这里写这个页面或区块的简介。",
+      "seo": {
+        "title": "示例：这里写页面 SEO 标题",
+        "description": "示例：这里写页面 SEO 描述，概括页面内容与关键词"
+      },
+      "order": 40
+    }
+  ]
+}

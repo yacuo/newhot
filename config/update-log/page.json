@@ -1,0 +1,9 @@
+{
+  "badge": "Changelog",
+  "title": "更新日志",
+  "description": "示例：这里写这个页面或区块的简介。",
+  "action": {
+    "label": "回到最新动态",
+    "href": "/"
+  }
+}

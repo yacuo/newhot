@@ -1,0 +1,65 @@
+{
+  "label": "AI 办公",
+  "labelEn": "AI OFFICE",
+  "description": "示例：这里写这个页面或区块的简介。",
+  "seo": {
+    "title": "示例：这里写页面 SEO 标题",
+    "description": "示例：这里写页面 SEO 描述，概括页面内容与关键词"
+  },
+  "faqs": [],
+  "standards": {
+    "description": "示例：这里写这个页面或区块的简介。",
+    "scope": "示例：这里写收录范围",
+    "points": [
+      "示例：这里写一条具体说明。",
+      "示例：这里写一条具体说明。",
+      "示例：这里写一条具体说明。"
+    ],
+    "sourcesHeading": "示例：这里写来源区块标题",
+    "sourcesDescription": "示例：这里写来源区块说明",
+    "quote": null
+  },
+  "order": 30,
+  "subcategories": [
+    {
+      "id": "platform",
+      "label": "综合办公平台",
+      "description": "示例：这里写这个页面或区块的简介。",
+      "seo": {
+        "title": "示例：这里写页面 SEO 标题",
+        "description": "示例：这里写页面 SEO 描述，概括页面内容与关键词"
+      },
+      "order": 10
+    },
+    {
+      "id": "docs",
+      "label": "文档与知识",
+      "description": "示例：这里写这个页面或区块的简介。",
+      "seo": {
+        "title": "示例：这里写页面 SEO 标题",
+        "description": "示例：这里写页面 SEO 描述，概括页面内容与关键词"
+      },
+      "order": 20
+    },
+    {
+      "id": "communication",
+      "label": "会议与沟通",
+      "description": "示例：这里写这个页面或区块的简介。",
+      "seo": {
+        "title": "示例：这里写页面 SEO 标题",
+        "description": "示例：这里写页面 SEO 描述，概括页面内容与关键词"
+      },
+      "order": 30
+    },
+    {
+      "id": "workflow",
+      "label": "数据与流程",
+      "description": "示例：这里写这个页面或区块的简介。",
+      "seo": {
+        "title": "示例：这里写页面 SEO 标题",
+        "description": "示例：这里写页面 SEO 描述，概括页面内容与关键词"
+      },
+      "order": 40
+    }
+  ]
+}

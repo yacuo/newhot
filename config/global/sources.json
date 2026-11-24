@@ -1,0 +1,112 @@
+{
+  "defaultSources": [
+    {
+      "name": "OpenAI News",
+      "href": "https://openai.com/news/"
+    },
+    {
+      "name": "Anthropic News",
+      "href": "https://www.anthropic.com/news"
+    },
+    {
+      "name": "Google DeepMind Blog",
+      "href": "https://deepmind.google/discover/blog/"
+    },
+    {
+      "name": "Meta AI Blog",
+      "href": "https://ai.meta.com/blog/"
+    },
+    {
+      "name": "Hugging Face Blog",
+      "href": "https://huggingface.co/blog"
+    }
+  ],
+  "channelSources": {
+    "llm": [
+      {
+        "name": "OpenAI News",
+        "href": "https://openai.com/news/"
+      },
+      {
+        "name": "Anthropic News",
+        "href": "https://www.anthropic.com/news"
+      },
+      {
+        "name": "Google DeepMind Blog",
+        "href": "https://deepmind.google/discover/blog/"
+      },
+      {
+        "name": "Meta AI Blog",
+        "href": "https://ai.meta.com/blog/"
+      },
+      {
+        "name": "Mistral AI News",
+        "href": "https://mistral.ai/news/"
+      }
+    ],
+    "ai-coding": [
+      {
+        "name": "GitHub Changelog",
+        "href": "https://github.blog/changelog/"
+      },
+      {
+        "name": "VS Code Updates",
+        "href": "https://code.visualstudio.com/updates"
+      },
+      {
+        "name": "Hugging Face Blog",
+        "href": "https://huggingface.co/blog"
+      }
+    ],
+    "ai-office": [
+      {
+        "name": "Google Workspace Updates",
+        "href": "https://workspaceupdates.googleblog.com/"
+      },
+      {
+        "name": "Microsoft 365 Blog",
+        "href": "https://www.microsoft.com/en-us/microsoft-365/blog/"
+      },
+      {
+        "name": "Notion Releases",
+        "href": "https://www.notion.com/releases"
+      }
+    ],
+    "ai-creation": [
+      {
+        "name": "OpenAI News",
+        "href": "https://openai.com/news/"
+      },
+      {
+        "name": "Adobe Blog",
+        "href": "https://blog.adobe.com/"
+      },
+      {
+        "name": "Hugging Face Blog",
+        "href": "https://huggingface.co/blog"
+      }
+    ]
+  },
+  "tutorialSources": [
+    {
+      "name": "MDN Web Docs",
+      "href": "https://developer.mozilla.org/"
+    },
+    {
+      "name": "React 官方文档",
+      "href": "https://react.dev/"
+    },
+    {
+      "name": "Next.js 文档",
+      "href": "https://nextjs.org/docs"
+    },
+    {
+      "name": "LangChain 文档",
+      "href": "https://python.langchain.com/"
+    },
+    {
+      "name": "Vite 文档",
+      "href": "https://vite.dev/"
+    }
+  ]
+}

@@ -1,20 +1,20 @@
 import fs from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
-import { DATA_DIR } from "@/modules/content/paths";
-import type { ContentTypeId } from "@/modules/content/content-types";
-import type { ArticleListItem } from "@/modules/content/schema";
-import { getChannels } from "@/modules/channel/model";
-import { resolveCompany, getCompany, getCompanyModel, resolveProduct } from "@/modules/vendor";
+import { DATA_DIR } from "@/entities/article/model/paths";
+import { readConfigJson } from "@/shared/config/read-config";
+import type { ContentTypeId } from "@/entities/article/model/content-types";
+import type { ArticleListItem } from "@/entities/article/model/schema";
+import { getChannels } from "@/entities/channel/model/model";
+import { resolveCompany, getCompany, getCompanyModel, resolveProduct } from "@/entities/vendor/model";
 
-const rootDir = process.cwd();
 const contentDir = DATA_DIR;
 const tutorialsRoot = path.join(contentDir, "tutorials");
 // 更新日志是独立栏目，不参与文章 feed / 列表分片
 const updateLogRoot = path.join(contentDir, "update-log");
-const contentTypeConfig = JSON.parse(
-  fs.readFileSync(path.join(rootDir, "src", "schema", "content-types.json"), "utf8"),
-) as { types: { id: string }[]; defaults: Record<string, string> };
+const contentTypeConfig = readConfigJson<{ types: { id: string }[]; defaults: Record<string, string> }>(
+  "global/content-types.json",
+);
 const channelLabels = new Map(getChannels().map((channel) => [channel.id, channel.label]));
 const subcategoryLabels = new Map(
   getChannels().flatMap((channel) =>

@@ -23,11 +23,12 @@
     "node": ">=20"
   },
   "scripts": {
-    "dev": "npm run --silent icons >/dev/null && npm run --silent content:feed >/dev/null && npm run --silent content:lists >/dev/null && ASTRO_TELEMETRY_DISABLED=1 astro dev",
-    "build": "npm run --silent icons >/dev/null && npm run --silent content:feed >/dev/null && npm run --silent content:lists >/dev/null && ASTRO_TELEMETRY_DISABLED=1 astro build",
+    "dev": "npm run --silent check:config && npm run --silent icons >/dev/null && npm run --silent content:feed >/dev/null && npm run --silent content:lists >/dev/null && ASTRO_TELEMETRY_DISABLED=1 astro dev",
+    "build": "npm run --silent check:config && npm run --silent icons >/dev/null && npm run --silent content:feed >/dev/null && npm run --silent content:lists >/dev/null && ASTRO_TELEMETRY_DISABLED=1 astro build",
     "icons": "tsx scripts/gen-icons-sprite.ts",
     "preview": "ASTRO_TELEMETRY_DISABLED=1 astro preview",
-    "check": "ASTRO_TELEMETRY_DISABLED=1 astro check",
+    "check": "npm run --silent check:config && ASTRO_TELEMETRY_DISABLED=1 astro check",
+    "check:config": "tsx scripts/validate-config.ts",
     "content:feed": "tsx scripts/generate-article-feeds.ts",
     "content:lists": "tsx scripts/generate-article-lists.ts",
     "start": "astro preview",

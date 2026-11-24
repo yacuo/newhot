@@ -8,7 +8,7 @@ category: llm
 subcategory: release
 type: release
 company: anthropic
-author: "NewHot 编辑部"
+author: "示例站 编辑部"
 tags: ["Mistral", "示例数据", "多模态", "Orbit 2.0"]
 sources:
   - title: "示例官方上线公告"

@@ -8,7 +8,7 @@ category: llm
 subcategory: release
 type: release
 company: google
-author: "NewHot 编辑部"
+author: "示例站 编辑部"
 tags: ["Mistral", "示例数据", "开源", "本地部署"]
 sources:
   - title: "示例开源仓库说明"

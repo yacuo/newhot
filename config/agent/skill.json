@@ -1,0 +1,79 @@
+{
+  "seo": {
+    "title": "示例：这里写页面 SEO 标题",
+    "description": "示例：这里写页面 SEO 描述，概括页面内容与关键词",
+    "path": "/agent/skill/"
+  },
+  "header": {
+    "title": "Agent Skill",
+    "description": "示例：这里写这个页面或区块的简介。"
+  },
+  "badges": [
+    {
+      "label": "示例标签一",
+      "tone": "emerald"
+    },
+    {
+      "label": "示例标签二",
+      "tone": "sky"
+    },
+    {
+      "label": "示例标签三",
+      "tone": "amber"
+    }
+  ],
+  "intro": "示例：这里写 Agent Skill 与其他方式的共同数据范围，上线前请替换为自己的说明。",
+  "steps": {
+    "title": "三步装好",
+    "prompt": {
+      "title": "第一步：复制这段话，发给你的 Agent",
+      "note": "示例：这里写补充说明",
+      "codeLabel": "发给 Agent",
+      "code": "请安装示例 Skill：https://example.com/example-skill/README.md"
+    },
+    "newSession": {
+      "title": "第二步：开一个新会话",
+      "note": "示例：这里写补充说明"
+    },
+    "ask": {
+      "title": "第三步：随便问一句",
+      "text": "示例：这里写说明文案",
+      "note": "示例：这里写补充说明"
+    }
+  },
+  "prompts": {
+    "title": "装好后可以这样问",
+    "description": "示例：这里写这个页面或区块的简介。",
+    "items": [
+      "示例：最近有什么值得看的？"
+    ]
+  },
+  "manual": {
+    "title": "自己动手安装",
+    "description": "示例：这里写这个页面或区块的简介。",
+    "entries": [
+      {
+        "label": "示例客户端",
+        "codeLabel": "示例客户端安装",
+        "code": "mkdir -p ~/.example/skills/example\ncurl -fsSL https://example.com/example-skill/SKILL.md \\\n  -o ~/.example/skills/example/SKILL.md"
+      }
+    ],
+    "footnote": "示例：安装前可以先看 [README.md](/example-skill/README.md)。"
+  },
+  "troubleshooting": {
+    "title": "没触发或连不上？",
+    "items": [
+      {
+        "label": "先新开会话。",
+        "text": "示例：这里写说明文案"
+      }
+    ]
+  },
+  "alternatives": {
+    "title": "不装 Skill 也能用",
+    "items": [
+      "示例方式：[`/api/v1/articles`](/api/v1/articles)"
+    ],
+    "note": "示例：这里写补充说明"
+  }
+}
