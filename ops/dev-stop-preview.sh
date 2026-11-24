@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
-# 停止本地开发预览服务（Astro dev）。
-# 用法：./ops/dev/dev-stop.sh（默认端口 3618，可用 PORT=xxxx 覆盖）
+# 停止本地预览服务（Astro dev）。
+# 用法：./ops/dev-stop-preview.sh（默认端口 3618，可用 PORT=xxxx 覆盖）
 set -euo pipefail
 
-ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 PORT="${PORT:-3618}"
 
 cd "$ROOT_DIR"
 
-# 1. 停 Astro 后台开发服务，与 ops/dev/dev-restart.sh 的 --background 启动方式对应
+# 1. 停 Astro 后台开发服务，与 ops/dev-restart-preview.sh 的 --background 启动方式对应
 if [ -f "$ROOT_DIR/.astro/dev.json" ]; then
   echo "正在停止 Astro 开发服务..."
   ASTRO_TELEMETRY_DISABLED=1 npx astro dev stop >/dev/null 2>&1 || true

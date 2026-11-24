@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# 本地开发预览脚本：Astro 热更新模式，改代码即时生效，无需重启。
-# 用法：./ops/dev/dev-restart.sh（默认端口 3618，可用 PORT=xxxx 覆盖）
+# 本地预览脚本：Astro 热更新模式，改代码即时生效，无需重启。
+# 用法：./ops/dev-restart-preview.sh（默认端口 3618，可用 PORT=xxxx 覆盖）
 # 注意：新增或修改文章 markdown 后，需执行 npm run content:feed / content:lists 再刷新页面。
 set -euo pipefail
 
-ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 TMP_DIR="$ROOT_DIR/.tmp"
 LOG_FILE="$TMP_DIR/astro-dev.log"
 PORT="${PORT:-3618}"
